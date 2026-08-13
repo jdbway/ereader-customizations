@@ -39,6 +39,11 @@ in this repo as SpringBreak-specific until verified otherwise.
 - `koreader-plugins/suspendhack.koplugin/` — **third-party**, see its
   `SOURCE.md`. Required for normal suspend/resume while frameworkless.
 
+- `koreader-settings/` — **ours.** Backups of the KOReader settings files
+  that hold server URLs/credentials (Wallabag, Calibre OPDS, kosync), so a
+  new device can be configured by copying files instead of retyping
+  everything. Passwords are blanked before committing — see its own README.
+
 - `tailscale/dns_watch.sh`, `tailscale/start_tailscale.sh` — **ours.** The
   Kindle's own `wifid` overwrites `/etc/resolv.conf` with DHCP-provided
   nameservers on every Wi-Fi reconnect (which happens often — Kindles sleep
