@@ -59,6 +59,20 @@ republished here — check their own repos/licenses if reproducing this setup:
   its menu, then tap "Sync highlights now" each time; it does not currently
   hook into automatic/periodic sync.
 
+## Tailscale binary itself — deliberately not vendored
+
+`/mnt/us/extensions/tailscale/bin/{tailscale,tailscaled}` are Tailscale's own
+official prebuilt binaries, not something authored here. Currently version
+**1.102.2**, architecture **armv7l** (32-bit ARM, matches Kindle Paperwhite
+5's CPU). ~67MB combined — deliberately not committed to this repo (binary
+blobs bloat every future clone permanently, and it's trivially re-obtained).
+
+To reproduce: download the matching static build from Tailscale's own
+release archive (`https://pkgs.tailscale.com/stable/`, `linux_arm` variant)
+at the version above, or newer, and place `tailscale`/`tailscaled` at that
+path. `start_tailscale.sh` and `dns_watch.sh` in this repo assume that exact
+path (`/mnt/us/extensions/tailscale/bin/`).
+
 ## Secrets — deliberately excluded, do not add these
 
 `auth.key` (Tailscale auth key), `ssh_host_*_key` (dropbear host keys), and
