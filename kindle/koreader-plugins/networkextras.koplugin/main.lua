@@ -44,6 +44,21 @@ function NetworkExtras:stopTailscale()
     UIManager:show(InfoMessage:new{ text = _("Tailscale stopped."), timeout = 2 })
 end
 
+-- update_tailscale.sh only replaces the binaries on disk (backing up the old
+-- ones as *.bak first) — it doesn't touch the running process, so it's safe
+-- to run while Tailscale is up. Progress prints directly to the screen via
+-- eips. Start/Stop Tailscale afterward to actually pick up the new binary.
+function NetworkExtras:updateTailscale()
+    UIManager:show(ConfirmBox:new{
+        text = _("Check for and install the latest Tailscale binaries (~31MB download)? Progress shows on-screen. You'll need to Stop then Start Tailscale afterward for the update to take effect."),
+        ok_text = _("Update"),
+        ok_callback = function()
+            os.execute(TS_DIR .. "/update_tailscale.sh >/dev/null 2>&1 &")
+            UIManager:show(InfoMessage:new{ text = _("Checking for updates…"), timeout = 2 })
+        end,
+    })
+end
+
 -- Switching Wi-Fi networks reliably requires the Amazon framework: KOReader's
 -- own picker calls com.lab126.cmd's ensureConnection, which is a no-op with
 -- the framework disabled, and direct wifid/wpa_supplicant control (wpa_cli,
@@ -129,6 +144,11 @@ function NetworkExtras:addToMainMenu(menu_items)
                 text = _("Stop Tailscale"),
                 keep_menu_open = true,
                 callback = function() self:stopTailscale() end,
+            },
+            {
+                text = _("Update Tailscale"),
+                keep_menu_open = true,
+                callback = function() self:updateTailscale() end,
             },
         }
     }

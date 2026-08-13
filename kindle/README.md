@@ -12,7 +12,10 @@ the time to save power.
   - **Framework Mode**: reboot with the Amazon framework enabled (needed to
     switch Wi-Fi networks — see below) or reboot back to low-power
     frameworkless mode.
-  - **Start/Stop Tailscale**: manual control without leaving KOReader.
+  - **Start/Stop/Update Tailscale**: manual control without leaving KOReader,
+    including checking for and installing newer Tailscale binaries (via
+    `update_tailscale.sh`, backs up the old binaries as `*.bak` first; a
+    Stop then Start afterward picks up the new version).
 
   Wi-Fi network switching used to be a menu item here too, but KOReader's own
   network picker calls into Amazon's framework layer, which is a no-op with
@@ -72,6 +75,14 @@ release archive (`https://pkgs.tailscale.com/stable/`, `linux_arm` variant)
 at the version above, or newer, and place `tailscale`/`tailscaled` at that
 path. `start_tailscale.sh` and `dns_watch.sh` in this repo assume that exact
 path (`/mnt/us/extensions/tailscale/bin/`).
+
+## Boot hooks
+
+See `boot-hooks/README.md` — backed-up copies of the two upstart job files
+that live on the read-only root filesystem: `kor.conf` (KOReader autolaunch,
+from a third-party KUAL extension) and `tailscale.conf` (Tailscale + the DNS
+watcher). Neither can be reproduced by a normal git checkout — they require
+an `mntroot rw` remount to place back, documented there.
 
 ## Secrets — deliberately excluded, do not add these
 
