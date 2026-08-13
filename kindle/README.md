@@ -5,6 +5,18 @@ Calibre-Web NextGen library. Goal: reach the OPDS catalog and sync progress
 over the tailnet from anywhere, with the Amazon framework disabled most of
 the time to save power.
 
+## Jailbreak
+
+Jailbroken via **[SpringBreak](https://kindlemodding.org/jailbreaking/SpringBreak/)**.
+Everything below — the `DONT_START_FRAMEWORK` flag convention, KUAL,
+`mntroot rw`/`ro`, the MRPI/KUAL bridge scaffolding (`kmc.conf`) — is part of
+the broader Kindle jailbreak ecosystem this method sets up, not specific to
+this repo. If reproducing this setup on another Kindle, start there; the
+specific jailbreak method used can affect exact file locations/mechanisms
+(e.g. other jailbreaks may not use `/etc/upstart/framework.conf`'s stock
+`DONT_START_FRAMEWORK` check the same way), so treat the boot-hook details
+in this repo as SpringBreak-specific until verified otherwise.
+
 ## Layout
 
 - `koreader-plugins/networkextras.koplugin/` — **ours.** Adds a "Network
