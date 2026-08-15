@@ -48,16 +48,40 @@ in this repo as SpringBreak-specific until verified otherwise.
 
 - `koreader-plugins/vocabdeck.koplugin/` — **third-party**
   ([yupmoon/vocabdeck.koplugin](https://github.com/yupmoon/vocabdeck.koplugin)),
-  vendored directly here (unlike `bookshelf`/`bookends`/`simpleui` below)
-  since its own config format is worth tracking a template for. Vocabulary
-  deck/flashcard plugin with optional AI enrichment. **This copy has local
-  customizations** — bug fixes and behavior changes on top of upstream, see
-  its own `CUSTOMIZATIONS.md` for the full list and why. **Its real
-  `vocabdeck_apikeys.lua` and `vocabdeck_configuration.lua` are excluded**
-  (per the plugin's own `.gitignore`) — see its `README.md` for how to
-  populate them from the committed `.sample` files. Any updates made to this
-  plugin from another chat/session won't be reflected here until re-synced
-  from the device — this repo only has whatever was last copied over.
+  vendored directly. Vocabulary deck/flashcard plugin with optional AI
+  enrichment. **This copy has local customizations** — bug fixes and
+  behavior changes on top of upstream, see its own `CUSTOMIZATIONS.md` for
+  the full list and why. **Its real `vocabdeck_apikeys.lua` and
+  `vocabdeck_configuration.lua` are excluded** (per the plugin's own
+  `.gitignore`) — see its `README.md` for how to populate them from the
+  committed `.sample` files. Any updates made to this plugin from another
+  chat/session won't be reflected here until re-synced from the device —
+  this repo only has whatever was last copied over.
+
+- `koreader-plugins/bookshelf.koplugin/` — **third-party**
+  ([AndyHazz/bookshelf.koplugin](https://github.com/AndyHazz/bookshelf.koplugin)),
+  vendored directly. Home-screen replacement — the active one on this device
+  (**Start with → Bookshelf** in KOReader's file-manager menu). Installed via
+  `git clone` on the device itself (for its in-app dev-branch update
+  feature), so the nested `.git/` was stripped before committing here — a
+  copy pulled from this repo is a plain file tree, not a git checkout of
+  upstream.
+
+- `koreader-plugins/bookends.koplugin/` — **third-party**
+  ([AndyHazz/bookends.koplugin](https://github.com/AndyHazz/bookends.koplugin)),
+  vendored directly. Overlay presets/styling; also supplies Bookshelf's
+  richer font-preview and extra progress-bar styles when both are installed
+  together.
+
+- `koreader-plugins/simpleui.koplugin/` — **third-party**
+  ([doctorhetfield-cmd/simpleui.koplugin](https://github.com/doctorhetfield-cmd/simpleui.koplugin)),
+  vendored directly. An earlier home-screen replacement, no longer the
+  default (Bookshelf is), but still installed: it contributes a standalone
+  persistent toolbar widget (Wi-Fi/brightness/power toggles) independent of
+  its home-screen role. Confirmed by direct testing that deleting it breaks
+  that widget AND `suspendhack.koplugin`'s FileManager widget registration,
+  even though neither has a visible code-level dependency on it — keep it
+  installed.
 
 - `koreader-settings/` — **ours.** Backups of the KOReader settings files
   that hold server URLs/credentials (Wallabag, Calibre OPDS, kosync), so a
@@ -86,19 +110,6 @@ in this repo as SpringBreak-specific until verified otherwise.
 
 ## Not included here (third-party, installed but not vendored)
 
-These are separately-maintained plugins installed on the device. Not
-republished here — check their own repos/licenses if reproducing this setup:
-
-- [`bookshelf.koplugin`](https://github.com/AndyHazz/bookshelf.koplugin) —
-  home-screen replacement (the active one on this device).
-- [`bookends.koplugin`](https://github.com/AndyHazz/bookends.koplugin)
-- [`simpleui.koplugin`](https://github.com/doctorhetfield-cmd/simpleui.koplugin)
-  — an earlier home-screen replacement, no longer the default, but still
-  installed: it contributes a standalone persistent toolbar widget
-  (Wi-Fi/brightness/power toggles) independent of its home-screen role.
-  Confirmed by direct testing that deleting it breaks that widget AND
-  `suspendhack.koplugin`'s FileManager widget registration, even though
-  neither has a visible code-level dependency on it — keep it installed.
 - `cwasync.koplugin` — **not third-party in the usual sense**: vendored
   directly from KOReader's own mainline repo
   (https://github.com/koreader/koreader/tree/master/plugins/cwasync.koplugin),
