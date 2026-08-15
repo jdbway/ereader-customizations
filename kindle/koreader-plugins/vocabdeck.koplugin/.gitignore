@@ -1,0 +1,6 @@
+vocabdeck_configuration.lua
+vocabdeck_apikeys.lua
+plans/
+tests/
+.DS_Store
+*.zip

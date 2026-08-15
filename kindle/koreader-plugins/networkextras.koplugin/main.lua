@@ -99,13 +99,11 @@ function NetworkExtras:getFrameworkModeMenu()
         },
         {
             text = _("Reboot with framework (to switch Wi-Fi)"),
-            enabled = frameworkless,
             keep_menu_open = true,
             callback = function() self:rebootWithFramework() end,
         },
         {
             text = _("Reboot frameworkless (low power)"),
-            enabled = not frameworkless,
             keep_menu_open = true,
             callback = function() self:rebootFrameworkless() end,
         },
@@ -129,6 +127,7 @@ end
 
 function NetworkExtras:addToMainMenu(menu_items)
     menu_items.network_extras = {
+        sorting_hint = "tools",
         text = _("Network Extras"),
         sub_item_table = {
             {

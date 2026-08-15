@@ -19,9 +19,13 @@ eips_log() {
 
 echo "[$(date)] Starting Tailscale..." > "$LOG"
 
-# Keep resolv.conf pointed at MagicDNS across wifid DHCP overwrites.
+# Background watchers (screenshot uploader, then resolv.conf fixup).
 # Started unconditionally, before any exit path below, so it runs regardless
 # of whether reconnect succeeds or falls through to the auth-key branch.
+if ! ps | grep -v grep | grep -q immich_upload_watch.sh; then
+    /mnt/us/extensions/tailscale/bin/immich_upload_watch.sh &
+fi
+
 if ! ps | grep -v grep | grep -q dns_watch.sh; then
     /mnt/us/extensions/tailscale/bin/dns_watch.sh &
 fi
