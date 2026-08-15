@@ -50,7 +50,9 @@ in this repo as SpringBreak-specific until verified otherwise.
   ([yupmoon/vocabdeck.koplugin](https://github.com/yupmoon/vocabdeck.koplugin)),
   vendored directly here (unlike `bookshelf`/`bookends`/`simpleui` below)
   since its own config format is worth tracking a template for. Vocabulary
-  deck/flashcard plugin with optional AI enrichment. **Its real
+  deck/flashcard plugin with optional AI enrichment. **This copy has local
+  customizations** — bug fixes and behavior changes on top of upstream, see
+  its own `CUSTOMIZATIONS.md` for the full list and why. **Its real
   `vocabdeck_apikeys.lua` and `vocabdeck_configuration.lua` are excluded**
   (per the plugin's own `.gitignore`) — see its `README.md` for how to
   populate them from the committed `.sample` files. Any updates made to this

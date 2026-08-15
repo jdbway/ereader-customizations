@@ -11,11 +11,16 @@ quiet, fast, and close to KOReader's native menus.
 VocabDeck is inspired by and derived from
 [smartdeck.koplugin](https://github.com/yupmoon/smartdeck.koplugin).
 
+> **This copy has been customized.** See [`CUSTOMIZATIONS.md`](CUSTOMIZATIONS.md)
+> in this same folder for the full list of deviations from upstream and why —
+> this README has been updated in place only where a documented behavior
+> actually changed.
+
 ## Features
 
-- **Save words as you read** — tap **Add to VocabDeck** from the dictionary popup or highlight menu. Each card keeps the word, its sentence, surrounding context, book title, and when you added it.
-- **Get AI definitions on the spot** — use **Define (VocabDeck)** when the built-in dictionary doesn't have what you need. It fetches a meaning, pronunciation, word type, and more before saving.
-- **Add cards manually** — open the main menu and pick **Add new card** to type in a word or phrase yourself.
+- **Save words as you read** — tap **VocabDeck Definition** from the dictionary popup, or the individual **Add to VD** / **Add to VD (Enriched)** / **Define (VD)** / **Grammar (VD)** actions from the highlight menu. Each card keeps the word, its sentence, surrounding context, book title, and when you added it. (See `CUSTOMIZATIONS.md` — the dictionary popup used to have three separate buttons here too.)
+- **Get AI definitions on the spot** — the dictionary popup's **VocabDeck Definition** button runs this automatically when online; it fetches a meaning, pronunciation, word type, and more before saving, and skips straight to a plain add if there's no Wi-Fi rather than attempting AI.
+- **Add cards manually** — open the main menu and pick **Add new card** to type in a word or phrase yourself. If you're online, it fetches AI data immediately after saving with no extra tap; offline, the card is just left pending for a later bulk fetch.
 - **Browse and manage everything** — open **All cards** or **Cards for this book**. Tap any row to view details, edit fields, refetch AI data, mark as known, check memory stats, or delete.
 - **Search and filter** — search by text, filter by word type or source language, or show only flagged cards. Sort by any field and switch to quick deletion mode when you need to clean up.
 - **Study with spaced repetition** — review using **Again**, **Hard**, **Good**, and **Easy** with an FSRS-style scheduler. Pick a source language or a specific book to study from.
@@ -40,14 +45,19 @@ VocabDeck is inspired by and derived from
 
 1. Open a book in KOReader.
 2. Select a word or phrase.
-3. Tap **Add to VocabDeck** to save the current lookup or selection.
-4. Tap **Define (VocabDeck)** if you want VocabDeck to fetch a definition first.
-5. Open **Tools > VocabDeck > Study** when you want to review.
+3. Tap **VocabDeck Definition** in the dictionary popup.
+4. Open **Tools > VocabDeck > Study** when you want to review.
 
-For ordinary dictionary lookups, **Add to VocabDeck** saves the word with the
-available definition and reading context. For phrases, or words without a good
-dictionary result, **Define (VocabDeck)** can create a card with AI-generated
-meaning and metadata.
+**VocabDeck Definition** does the right thing automatically: if the phrase is
+already a saved, enriched card, it shows that instantly (works offline). If
+it's new and you're online, it fetches an AI definition and previews it
+before saving (Cancel / Add Card). If it's new and you're offline, it skips
+straight to a plain add dialog rather than attempting AI.
+
+The highlight menu still has the original four separate actions — **Add to
+VD**, **Add to VD (Enriched)**, **Define (VD)**, **Grammar (VD)** — for when
+you want explicit control instead of the single combined dictionary-popup
+button.
 
 ## Main Menu
 
@@ -62,7 +72,7 @@ VocabDeck appears in KOReader's **Tools** menu.
 - **API Key**: enter or clear the key for the current provider.
 - **AI context words**: choose how much surrounding text is sent for AI lookup.
 - **Fetch missing info (this book)**: enrich pending cards from the current book.
-- **Fetch missing info (all books)**: enrich pending cards across the deck.
+- **Fetch missing info (all books)**: enrich pending cards across the deck — every language's database, not just whichever one you had open last. (See `CUSTOMIZATIONS.md`: upstream only fetched for the currently active language despite the "all books" label.)
 - **Settings**: study behavior, display fields, import, backup, and restore.
 - **About VocabDeck**: show provider and configuration status.
 
