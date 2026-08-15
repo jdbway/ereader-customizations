@@ -83,6 +83,16 @@ in this repo as SpringBreak-specific until verified otherwise.
   even though neither has a visible code-level dependency on it — keep it
   installed.
 
+- `koreader-plugins/cwasync.koplugin/` — **not third-party in the usual
+  sense**: vendored directly from KOReader's own mainline repo
+  (https://github.com/koreader/koreader/tree/master/plugins/cwasync.koplugin),
+  not a separate author's project. Handles progress sync *and* two-way
+  highlights/annotations sync with Calibre-Web NextGen (`sync_logic.lua` has
+  a real last-write-wins merge engine, not just percentage push). Note:
+  annotation sync is opt-in and manual — check "Sync KOReader highlights" in
+  its menu, then tap "Sync highlights now" each time; it does not currently
+  hook into automatic/periodic sync.
+
 - `koreader-settings/` — **ours.** Backups of the KOReader settings files
   that hold server URLs/credentials (Wallabag, Calibre OPDS, kosync), so a
   new device can be configured by copying files instead of retyping
@@ -107,18 +117,6 @@ in this repo as SpringBreak-specific until verified otherwise.
   itself and the API key from `immich_api.key` (see Secrets below) —
   **generate that key with only the `asset.upload` permission**, nothing
   broader.
-
-## Not included here (third-party, installed but not vendored)
-
-- `cwasync.koplugin` — **not third-party in the usual sense**: vendored
-  directly from KOReader's own mainline repo
-  (https://github.com/koreader/koreader/tree/master/plugins/cwasync.koplugin),
-  not a separate author's project. Handles progress sync *and* two-way
-  highlights/annotations sync with Calibre-Web NextGen (`sync_logic.lua`
-  has a real last-write-wins merge engine, not just percentage push). Note:
-  annotation sync is opt-in and manual — check "Sync KOReader highlights" in
-  its menu, then tap "Sync highlights now" each time; it does not currently
-  hook into automatic/periodic sync.
 
 ## Tailscale binary itself — deliberately not vendored
 
