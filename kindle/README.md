@@ -36,8 +36,26 @@ in this repo as SpringBreak-specific until verified otherwise.
   mode to switch networks turned out to be the only deterministic path, so
   the unreliable in-KOReader picker was removed entirely.
 
+  The "Framework Mode" reboot options are always tappable now (previously the
+  option matching the *current* mode was greyed out, which was more
+  confusing than useful). The whole "Network Extras" menu also now sets
+  `sorting_hint = "tools"` so it lands under KOReader's Tools (wrench) menu,
+  matching where every other plugin-added menu on this device shows up,
+  instead of the unrelated default bucket it fell into before.
+
 - `koreader-plugins/suspendhack.koplugin/` — **third-party**, see its
   `SOURCE.md`. Required for normal suspend/resume while frameworkless.
+
+- `koreader-plugins/vocabdeck.koplugin/` — **third-party**
+  ([yupmoon/vocabdeck.koplugin](https://github.com/yupmoon/vocabdeck.koplugin)),
+  vendored directly here (unlike `bookshelf`/`bookends`/`simpleui` below)
+  since its own config format is worth tracking a template for. Vocabulary
+  deck/flashcard plugin with optional AI enrichment. **Its real
+  `vocabdeck_apikeys.lua` and `vocabdeck_configuration.lua` are excluded**
+  (per the plugin's own `.gitignore`) — see its `README.md` for how to
+  populate them from the committed `.sample` files. Any updates made to this
+  plugin from another chat/session won't be reflected here until re-synced
+  from the device — this repo only has whatever was last copied over.
 
 - `koreader-settings/` — **ours.** Backups of the KOReader settings files
   that hold server URLs/credentials (Wallabag, Calibre OPDS, kosync), so a
@@ -53,6 +71,16 @@ in this repo as SpringBreak-specific until verified otherwise.
   It's launched from `start_tailscale.sh` (which already runs at boot via the
   existing `/etc/upstart/tailscale.conf` job) — no read-only-filesystem edits
   needed. Verified to survive a real reboot and self-heal a forced overwrite.
+
+- `tailscale/immich_upload_watch.sh` — **ours.** Polls
+  `/mnt/us/koreader/screenshots` every 30s and uploads any new file to a
+  self-hosted [Immich](https://immich.app) instance via its REST API
+  (`POST /api/assets`), tracking what's already been uploaded in a local
+  state file so nothing re-uploads. Also launched from `start_tailscale.sh`
+  alongside `dns_watch.sh`. Reads the server URL from the top of the script
+  itself and the API key from `immich_api.key` (see Secrets below) —
+  **generate that key with only the `asset.upload` permission**, nothing
+  broader.
 
 ## Not included here (third-party, installed but not vendored)
 
@@ -103,10 +131,32 @@ an `mntroot rw` remount to place back, documented there.
 
 ## Secrets — deliberately excluded, do not add these
 
-`auth.key` (Tailscale auth key), `ssh_host_*_key` (dropbear host keys), and
-`tailscaled.state` (contains the node's private key) all live under
-`/mnt/us/extensions/tailscale/bin/` on the device and must never be committed
-here.
+Every secret file below lives only on the device, is never committed here,
+and must be recreated by hand if setting this up fresh. For each one: the
+exact path, what it holds, and how to (re)populate it.
+
+- **`/mnt/us/extensions/tailscale/bin/auth.key`** — Tailscale auth key, plain
+  text, single line, no trailing newline required. Generate one at
+  https://login.tailscale.com/admin/settings/keys and paste it in. Read by
+  `start_tailscale.sh` as a fallback when a plain `tailscale up` reconnect
+  fails (first-time registration or after a reset).
+- **`/mnt/us/extensions/tailscale/bin/ssh_host_*_key`** — dropbear SSH host
+  keys. Don't hand-populate these; delete them and let dropbear regenerate
+  fresh ones on next start (`dropbear -R`, already the flag used here).
+- **`/mnt/us/extensions/tailscale/bin/tailscaled.state`** — contains the
+  node's Tailscale private key. Not something you write by hand; it's
+  created automatically the first time `tailscale up --auth-key=...`
+  succeeds. Deleting it forces the device to re-register as a "new" node.
+- **`/mnt/us/extensions/tailscale/bin/immich_api.key`** — Immich API key,
+  plain text, single line, no trailing newline required. Generate one from
+  the Immich **web UI** (not the Android app) under Account Settings → API
+  Keys → New API Key, with **only the `asset.upload` permission** checked —
+  nothing else. Read by `immich_upload_watch.sh`.
+- **`kindle/koreader-plugins/vocabdeck.koplugin/vocabdeck_apikeys.lua`** and
+  **`vocabdeck_configuration.lua`** — AI-provider API keys for VocabDeck's
+  optional enrichment feature. Copy the committed `.sample` files to these
+  names and fill them in; see that plugin's own `README.md` for the exact
+  format per provider.
 
 ## SSH access
 
