@@ -14,7 +14,7 @@ while true; do
         [ -f "$f" ] || continue
         name=$(basename "$f")
         if ! grep -qxF "$name" "$STATE" 2>/dev/null; then
-            ts=$(date -r "$f" +%Y-%m-%dT%H:%M:%S.000Z)
+            ts=$(date -u -r "$f" +%Y-%m-%dT%H:%M:%S.000Z)
             code=$(curl -s -o /tmp/immich_resp.json -w '%{http_code}' \
                 -X POST "$SERVER/api/assets" \
                 -H "x-api-key: $API_KEY" \
