@@ -14,6 +14,8 @@ kindle/
   koreader-plugins/networkextras.koplugin/   ours — Tailscale + framework-mode controls
   koreader-plugins/suspendhack.koplugin/     third-party (vendored, see its SOURCE.md)
   koreader-plugins/vocabdeck.koplugin/       third-party (vendored, see its README.md)
+  koreader-plugins/AnnotationSync.koplugin/  third-party — cross-device highlight sync via WebDAV
+  koreader-plugins/crossbill.koplugin/       third-party — syncs highlights to a Crossbill web UI
   tailscale/dns_watch.sh                     ours — self-healing MagicDNS watcher
   tailscale/start_tailscale.sh               ours — modified to launch both watchers
   tailscale/immich_upload_watch.sh           ours — uploads new KOReader screenshots to Immich

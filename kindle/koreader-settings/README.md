@@ -29,6 +29,17 @@ stripped for the other two. Re-enter them after copying.
   config inside KOReader's global `settings.reader.lua` instead of its own
   file, so there's nothing clean to copy — this note has the 3 values
   (server/username/password) and where to enter them in KOReader's menu.
+- `cloudstorage.lua` → copy to `koreader/settings/cloudstorage.lua`. Holds
+  the WebDAV account `AnnotationSync.koplugin` binds to. Password blank,
+  everything else (address, username, start folder) intact.
+- `annotationsync-NOTE.md` → not a settings file. `AnnotationSync.koplugin`
+  also needs a step inside `settings.reader.lua`'s `annotation_sync_plugin`
+  block that isn't backed up (same reasoning as `cwasync-NOTE.md`) — this
+  note covers both halves and the shared-infrastructure WebDAV server it
+  points at.
+- `crossbill-NOTE.md` → not a settings file. `crossbill.koplugin` stores its
+  config inside `settings.reader.lua`'s `crossbill_sync` block, same
+  situation as `cwasync`.
 
 ## UI / behaviour customization (no credentials involved)
 

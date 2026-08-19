@@ -93,6 +93,33 @@ in this repo as SpringBreak-specific until verified otherwise.
   its menu, then tap "Sync highlights now" each time; it does not currently
   hook into automatic/periodic sync.
 
+- `koreader-plugins/AnnotationSync.koplugin/` — **third-party**
+  ([dani84bs/AnnotationSync.koplugin](https://github.com/dani84bs/AnnotationSync.koplugin)),
+  vendored directly, unmodified (v2.0.0). Cross-device highlight/note/
+  bookmark sync via WebDAV, with smart last-write-wins merging and a trash
+  bin for recovering accidental deletions. Binds to a Cloud storage+ WebDAV
+  account rather than holding its own connection — config split across two
+  files, see `koreader-settings/annotationsync-NOTE.md`. The WebDAV server
+  itself is self-hosted (`rclone serve webdav`, `homelab-rclone` repo) and
+  shared across every device, not per-device config.
+
+  This is the practical fix for the stock KOReader → Joplin exporter being
+  unfit for purpose (creates a new note per re-export instead of updating in
+  place) — annotations land here first, in one KOReader-native shape, then
+  get pulled from the shared WebDAV store into whatever downstream tool
+  needs them, instead of each tool needing its own per-device sync story.
+
+- `koreader-plugins/crossbill.koplugin/` — **third-party**
+  ([Crossbill-App/koreader-plugin](https://github.com/Crossbill-App/koreader-plugin)),
+  vendored directly, unmodified. Syncs highlights to a self-hosted
+  [Crossbill](https://github.com/Crossbill-App/crossbill-web) instance for
+  a real web UI — browsing highlights, AI chapter summaries, flashcards.
+  Menu only appears in Tools while a document is open (`is_doc_only = true`
+  in its `main.lua`). Config in `settings.reader.lua`, see
+  `koreader-settings/crossbill-NOTE.md` — including a known upstream gap
+  where highlight notes don't currently make it into Crossbill (tracked in
+  that note).
+
 - `koreader-settings/` — **ours.** Backups of the KOReader settings files
   that hold server URLs/credentials (Wallabag, Calibre OPDS, kosync), so a
   new device can be configured by copying files instead of retyping

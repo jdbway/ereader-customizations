@@ -1,0 +1,570 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the AnnotationSync package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: AnnotationSync 1.9.9999\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-18 20:27+0000\n"
+"PO-Revision-Date: 2026-08-18 21:17+0800\n"
+"Last-Translator: 梦境 <myr231854@gmail.com>\n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
+"X-Poedit-Basepath: ../..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: _meta.lua:4 menus.lua:468
+msgid "Annotation Sync"
+msgstr "阅读同步"
+
+#: _meta.lua:5
+msgid "annotation_sync_plugin"
+msgstr "阅读同步插件"
+
+#: _meta.lua:6
+msgid "Sync annotations and bookmarks between devices."
+msgstr "在不同设备之间同步标注与书签。"
+
+#: exclude_dirs.lua:28
+msgid "Add directory..."
+msgstr "添加文件夹……"
+
+#: exclude_dirs.lua:49
+msgid "No directories excluded"
+msgstr "未排除任何文件夹"
+
+#: exclude_dirs.lua:58
+msgid "Remove this directory from the exclude list?"
+msgstr "是否将该文件夹从排除列表中移除？"
+
+#: exclude_dirs.lua:59
+msgid "Remove"
+msgstr "移除"
+
+#: exclude_dirs.lua:60 manager.lua:477 menus.lua:330 menus.lua:366
+#: menus.lua:414
+msgid "Cancel"
+msgstr "取消"
+
+#: exclude_dirs.lua:73
+msgid "Excluded directories for progress sync"
+msgstr "进度同步时排除的文件夹"
+
+#: main.lua:184 main.lua:198 manager.lua:238 manager.lua:279
+msgid "Reading progress sync is not supported on this version of KOReader."
+msgstr "当前版本KOReader不支持阅读进度同步。"
+
+#: main.lua:189
+msgid "A document must be active to jump to device progress."
+msgstr "显示云端阅读进度前请先打开文档。"
+
+#: main.lua:203
+msgid "A document must be active to push reading progress."
+msgstr "上传阅读进度请先打开文档。"
+
+#: main.lua:206
+msgid "Pushing reading progress..."
+msgstr "阅读进度上传中……"
+
+#: main.lua:209
+msgid "Reading progress pushed successfully."
+msgstr "阅读进度上传成功。"
+
+#: main.lua:211
+msgid "Failed to push reading progress."
+msgstr "阅读进度上传失败。"
+
+#: main.lua:251
+msgid "AnnotationSync: Manual Sync"
+msgstr "阅读同步：手动同步"
+
+#: main.lua:259
+msgid "AnnotationSync: Push settings to cloud"
+msgstr "阅读同步：上传设置到云端"
+
+#: main.lua:260
+msgid "Push the selected settings to the cloud."
+msgstr "上传所选设置到云端。"
+
+#: main.lua:267
+msgid "AnnotationSync: Pull settings from cloud"
+msgstr "阅读同步：从云端拉取设置"
+
+#: main.lua:268
+msgid "Pull the selected settings from the cloud."
+msgstr "从云端拉取所选设置。"
+
+#: main.lua:275
+msgid "AnnotationSync: Push reading progress"
+msgstr "阅读同步：上传阅读进度"
+
+#: main.lua:283
+msgid "AnnotationSync: Jump to device progress"
+msgstr "阅读同步：显示云端阅读进度"
+
+#: main.lua:291
+msgid "AnnotationSync: Sync All"
+msgstr "阅读同步：同步所有文档"
+
+#: main.lua:299
+msgid "AnnotationSync: Sync All (including unread)"
+msgstr "阅读同步：同步所有文档（包括未读）"
+
+#: main.lua:318
+msgid ""
+"Cloud destination set to:\n"
+"%1\n"
+"Provider: %2"
+msgstr ""
+"云储存位置：\n"
+"%1\n"
+"服务商：%2"
+
+#: main.lua:368
+msgid "Annotation restored."
+msgstr "标注已恢复。"
+
+#: main.lua:370 menus.lua:45
+msgid "Restored %1 annotations."
+msgstr "恢复%1标注。"
+
+#: manager.lua:243
+msgid "Network is disconnected, cannot pull progress"
+msgstr "网络连接不可用，无法上传进度"
+
+#: manager.lua:253
+msgid "Fetching remote progress..."
+msgstr "从云端获取进度中……"
+
+#: manager.lua:258
+msgid "Failed to fetch remote progress"
+msgstr "从云端获取进度失败"
+
+#: manager.lua:396
+msgid ""
+"Unable to sync the following document(s):\n"
+"%1\n"
+"\n"
+"Would you like to open the pending documents manager?"
+msgstr ""
+"无法同步以下文档：\n"
+"%1\n"
+"\n"
+"是否打开待同步文档管理器？"
+
+#: manager.lua:398
+msgid "Open Manager"
+msgstr "打开管理器"
+
+#: manager.lua:402 menus.lua:67
+msgid "Close"
+msgstr "关闭"
+
+#: manager.lua:469
+msgid "No home directory configured; cannot scan library."
+msgstr "未配置主目录，无法扫描书库。"
+
+#: manager.lua:475
+msgid ""
+"Scan your whole library for books with annotations that have never been "
+"synced, and sync them?\n"
+"\n"
+"This walks your library on disk and may take a while for large collections."
+msgstr "扫描整个书库，查找从未同步过标注的书籍并同步它们？\n\n此操作会遍历磁盘上的书库，对于较大的藏书可能需要一些时间。"
+
+#: manager.lua:476
+msgid "Scan && Sync"
+msgstr "扫描并同步"
+
+#: manager.lua:491
+msgid "Scanning library… (tap to cancel)"
+msgstr "正在扫描书库……（点击取消）"
+
+#: manager.lua:494
+msgid "Library scan cancelled."
+msgstr "书库扫描已取消。"
+
+#: manager.lua:500
+msgid "Scanned %1 book(s); everything is already synced."
+msgstr "已扫描 %1 本书；均已同步。"
+
+#: manager.lua:509
+msgid "Marked %1 book(s) for sync (skipped %2 unreadable). Syncing now…"
+msgstr "已标记 %1 本书待同步（跳过 %2 本无法读取的书）。正在同步……"
+
+#: manager.lua:511
+msgid "Marked %1 book(s) for sync. Syncing now…"
+msgstr "已标记 %1 本书待同步。正在同步……"
+
+#: manager.lua:649 manager.lua:658
+msgid "No hash"
+msgstr "无哈希值"
+
+#: menus.lua:27
+msgid "No deleted annotations found for this document."
+msgstr "未找到此文档的已删除标注。"
+
+#: menus.lua:36 menus.lua:42
+msgid "Restore All"
+msgstr "恢复全部"
+
+#: menus.lua:40
+msgid "Are you sure you want to restore all %1 deleted annotations?"
+msgstr "是否要恢复全部 %1条已删除的标注？"
+
+#: menus.lua:54 menus.lua:55
+msgid "Highlight"
+msgstr "高亮"
+
+#: menus.lua:63
+msgid ""
+"Do you want to restore this annotation?\n"
+"\n"
+"Page %1: %2"
+msgstr ""
+"是否要恢复此条标注？\n"
+"第 %1 页：%2"
+
+#: menus.lua:66
+msgid "Restore"
+msgstr "恢复"
+
+#: menus.lua:77
+msgid "Deleted Annotations"
+msgstr "已删除的标注"
+
+#: menus.lua:111
+msgid "(this device)"
+msgstr "（此设备）"
+
+#: menus.lua:130
+msgid "Jumped to page %1 from %2"
+msgstr "已从 %2 跳转到第 %1 页"
+
+#: menus.lua:137
+msgid "No remote progress found."
+msgstr "未找到远程进度。"
+
+#: menus.lua:142 menus.lua:726
+msgid "Jump to device progress"
+msgstr "显示云端阅读进度"
+
+#: menus.lua:182
+msgid "No other devices found in cloud settings."
+msgstr "在云端设置中未找到其他设备。"
+
+#: menus.lua:187 menus.lua:694
+msgid "Pull settings from cloud"
+msgstr "从云端拉取设置"
+
+#: menus.lua:225
+msgid "No differing settings found for this device."
+msgstr "未找到此设备不同的设置项。"
+
+#: menus.lua:237
+msgid "Import Selected Settings"
+msgstr "导入所选设置"
+
+#: menus.lua:250
+msgid "Successfully imported %1 settings."
+msgstr "成功导入 %1 项设置。"
+
+#: menus.lua:252
+msgid "No settings imported."
+msgstr "未导入任何设置。"
+
+#: menus.lua:262 settings_selection.lua:248
+msgid "Select All"
+msgstr "选择全部"
+
+#: menus.lua:272 settings_selection.lua:262
+msgid "Clear Selection"
+msgstr "清除已选项"
+
+#: menus.lua:298
+msgid "Settings from %1"
+msgstr "来自 %1 的设置"
+
+#: menus.lua:319
+msgid "No other devices found in this document's progress."
+msgstr "该文档的进度中未找到其他设备。"
+
+#: menus.lua:328
+msgid "Permanently purge \"%1\" from reading progress sync?"
+msgstr "是否永久将“%1”从阅读进度同步中清除？"
+
+#: menus.lua:329
+msgid "Purge"
+msgstr "清除"
+
+#: menus.lua:341
+msgid "Purge device from progress sync"
+msgstr "从进度同步中清除设备"
+
+#: menus.lua:355
+msgid "No devices purged"
+msgstr "没有已清除的设备"
+
+#: menus.lua:364
+msgid "Stop purging \"%1\" going forward?"
+msgstr "是否停止以后清除“%1”？"
+
+#: menus.lua:365
+msgid "Un-purge"
+msgstr "取消清除"
+
+#: menus.lua:379
+msgid "Purged devices"
+msgstr "已清除的设备"
+
+#: menus.lua:388
+msgid "No pending documents to sync."
+msgstr "没有待同步的文档。"
+
+#: menus.lua:412
+msgid ""
+"Do you want to sync this document?\n"
+"\n"
+"%1"
+msgstr ""
+"是否要同步此文档？\n"
+"\n"
+"%1"
+
+#: menus.lua:413
+msgid "Sync now"
+msgstr "立即同步"
+
+#: menus.lua:420
+msgid "Syncing %1..."
+msgstr "%1同步中……"
+
+#: menus.lua:426
+msgid "Successfully synced %1"
+msgstr "%1同步成功"
+
+#: menus.lua:428
+msgid "Failed to sync %1"
+msgstr "%1同步失败"
+
+#: menus.lua:435
+msgid "Could not open %1 for sync"
+msgstr "无法从云端打开 %1 进行同步"
+
+#: menus.lua:444
+msgid "Remove from list"
+msgstr "从列表中移除"
+
+#: menus.lua:447
+msgid "Removed %1 from sync list"
+msgstr "已将 %1 从同步列表中移除"
+
+#: menus.lua:460
+msgid "Pending Documents"
+msgstr "待同步文档"
+
+#: menus.lua:472
+msgid "Settings"
+msgstr "设置"
+
+#: menus.lua:475
+msgid "Cloud settings"
+msgstr "云储存设置"
+
+#: menus.lua:494
+msgid "Use filename instead of hash"
+msgstr "使用文件名而不是哈希值"
+
+#: menus.lua:505
+msgid "Menu location"
+msgstr "菜单位置"
+
+#: menus.lua:508
+msgid "Tools"
+msgstr "工具"
+
+#: menus.lua:518
+msgid "More tools"
+msgstr "更多工具"
+
+#: menus.lua:528
+msgid "None (shown as new item)"
+msgstr "无（显示为新项目）"
+
+#: menus.lua:540
+msgid "Automatically Sync All when network becomes available"
+msgstr "网络连接时自动同步所有文档"
+
+#: menus.lua:554
+msgid "Enable Reading Progress Sync"
+msgstr "启用阅读进度同步"
+
+#: menus.lua:568
+msgid "Sync using last word of page"
+msgstr "使用页面最后一个词进行同步"
+
+#: menus.lua:583
+msgid "Sync every %1 pages"
+msgstr "触发同步的页数：%1"
+
+#: menus.lua:591
+msgid "Sync every # pages"
+msgstr "触发同步的页数"
+
+#: menus.lua:610
+msgid "Manage excluded directories (progress sync)"
+msgstr "管理进度同步排除目录"
+
+#: menus.lua:619
+msgid "Manage purged devices"
+msgstr "管理已清除的设备"
+
+#: menus.lua:635
+msgid "Device name: %1"
+msgstr "设备名称：%1"
+
+#: menus.lua:648
+msgid "Set device name"
+msgstr "设置设备名称"
+
+#: menus.lua:649
+msgid "Leave empty to use the default device name."
+msgstr "留空使用默认名称。"
+
+#: menus.lua:668
+msgid "Show changed settings"
+msgstr "显示已更改的设置"
+
+#: menus.lua:677
+msgid "None"
+msgstr "无"
+
+#: menus.lua:678
+msgid "Current cloud: %1"
+msgstr "云服务：%1"
+
+#: menus.lua:685
+msgid "Push settings to cloud"
+msgstr "上传设置到云端"
+
+#: menus.lua:703
+msgid "Manual Sync"
+msgstr "手动同步"
+
+#: menus.lua:715
+msgid "Push reading progress"
+msgstr "上传阅读进度"
+
+#: menus.lua:737
+msgid "Purge device from progress sync..."
+msgstr "从进度同步中清除设备……"
+
+#: menus.lua:748
+msgid "Sync All"
+msgstr "同步所有文档"
+
+#: menus.lua:760
+msgid "Sync All (including unread)"
+msgstr "同步所有文档（包括未读）"
+
+#: menus.lua:773
+msgid "Show pending/unsynced documents"
+msgstr "显示待同步文档"
+
+#: menus.lua:780
+msgid "Show Deleted"
+msgstr "显示已删除标注"
+
+#: menus.lua:792
+msgid "Last sync: %1"
+msgstr "上次同步：%1"
+
+#: menus.lua:796
+msgid "Plugin version: %1"
+msgstr "插件版本：%1"
+
+#: menus.lua:800
+msgid ""
+"%1 (%4)\n"
+"Version: %2\n"
+"\n"
+"%3"
+msgstr ""
+"%1 (%4)\n"
+"版本：%2\n"
+"\n"
+"%3"
+
+#: menus.lua:809
+msgid "Why are some options greyed out?"
+msgstr "为什么有些选项不可用？"
+
+#: menus.lua:812
+msgid ""
+"Reading progress sync features are disabled because your KOReader version "
+"does not support the cloudstorage plugin.\n"
+"\n"
+"These features require a newer KOReader release (not yet available in stable "
+"releases)."
+msgstr ""
+"由于当前 版本 KOReader不支持云存储插件，阅读进度同步功能已禁用。\n"
+"\n"
+"这些功能需要更新版本的 KOReader（稳定版中尚不可用）。"
+
+#: remote.lua:63
+msgid "Sync conflict, please try again"
+msgstr "同步冲突，请重试"
+
+#: remote.lua:74
+msgid "Cloud Storage plugin is not enabled or available."
+msgstr "云存储插件未启用/不可用。"
+
+#: remote.lua:88
+msgid "No cloud destination set in settings."
+msgstr "设置中未配置云储存位置。"
+
+#: settings_selection.lua:329
+msgid "No changed settings found."
+msgstr "未找到已更改的设置。"
+
+#: settings_selection.lua:341
+msgid "Changed Settings"
+msgstr "已更改的设置"
+
+#: settings_sync.lua:43
+msgid ""
+"No settings are selected. Please select settings to sync in 'Show changed "
+"settings'."
+msgstr "尚未选择设置。请前往“显示已更改的设置”勾选要同步的设置。"
+
+#: settings_sync.lua:59
+msgid "Failed to write settings to local storage."
+msgstr "无法将设置写入本地存储。"
+
+#: settings_sync.lua:64
+msgid "Pushing settings to cloud..."
+msgstr "设置上传中……"
+
+#: settings_sync.lua:98
+msgid "Network is disconnected, cannot pull settings"
+msgstr "网络连接不可用，无法上传设置"
+
+#: settings_sync.lua:104
+msgid "Fetching settings from cloud..."
+msgstr "从云端获取设置中……"
+
+#: settings_sync.lua:110
+msgid "Failed to fetch settings from cloud"
+msgstr "从云端获取设置失败"
+
+#: silent_ui.lua:12
+msgid "Successfully synchronized."
+msgstr "同步成功。"
