@@ -19,6 +19,17 @@ in this repo as SpringBreak-specific until verified otherwise.
 
 ## Layout
 
+- `assistant.koplugin` — **not vendored here, deliberately.** AI Helper
+  plugin (Claude/GPT/Gemini/DeepSeek/Ollama while reading — the "Add to
+  Note"/"Save" conversation features underpinning most of the AI
+  highlights/notes on this device). Tracked in its own repo instead,
+  [jdbway/assistant.koplugin](https://github.com/jdbway/assistant.koplugin)
+  (a real fork of
+  [omer-faruq/assistant.koplugin](https://github.com/omer-faruq/assistant.koplugin),
+  with at least one PR merged upstream from it) — that repo is the
+  definitive copy with real history, so it's linked from here rather than
+  duplicated.
+
 - `koreader-plugins/networkextras.koplugin/` — **ours.** Adds a "Network
   Extras" entry to KOReader's main menu with:
   - **Framework Mode**: reboot with the Amazon framework enabled (needed to
