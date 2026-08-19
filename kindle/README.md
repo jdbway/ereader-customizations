@@ -19,16 +19,17 @@ in this repo as SpringBreak-specific until verified otherwise.
 
 ## Layout
 
-- `assistant.koplugin` — **not vendored here, deliberately.** AI Helper
-  plugin (Claude/GPT/Gemini/DeepSeek/Ollama while reading — the "Add to
-  Note"/"Save" conversation features underpinning most of the AI
-  highlights/notes on this device). Tracked in its own repo instead,
-  [jdbway/assistant.koplugin](https://github.com/jdbway/assistant.koplugin)
-  (a real fork of
-  [omer-faruq/assistant.koplugin](https://github.com/omer-faruq/assistant.koplugin),
-  with at least one PR merged upstream from it) — that repo is the
-  definitive copy with real history, so it's linked from here rather than
-  duplicated.
+- `assistant.koplugin` — **not vendored here, no local customizations.**
+  AI Helper plugin (Claude/GPT/Gemini/DeepSeek/Ollama while reading — the
+  "Add to Note"/"Save" conversation features underpinning most of the AI
+  highlights/notes on this device). Installed straight from upstream,
+  [omer-faruq/assistant.koplugin](https://github.com/omer-faruq/assistant.koplugin)
+  — no fork needed. A `jdbway/assistant.koplugin` fork existed briefly to
+  land [PR #197](https://github.com/omer-faruq/assistant.koplugin/pull/197)
+  (Wi-Fi-off actions hanging ~20s on a DNS timeout before prompting, instead
+  of checking radio state first) — merged 2026-08-18, fork has zero commits
+  beyond that and is now behind upstream, kept around or not as preferred,
+  doesn't matter either way.
 
 - `koreader-plugins/networkextras.koplugin/` — **ours.** Adds a "Network
   Extras" entry to KOReader's main menu with:
