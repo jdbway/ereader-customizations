@@ -1,9 +1,18 @@
 # ereader-customizations
 
-Custom KOReader/Tailscale setup for e-readers reaching a self-hosted
-Calibre-Web NextGen library (`calibre.truepob.com`) over a tailnet — one
-device at a time, starting with a Kindle Paperwhite 5, eventually a small
-fleet of Kobos for family members.
+An up-to-date mirror of the actual configuration running on my e-readers —
+KOReader plugins (ours and vendored third-party), boot hooks, Tailscale
+scripts, and settings-file backups — for a self-hosted Calibre-Web NextGen
+library (`calibre.truepob.com`) reached over a tailnet. One device family at
+a time: a Kindle Paperwhite 5 today, a small Kobo fleet for family members
+once that's underway.
+
+**Why this exists**: so a new or replacement device can be brought back to
+the current working setup by copying files out of here, instead of
+re-deriving the whole configuration from memory. That's also *why* it needs
+to track what's actually on each device, not just what was true the day a
+plugin was first added — see each device folder's README for the current
+snapshot.
 
 See `kindle/README.md` and `kobo/README.md` for per-device details.
 
@@ -31,6 +40,15 @@ scripts/                                     git submodules — each a standalon
 Cloning this repo? Add `--recurse-submodules`, or run
 `git submodule update --init` afterward — otherwise `scripts/*` show up as
 empty directories.
+
+## Licensing
+
+The root `LICENSE` (MIT) covers only the code/content authored here —
+`networkextras.koplugin`, the `tailscale/` scripts, and the
+`koreader-settings/` backups (all marked "ours" below). Every vendored
+third-party plugin under `kindle/koreader-plugins/` keeps its own upstream
+license in its own subdirectory's `LICENSE` file — check that file, not the
+root one, for terms on those.
 
 ## What's deliberately not in this repo
 

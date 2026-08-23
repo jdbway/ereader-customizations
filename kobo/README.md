@@ -1,6 +1,12 @@
 # Kobo setup
 
-Not started yet. Planning notes:
+Not started yet — no Kobo device configured, so nothing to mirror here.
+Once one exists, this folder will hold the same kind of thing `kindle/`
+does: an up-to-date copy of that device's actual plugins/config, kept in
+sync so it can be replicated onto a new or replacement Kobo (see the root
+README's "Why this exists").
+
+Planning notes so far:
 
 - Leaning toward Kobo over buying more Kindles for the nephew e-reader fleet:
   KOReader manages Wi-Fi directly on Kobo (a real network picker, not the

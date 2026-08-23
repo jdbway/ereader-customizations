@@ -5,6 +5,12 @@ Calibre-Web NextGen library. Goal: reach the OPDS catalog and sync progress
 over the tailnet from anywhere, with the Amazon framework disabled most of
 the time to save power.
 
+This folder mirrors what's actually installed and configured on that
+physical device right now — every plugin listed below, `koreader-settings/`,
+and `boot-hooks/` should match what's really on the Kindle. When the device
+changes (a plugin added/removed, a setting changed), this folder should be
+re-synced from it, not just left describing an earlier state.
+
 ## Jailbreak
 
 Jailbroken via **[SpringBreak](https://kindlemodding.org/jailbreaking/SpringBreak/)**.
