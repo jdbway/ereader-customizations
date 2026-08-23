@@ -20,6 +20,9 @@ kindle/
   tailscale/start_tailscale.sh               ours — modified to launch both watchers
   tailscale/immich_upload_watch.sh           ours — uploads new KOReader screenshots to Immich
 kobo/                                        not started yet
+scripts/
+  vocabdeck-crossbill-push/                  ours — one-shot VocabDeck -> Crossbill data migration
+                                              (direct API, sibling to the vocabdeck-anki-export repo)
 ```
 
 ## What's deliberately not in this repo
