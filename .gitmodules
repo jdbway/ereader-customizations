@@ -1,0 +1,9 @@
+[submodule "scripts/vocabdeck-anki-export"]
+	path = scripts/vocabdeck-anki-export
+	url = https://github.com/jdbway/vocabdeck-anki-export
+[submodule "scripts/vocabdeck-crossbill-export"]
+	path = scripts/vocabdeck-crossbill-export
+	url = https://github.com/jdbway/vocabdeck-crossbill-export
+[submodule "scripts/koreader-joplin-sync"]
+	path = scripts/koreader-joplin-sync
+	url = https://github.com/jdbway/koreader-joplin-sync
