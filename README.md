@@ -20,7 +20,17 @@ kindle/
   tailscale/start_tailscale.sh               ours — modified to launch both watchers
   tailscale/immich_upload_watch.sh           ours — uploads new KOReader screenshots to Immich
 kobo/                                        not started yet
+scripts/                                     git submodules — each a standalone public repo, linked
+                                              here so they're browsable alongside the device configs
+                                              that use them
+  vocabdeck-anki-export/                     VocabDeck -> Anki (.apkg) one-shot export
+  vocabdeck-crossbill-export/                VocabDeck -> Crossbill (direct API) one-shot push
+  koreader-joplin-sync/                      KOReader highlights/notes/VocabDeck -> Joplin ETL
 ```
+
+Cloning this repo? Add `--recurse-submodules`, or run
+`git submodule update --init` afterward — otherwise `scripts/*` show up as
+empty directories.
 
 ## What's deliberately not in this repo
 
