@@ -29,6 +29,11 @@ kindle/
   tailscale/start_tailscale.sh               ours — modified to launch both watchers
   tailscale/immich_upload_watch.sh           ours — uploads new KOReader screenshots to Immich
 kobo/                                        not started yet
+backup/backup_koreader.sh                    ours — Kodi-style raw snapshot: pulls the whole
+                                              plugins/ install + top-level settings/*.lua off a
+                                              device (gitignored output, see backup/README.md)
+backup/restore_koreader.sh                   ours — pushes a backup_koreader.sh snapshot onto a
+                                              fresh/replacement device
 scripts/                                     git submodules — each a standalone public repo, linked
                                               here so they're browsable alongside the device configs
                                               that use them
@@ -44,8 +49,8 @@ empty directories.
 ## Licensing
 
 The root `LICENSE` (MIT) covers only the code/content authored here —
-`networkextras.koplugin`, the `tailscale/` scripts, and the
-`koreader-settings/` backups (all marked "ours" below). Every vendored
+`networkextras.koplugin`, the `tailscale/` scripts, the `koreader-settings/`
+backups, and the `backup/` scripts (all marked "ours" below). Every vendored
 third-party plugin under `kindle/koreader-plugins/` keeps its own upstream
 license in its own subdirectory's `LICENSE` file — check that file, not the
 root one, for terms on those.
