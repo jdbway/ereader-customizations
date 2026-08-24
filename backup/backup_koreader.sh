@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Pulls a full "reinstall this device" snapshot off a KOReader device --
 # the whole plugins/ install plus every top-level settings/*.lua config
 # file (global settings.reader.lua plus the per-feature ones already

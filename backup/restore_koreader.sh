@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Pushes a backup_koreader.sh snapshot (plugins/ + settings/*.lua) onto a
 # target device at the matching paths under KOReader's install root.
 # Meant for a fresh or replacement Kindle that already has KOReader
