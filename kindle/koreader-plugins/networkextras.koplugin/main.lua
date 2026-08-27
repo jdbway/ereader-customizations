@@ -179,6 +179,11 @@ function NetworkExtras:addToMainMenu(menu_items)
                 sub_item_table_func = function() return self:getFrameworkModeMenu() end,
             },
             {
+                text = _("Tailscale Status"),
+                keep_menu_open = true,
+                callback = function() self:showTailscaleStatus() end,
+            },
+            {
                 text = _("Start Tailscale"),
                 keep_menu_open = true,
                 callback = function() self:startTailscale() end,
