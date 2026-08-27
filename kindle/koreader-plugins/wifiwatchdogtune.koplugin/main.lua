@@ -73,6 +73,17 @@ local function showResult(ok, err)
     end
 end
 
+-- Skips the write (and the restart prompt) entirely when the spinner was
+-- just confirmed without actually changing the value - restarting KOReader
+-- is only actually required when something on disk changed.
+local function applyIfChanged(old_value, new_value, pattern, replacement)
+    if new_value == old_value then
+        UIManager:show(InfoMessage:new{ text = _("No change."), timeout = 2 })
+        return
+    end
+    showResult(patchValue(pattern, replacement))
+end
+
 -- phd ("phone home") is stock Amazon device-telemetry infrastructure, not
 -- part of KOReader/this plugin - upstart-supervised (respawn) and tied to
 -- `start on started cmd`. Toggled here via initctl only (no touching
@@ -126,10 +137,9 @@ function WifiWatchdogTune:editFirstCheck()
         value_step = 1,
         ok_text = _("Save"),
         callback = function(spin)
-            local ok, err = patchValue(
+            applyIfChanged(current.first_check_min, spin.value,
                 "local default_network_timeout_seconds = %d+%*60",
                 "local default_network_timeout_seconds = " .. spin.value .. "*60")
-            showResult(ok, err)
         end,
     })
 end
@@ -149,10 +159,9 @@ function WifiWatchdogTune:editMaxCheck()
         value_step = 5,
         ok_text = _("Save"),
         callback = function(spin)
-            local ok, err = patchValue(
+            applyIfChanged(current.max_check_min, spin.value,
                 "local max_network_timeout_seconds = %d+%*60",
                 "local max_network_timeout_seconds = " .. spin.value .. "*60")
-            showResult(ok, err)
         end,
     })
 end
@@ -172,10 +181,9 @@ function WifiWatchdogTune:editNoiseMargin()
         value_step = 1,
         ok_text = _("Save"),
         callback = function(spin)
-            local ok, err = patchValue(
+            applyIfChanged(current.noise_margin, spin.value,
                 "local network_activity_noise_margin = %d+",
                 "local network_activity_noise_margin = " .. spin.value)
-            showResult(ok, err)
         end,
     })
 end
