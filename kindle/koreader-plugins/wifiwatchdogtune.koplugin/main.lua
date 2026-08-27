@@ -73,6 +73,40 @@ local function showResult(ok, err)
     end
 end
 
+-- phd ("phone home") is stock Amazon device-telemetry infrastructure, not
+-- part of KOReader/this plugin - upstart-supervised (respawn) and tied to
+-- `start on started cmd`. Toggled here via initctl only (no touching
+-- /etc/upstart/phd.conf), so it's session-only: any reboot brings it back
+-- automatically, no separate recovery mechanism needed.
+local function isPhdRunning()
+    return os.execute("pgrep -f 'phd -f' >/dev/null 2>&1") == 0
+end
+
+function WifiWatchdogTune:togglePhd()
+    local running = isPhdRunning()
+    if running then
+        UIManager:show(ConfirmBox:new{
+            text = _("Stop Amazon's Phone Home (phd) service for this session? It contributes background Wi-Fi traffic that can keep the auto-off watchdog from ever triggering. This only stops it until next reboot - it restarts automatically on its own after that, no manual recovery needed."),
+            ok_text = _("Stop"),
+            ok_callback = function()
+                local ok = os.execute("initctl stop phd >/dev/null 2>&1") == 0
+                if ok and not isPhdRunning() then
+                    UIManager:show(InfoMessage:new{ text = _("phd stopped for this session."), timeout = 3 })
+                else
+                    UIManager:show(InfoMessage:new{ text = _("Failed to stop phd."), timeout = 4 })
+                end
+            end,
+        })
+    else
+        local ok = os.execute("initctl start phd >/dev/null 2>&1") == 0
+        if ok and isPhdRunning() then
+            UIManager:show(InfoMessage:new{ text = _("phd started."), timeout = 3 })
+        else
+            UIManager:show(InfoMessage:new{ text = _("Failed to start phd."), timeout = 4 })
+        end
+    end
+end
+
 function WifiWatchdogTune:init()
     self.ui.menu:registerToMainMenu(self)
 end
@@ -153,6 +187,11 @@ function WifiWatchdogTune:getMenuItems()
             current.first_check_min, current.max_check_min, current.noise_margin)
         or _("Could not read current settings")
 
+    local phd_running = isPhdRunning()
+    local phd_status_text = phd_running
+        and _("phd (Amazon Phone Home): running")
+        or _("phd (Amazon Phone Home): stopped")
+
     return {
         { text = status_text, enabled = false },
         {
@@ -169,6 +208,13 @@ function WifiWatchdogTune:getMenuItems()
             text = _("Noise margin"),
             keep_menu_open = true,
             callback = function() self:editNoiseMargin() end,
+        },
+        { text = "───────────", enabled = false },
+        { text = phd_status_text, enabled = false },
+        {
+            text = phd_running and _("Stop Amazon Phone Home (phd)") or _("Start Amazon Phone Home (phd)"),
+            keep_menu_open = true,
+            callback = function() self:togglePhd() end,
         },
     }
 end
