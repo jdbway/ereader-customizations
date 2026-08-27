@@ -83,3 +83,31 @@ What it does: waits for `lab126` to start, then launches Tailscale in TUN
 mode via `start_tailscaled_tun.sh`, then `start_tailscale.sh` (which is
 **ours**, modified — see `../tailscale/start_tailscale.sh` — to also launch
 `dns_watch.sh`, the self-healing MagicDNS watcher).
+
+## `tailscale-watchdog.conf` — Tailscale keepalive watchdog (**disabled 2026-08-27**)
+
+Lives at `/etc/upstart/tailscale-watchdog.conf`, `respawn`-supervised, execs
+`../tailscale/tailscale_watchdog.sh`. Predates this session (found already
+present, older than its Aug 26 file mtime suggested — that was just a save,
+not creation) but wasn't caught by the 2026-08-13 audit above, so it was
+added sometime between the two.
+
+What it does: an infinite loop, `pgrep`-checking every 300s whether
+`tailscaled` is running and `tailscale status` reports connected; restarts
+whichever piece is down via the same `start_tailscaled_tun.sh` /
+`start_tailscale.sh` scripts the boot job uses. Cheap by design — each cycle
+is a local process check, not network I/O — but the *effect* of restarting
+is a full Tailscale reconnect (STUN probes to multiple DERP-adjacent hosts,
+NAT-PMP/UPnP portmap attempts, a DERP/control HTTP(S) round-trip), easily
+100+ packets in a few seconds.
+
+**Disabled 2026-08-27** (config renamed to `tailscale-watchdog.conf.disabled`
+on-device, process killed) after it was traced as the root cause of an
+extended debugging session: every "Tailscale off" test that session kept
+mysteriously showing Tailscale-shaped traffic a few minutes in, because this
+watchdog was silently un-doing the manual stop within one 5-minute cycle.
+Preference going forward is manual Tailscale control via
+`networkextras.koplugin`'s Start/Stop menu items, not an always-reconnecting
+background process. To re-enable: `mntroot rw`, rename the `.disabled` file
+back to `tailscale-watchdog.conf`, `mntroot ro`, reboot (or just re-`exec`
+the script directly for a non-persistent test).
