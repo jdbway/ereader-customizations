@@ -110,6 +110,44 @@ function NetworkExtras:getFrameworkModeMenu()
     }
 end
 
+-- Plain-text `tailscale status` is used instead of --json to avoid depending
+-- on a JSON decoder being available in every KOReader build; the self row's
+-- column layout (ip, hostname, user, os, ...) has been stable across the
+-- versions this device has run.
+function NetworkExtras:getTailscaleStatusText()
+    if not isTailscaledRunning() then
+        return _("Tailscale: not running")
+    end
+
+    local handle = io.popen(TS_DIR .. "/tailscale status --self --peers=false 2>&1")
+    local output = handle and handle:read("*a") or ""
+    if handle then handle:close() end
+    output = output:gsub("^%s+", ""):gsub("%s+$", "")
+
+    if output == "" then
+        return _("Tailscale: running, but status unavailable")
+    elseif output:match("Tailscale is stopped") then
+        return _("Tailscale: stopped")
+    elseif output:match("Logged out") then
+        return _("Tailscale: logged out")
+    elseif output:match("NeedsMachineAuth") then
+        return _("Tailscale: awaiting authorization")
+    end
+
+    local ip, hostname = output:match("^(%S+)%s+(%S+)")
+    if ip then
+        return string.format(_("Tailscale: connected\nIP: %s\nHost: %s"), ip, hostname or "?")
+    end
+    return _("Tailscale:\n") .. output
+end
+
+function NetworkExtras:showTailscaleStatus()
+    UIManager:show(InfoMessage:new{
+        text = self:getTailscaleStatusText(),
+        timeout = 5,
+    })
+end
+
 function NetworkExtras:onStartTailscale()
     self:startTailscale()
 end
@@ -118,11 +156,17 @@ function NetworkExtras:onStopTailscale()
     self:stopTailscale()
 end
 
+function NetworkExtras:onShowTailscaleStatus()
+    self:showTailscaleStatus()
+end
+
 function NetworkExtras:onDispatcherRegisterActions()
     Dispatcher:registerAction("start_tailscale",
         { category = "none", event = "StartTailscale", title = _("Start Tailscale"), general = true })
     Dispatcher:registerAction("stop_tailscale",
         { category = "none", event = "StopTailscale", title = _("Stop Tailscale"), general = true })
+    Dispatcher:registerAction("show_tailscale_status",
+        { category = "none", event = "ShowTailscaleStatus", title = _("Tailscale Status"), general = true })
 end
 
 function NetworkExtras:addToMainMenu(menu_items)
