@@ -111,3 +111,25 @@ Preference going forward is manual Tailscale control via
 background process. To re-enable: `mntroot rw`, rename the `.disabled` file
 back to `tailscale-watchdog.conf`, `mntroot ro`, reboot (or just re-`exec`
 the script directly for a non-persistent test).
+
+## `tailscale.conf` and `phd.conf` - both disabled 2026-08-27
+
+`tailscale.conf` (documented above, plain boot-autostart, not the watchdog)
+and stock `/etc/upstart/phd.conf` (`/usr/sbin/phd`, Amazon's own "phone
+home" device telemetry daemon - the upstart job's own top comment literally
+says `# phone home`, and the binary contains strings like `PHONE_HOME` /
+`PHONE_HOME_ACK`) were both renamed to `.disabled` at the user's explicit
+request. Root-cause work (raw-socket packet capture via `../tailscale/
+pktlog.lua`) found `phd` sending a UDP heartbeat to an Amazon IP roughly
+every 27s, on its own enough to defeat KOReader's `auto_disable_wifi` noise
+threshold - confirmed by stopping it and watching the watchdog actually fire
+in KOReader's own debug log, cross-validated against `wifiwatch.sh`'s
+independent interface-state polling. Same re-enable procedure as
+`tailscale-watchdog.conf` above.
+
+## `wifiwatch.conf` - ours, added 2026-08-27
+
+`respawn`-supervised, execs `../tailscale/wifiwatch.sh`. Added so the
+Wi-Fi-state/packet-capture monitoring set up for the `auto_disable_wifi`
+investigation survives a reboot during multi-day passive monitoring, instead
+of silently going dark until someone notices and manually relaunches it.
