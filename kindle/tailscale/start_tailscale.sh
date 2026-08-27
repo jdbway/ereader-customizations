@@ -22,13 +22,24 @@ echo "[$(date)] Starting Tailscale..." > "$LOG"
 # Background watchers (screenshot uploader, then resolv.conf fixup).
 # Started unconditionally, before any exit path below, so it runs regardless
 # of whether reconnect succeeds or falls through to the auth-key branch.
-if ! ps | grep -v grep | grep -q immich_upload_watch.sh; then
-    /mnt/us/extensions/tailscale/bin/immich_upload_watch.sh &
-fi
+#
+# PID-file locking instead of `ps | grep`: the grep-based check raced when
+# this script ran multiple times in quick succession (manual toggles plus,
+# formerly, the watchdog's own restart cycle) - multiple invocations could
+# each see "not running yet" before the first one's background launch showed
+# up in `ps`, spawning duplicates (found 6 of each watcher stacked up).
+start_once() {
+    target="$1"
+    pidfile="/mnt/us/extensions/tailscale/bin/.$(basename "$target").pid"
+    if [ -f "$pidfile" ] && kill -0 "$(cat "$pidfile")" 2>/dev/null; then
+        return 0
+    fi
+    "$target" &
+    echo $! > "$pidfile"
+}
 
-if ! ps | grep -v grep | grep -q dns_watch.sh; then
-    /mnt/us/extensions/tailscale/bin/dns_watch.sh &
-fi
+start_once "/mnt/us/extensions/tailscale/bin/immich_upload_watch.sh"
+start_once "/mnt/us/extensions/tailscale/bin/dns_watch.sh"
 eips_log "Reconnecting to Tailscale..."
 
 # Try reconnecting without re-authenticating first (works when the node is
