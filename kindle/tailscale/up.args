@@ -1,0 +1,1 @@
+--ssh --accept-routes --hostname=kindle --accept-dns=false

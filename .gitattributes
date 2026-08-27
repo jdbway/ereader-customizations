@@ -1,0 +1,7 @@
+# Everything in this repo deploys to Linux devices (Kindle/Kobo). Force LF
+# on checkout regardless of local git autocrlf settings - a CRLF shebang
+# line (`#!/bin/sh\r`) makes a script fail to exec with a misleading
+# "not found" error, which cost a long debugging session on 2026-08-27
+# after a Windows checkout silently reintroduced CRLF into a locally-edited
+# script that then got deployed as-is.
+* text=auto eol=lf

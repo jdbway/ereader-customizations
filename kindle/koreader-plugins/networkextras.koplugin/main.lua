@@ -3,11 +3,38 @@ local Dispatcher = require("dispatcher")
 local InfoMessage = require("ui/widget/infomessage")
 local UIManager = require("ui/uimanager")
 local WidgetContainer = require("ui/widget/container/widgetcontainer")
-local ffiutil = require("ffi/util")
 local _ = require("gettext")
 
-local TS_DIR = "/mnt/us/extensions/tailscale/bin"
 local FRAMEWORK_FLAG = "/mnt/us/DONT_START_FRAMEWORK"
+
+local function fileExists(path)
+    local f = io.open(path, "r")
+    if f then f:close(); return true end
+    return false
+end
+
+-- Device mount points differ (Kindle: /mnt/us, Kobo: /mnt/onboard), so the
+-- tailscale install location can't be a single hardcoded path if this plugin
+-- is meant to run on either. Auto-detects by checking known candidate
+-- layouts for the actual `tailscale` binary, rather than assuming Kindle.
+-- Kobo path is a convention (untested - no Kobo tailscale install exists
+-- yet), matching that platform's .adds-based jailbreak layout; add more
+-- candidates here if a real install ends up somewhere else.
+local TS_DIR_CANDIDATES = {
+    "/mnt/us/extensions/tailscale/bin",          -- Kindle (KUAL extensions)
+    "/mnt/onboard/.adds/tailscale/bin",          -- Kobo (.adds convention)
+}
+
+local function detectTsDir()
+    for _, dir in ipairs(TS_DIR_CANDIDATES) do
+        if fileExists(dir .. "/tailscale") then
+            return dir
+        end
+    end
+    return nil
+end
+
+local TS_DIR = detectTsDir()
 
 local NetworkExtras = WidgetContainer:extend{
     name = "networkextras",
@@ -18,30 +45,65 @@ local function isTailscaledRunning()
     return os.execute("pgrep -f tailscaled >/dev/null 2>&1") == 0
 end
 
-local function fileExists(path)
-    local f = io.open(path, "r")
-    if f then f:close(); return true end
-    return false
-end
-
 function NetworkExtras:init()
     self.ui.menu:registerToMainMenu(self)
     self:onDispatcherRegisterActions()
 end
 
-function NetworkExtras:startTailscale()
-    if not isTailscaledRunning() then
-        os.execute(TS_DIR .. "/start_tailscaled_tun.sh >/dev/null 2>&1 &")
-        ffiutil.sleep(3)
+-- Polls `tailscale status` a few times after firing the start scripts and
+-- reports what actually happened, instead of a blind "Starting…" toast with
+-- no way to tell success from failure short of checking manually. Both start
+-- scripts run backgrounded (non-blocking for the UI thread), so this is the
+-- only way to know the outcome without polling.
+function NetworkExtras:checkTailscaleStartResult(attempt)
+    local ok = os.execute(TS_DIR .. "/tailscale status >/dev/null 2>&1") == 0
+    if ok then
+        UIManager:show(InfoMessage:new{ text = _("Tailscale connected."), timeout = 3 })
+    elseif attempt < 4 then
+        UIManager:scheduleIn(4, function() self:checkTailscaleStartResult(attempt + 1) end)
+    else
+        UIManager:show(InfoMessage:new{
+            text = _("Tailscale failed to connect after 3 attempts.\nCheck tailscale_start_log.txt."),
+            timeout = 6,
+        })
     end
-    os.execute(TS_DIR .. "/start_tailscale.sh >/dev/null 2>&1 &")
+end
+
+function NetworkExtras:startTailscale()
+    if not TS_DIR then
+        UIManager:show(InfoMessage:new{ text = _("Tailscale not found on this device."), timeout = 3 })
+        return
+    end
+    if isTailscaledRunning() then
+        os.execute(TS_DIR .. "/start_tailscale.sh >/dev/null 2>&1 &")
+    else
+        os.execute(TS_DIR .. "/start_tailscaled_tun.sh >/dev/null 2>&1 &")
+        -- Give the daemon a moment to create its control socket before
+        -- `start_tailscale.sh` tries `tailscale up` against it. Scheduled
+        -- rather than ffiutil.sleep(3), which would block the whole UI.
+        UIManager:scheduleIn(3, function()
+            os.execute(TS_DIR .. "/start_tailscale.sh >/dev/null 2>&1 &")
+        end)
+    end
     UIManager:show(InfoMessage:new{ text = _("Starting Tailscale…"), timeout = 2 })
+    UIManager:scheduleIn(9, function() self:checkTailscaleStartResult(1) end)
 end
 
 function NetworkExtras:stopTailscale()
-    os.execute(TS_DIR .. "/stop_tailscale.sh >/dev/null 2>&1")
-    os.execute(TS_DIR .. "/stop_tailscaled.sh >/dev/null 2>&1")
-    UIManager:show(InfoMessage:new{ text = _("Tailscale stopped."), timeout = 2 })
+    if not TS_DIR then
+        UIManager:show(InfoMessage:new{ text = _("Tailscale not found on this device."), timeout = 3 })
+        return
+    end
+    local stop_ok = os.execute(TS_DIR .. "/stop_tailscale.sh >/dev/null 2>&1") == 0
+    local daemon_ok = os.execute(TS_DIR .. "/stop_tailscaled.sh >/dev/null 2>&1") == 0
+    if stop_ok and daemon_ok and not isTailscaledRunning() then
+        UIManager:show(InfoMessage:new{ text = _("Tailscale stopped."), timeout = 2 })
+    else
+        UIManager:show(InfoMessage:new{
+            text = _("Tailscale stop reported a problem — check tailscaled_stop_log.txt."),
+            timeout = 5,
+        })
+    end
 end
 
 -- update_tailscale.sh only replaces the binaries on disk (backing up the old
@@ -49,6 +111,10 @@ end
 -- to run while Tailscale is up. Progress prints directly to the screen via
 -- eips. Start/Stop Tailscale afterward to actually pick up the new binary.
 function NetworkExtras:updateTailscale()
+    if not TS_DIR then
+        UIManager:show(InfoMessage:new{ text = _("Tailscale not found on this device."), timeout = 3 })
+        return
+    end
     UIManager:show(ConfirmBox:new{
         text = _("Check for and install the latest Tailscale binaries (~31MB download)? Progress shows on-screen. You'll need to Stop then Start Tailscale afterward for the update to take effect."),
         ok_text = _("Update"),
@@ -115,6 +181,9 @@ end
 -- column layout (ip, hostname, user, os, ...) has been stable across the
 -- versions this device has run.
 function NetworkExtras:getTailscaleStatusText()
+    if not TS_DIR then
+        return _("Tailscale: not found on this device")
+    end
     if not isTailscaledRunning() then
         return _("Tailscale: not running")
     end
