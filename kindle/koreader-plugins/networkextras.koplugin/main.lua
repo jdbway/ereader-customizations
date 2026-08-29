@@ -1,4 +1,5 @@
 local ConfirmBox = require("ui/widget/confirmbox")
+local Device = require("device")
 local Dispatcher = require("dispatcher")
 local InfoMessage = require("ui/widget/infomessage")
 local UIManager = require("ui/uimanager")
@@ -17,24 +18,27 @@ end
 -- tailscale install location can't be a single hardcoded path if this plugin
 -- is meant to run on either. Auto-detects by checking known candidate
 -- layouts for the actual `tailscale` binary, rather than assuming Kindle.
--- Kobo path is a convention (untested - no Kobo tailscale install exists
--- yet), matching that platform's .adds-based jailbreak layout; add more
--- candidates here if a real install ends up somewhere else.
-local TS_DIR_CANDIDATES = {
-    "/mnt/us/extensions/tailscale/bin",          -- Kindle (KUAL extensions)
-    "/mnt/onboard/.adds/tailscale/bin",          -- Kobo (.adds convention)
+-- Kobo also runs its daemon on a non-default control socket (its boot
+-- script fixes this at /tmp/tailscaled.sock so `tailscale` and `tailscaled`
+-- can always find each other regardless of what launched them), so every
+-- direct `tailscale <verb>` call this plugin makes needs that flag too —
+-- Kindle's daemon uses the compiled-in default and needs no flag at all.
+local TS_CANDIDATES = {
+    { dir = "/mnt/us/extensions/tailscale/bin", socket = nil },                  -- Kindle (KUAL extensions)
+    { dir = "/mnt/onboard/.adds/tailscale/bin", socket = "/tmp/tailscaled.sock" }, -- Kobo (.adds convention)
 }
 
-local function detectTsDir()
-    for _, dir in ipairs(TS_DIR_CANDIDATES) do
-        if fileExists(dir .. "/tailscale") then
-            return dir
+local function detectTailscale()
+    for _, c in ipairs(TS_CANDIDATES) do
+        if fileExists(c.dir .. "/tailscale") then
+            return c.dir, c.socket
         end
     end
-    return nil
+    return nil, nil
 end
 
-local TS_DIR = detectTsDir()
+local TS_DIR, TS_SOCKET = detectTailscale()
+local SOCK_ARG = TS_SOCKET and (" --socket=" .. TS_SOCKET) or ""
 
 local NetworkExtras = WidgetContainer:extend{
     name = "networkextras",
@@ -56,7 +60,7 @@ end
 -- scripts run backgrounded (non-blocking for the UI thread), so this is the
 -- only way to know the outcome without polling.
 function NetworkExtras:checkTailscaleStartResult(attempt)
-    local ok = os.execute(TS_DIR .. "/tailscale status >/dev/null 2>&1") == 0
+    local ok = os.execute(TS_DIR .. "/tailscale" .. SOCK_ARG .. " status >/dev/null 2>&1") == 0
     if ok then
         UIManager:show(InfoMessage:new{ text = _("Tailscale connected."), timeout = 3 })
     elseif attempt < 4 then
@@ -188,7 +192,7 @@ function NetworkExtras:getTailscaleStatusText()
         return _("Tailscale: not running")
     end
 
-    local handle = io.popen(TS_DIR .. "/tailscale status --self --peers=false 2>&1")
+    local handle = io.popen(TS_DIR .. "/tailscale" .. SOCK_ARG .. " status --self --peers=false 2>&1")
     local output = handle and handle:read("*a") or ""
     if handle then handle:close() end
     output = output:gsub("^%s+", ""):gsub("%s+$", "")
@@ -239,35 +243,45 @@ function NetworkExtras:onDispatcherRegisterActions()
 end
 
 function NetworkExtras:addToMainMenu(menu_items)
+    local sub_item_table = {}
+
+    -- Framework Mode is an Amazon-framework concept with no Kobo equivalent
+    -- (KOReader manages Wi-Fi directly there) — showing it unconditionally
+    -- would let a Kobo user "reboot frameworkless" into a Kindle-only path
+    -- (/mnt/us/DONT_START_FRAMEWORK) that doesn't exist on their device,
+    -- rebooting it for nothing.
+    if Device:isKindle() then
+        table.insert(sub_item_table, {
+            text = _("Framework Mode"),
+            sub_item_table_func = function() return self:getFrameworkModeMenu() end,
+        })
+    end
+
+    table.insert(sub_item_table, {
+        text = _("Tailscale Status"),
+        keep_menu_open = true,
+        callback = function() self:showTailscaleStatus() end,
+    })
+    table.insert(sub_item_table, {
+        text = _("Start Tailscale"),
+        keep_menu_open = true,
+        callback = function() self:startTailscale() end,
+    })
+    table.insert(sub_item_table, {
+        text = _("Stop Tailscale"),
+        keep_menu_open = true,
+        callback = function() self:stopTailscale() end,
+    })
+    table.insert(sub_item_table, {
+        text = _("Update Tailscale"),
+        keep_menu_open = true,
+        callback = function() self:updateTailscale() end,
+    })
+
     menu_items.network_extras = {
         sorting_hint = "tools",
         text = _("Network Extras"),
-        sub_item_table = {
-            {
-                text = _("Framework Mode"),
-                sub_item_table_func = function() return self:getFrameworkModeMenu() end,
-            },
-            {
-                text = _("Tailscale Status"),
-                keep_menu_open = true,
-                callback = function() self:showTailscaleStatus() end,
-            },
-            {
-                text = _("Start Tailscale"),
-                keep_menu_open = true,
-                callback = function() self:startTailscale() end,
-            },
-            {
-                text = _("Stop Tailscale"),
-                keep_menu_open = true,
-                callback = function() self:stopTailscale() end,
-            },
-            {
-                text = _("Update Tailscale"),
-                keep_menu_open = true,
-                callback = function() self:updateTailscale() end,
-            },
-        }
+        sub_item_table = sub_item_table,
     }
 end
 
