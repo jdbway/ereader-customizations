@@ -203,24 +203,43 @@ let this list go stale.
     open question below** — the mechanism for the "Calibre" OPDS chip
     seen on the live rebuild isn't confirmed yet.
 
-## Open question: Bookshelf's auto-appearing "Calibre" chip
+## Bookshelf chip bar (Home / Recent / Calibre)
 
-On the 2026-08-29 rebuild, the chip bar showed exactly Home / Recent /
-Calibre (the custom OPDS catalog) with no manual chip-editor visit — but
-`settings/bookshelf.lua` has no `tabs` key saved at all, and the plugin's
-own source (`lib/bookshelf_tab_model.lua`) shows OPDS catalogs are
-**not** auto-converted into chips; a chip only exists if explicitly
-added with `source = {kind="opds", id=<serverKey>}` in the saved `tabs`
-list, and `lib/bookshelf_opds_catalogs.lua`'s write path confirms the
-same — nothing found that auto-seeds one from `opds.lua`'s server list.
-Somewhat contradicts what was actually seen on-screen. Once resolved
-(was a chip manually added and just not yet flushed to disk, is there a
-seed path not found by this read, or something else), document either:
-- the exact `tabs` block to write into `settings/bookshelf.lua` to
-  reproduce Home/Recent/Calibre on a new device without touching the UI
-  (the "config behind the scenes" outcome hoped for), or
-- confirmation that this has to be set up by hand in Bookshelf's chip
-  editor on each new device, if no file-only path exists.
+Resolved: the "auto-appearing" Calibre chip on the 2026-08-29 rebuild
+wasn't automatic — it (and removing Series/Favourites) was done by hand
+in Bookshelf's chip editor, same as on Kindle: long-press an unwanted
+chip → trash icon → confirm, and tap **+** → Chip source → **OPDS
+catalog...** → pick the configured server from the list (the same list
+`opds.lua` populates). This *can* be done by hand on each new device in
+under a minute.
+
+It can also be done as a pure file edit, confirmed working by writing it
+directly into `settings/bookshelf.lua`'s `tabs` key on 2026-08-29 (see
+`koreader-settings/bookshelf-tabs-template.lua` in this folder — merge
+just its `tabs` key into a device's real `settings/bookshelf.lua`, which
+also holds unrelated keys like `start_menu_items`; don't overwrite the
+whole file with the template). The one
+non-obvious part is `source.id` for an OPDS chip: it's not the catalog
+URL itself but a `djb2`-style hash of it (`lib/bookshelf_opds_source.lua`,
+`OpdsSource.serverKey()`) — `filter = {}` and `sort_priority = {}` (OPDS
+chips don't get a client-side sort; feed order is authoritative, per
+`SOURCE_SORT_DEFAULTS.opds` in `lib/bookshelf_chip_editor.lua`). To
+compute the key for a different catalog URL, run this on-device (needs
+KOReader's bundled `luajit`, matches the real algorithm exactly rather
+than reimplementing it — a from-scratch reimplementation attempt during
+this session's setup produced two different wrong answers before this
+approach was used instead):
+```sh
+/mnt/onboard/.adds/koreader/luajit -e '
+local url = "PUT_THE_OPDS_URL_HERE"
+local h = 5381
+for i = 1, #url do h = (h * 33 + url:byte(i)) % 4294967296 end
+print(string.format("%08x", h))'
+```
+Back up the device's current `settings/bookshelf.lua` before overwriting
+it (`cp ... bookshelf.lua.bak-...`), and restart KOReader afterward so it
+picks up the change from disk rather than overwriting it back with
+whatever's still cached in memory from the running session.
 
 ## Wi-Fi caveat: things can look connected but not actually pass traffic
 
