@@ -24,6 +24,9 @@ per-device details.
 shared/                    genuinely cross-device components — see below
   koreader-plugins/networkextras.koplugin/   ours — Tailscale controls
   koreader-plugins/immichupload.koplugin/    ours — uploads new screenshots to Immich
+  koreader-plugins/readinginsights.koplugin/ vendored — reading stats/goals popup,
+                                              powers the Reading streak micromodule's
+                                              "Reading insight" tap action
 kindle/
   koreader-plugins/        Kindle-specific + not-yet-audited-for-portability plugins
   koreader-settings/       settings-file backups (passwords blanked)
@@ -92,9 +95,10 @@ wherever else referenced, the `tailscale/` scripts, the `koreader-settings/`
 backups, and the `backup/` scripts. Every vendored third-party plugin
 (`bookshelf.koplugin`, `bookends.koplugin`, `simpleui.koplugin`,
 `crossbill.koplugin`, `cwasync.koplugin`, `appstore.koplugin`,
-`vocabdeck.koplugin`, `AnnotationSync.koplugin`, `suspendhack.koplugin`,
-etc.) keeps its own upstream license in its own subdirectory's `LICENSE`
-file — check that file, not the root one, for terms on those.
+`readinginsights.koplugin`, `vocabdeck.koplugin`, `AnnotationSync.koplugin`,
+`suspendhack.koplugin`, etc.) keeps its own upstream license in its own
+subdirectory's `LICENSE` file — check that file, not the root one, for
+terms on those.
 
 ## What's deliberately not in this repo
 

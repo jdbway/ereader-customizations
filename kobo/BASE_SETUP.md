@@ -151,6 +151,21 @@ actual device-specific assumptions (hardcoded `/mnt/us` paths,
 - **appstore.koplugin** — the KOReader App Store
   (`omer-faruq/appstore.koplugin`), for browsing/installing/updating
   community plugins from KOReader itself. No device-specific code.
+- **readinginsights.koplugin** — provides the "Reading insights" popup
+  (goal progress, achievements, calendar, records) and registers the
+  Dispatcher actions behind it (`reading_insights_popup`,
+  `reading_stats_popup`, `reading_calendar_popup`, `reading_records_popup`,
+  `reading_achievements_popup`). **Required for the Reading streak
+  micromodule's "Reading insight" tap option** (see Micromodules below) —
+  without this plugin installed, that tap action is selected successfully
+  in the module's settings dialog but silently does nothing when tapped,
+  because the Dispatcher action it calls doesn't exist. Found missing on
+  the 2026-08-29 Kobo rebuild (only ever installed on the Kindle, never
+  vendored into this repo) — pulled off the Kindle, audited (uses
+  `DataStorage` throughout, no hardcoded paths or `Device:isKindle()`
+  branches), and added here. Uses `DataStorage:getDataDir()` for its own
+  self-update mechanism too, so it's safe to update via its own in-plugin
+  updater on either device.
 
 ### KOReader settings (`koreader-settings/`, copy into
 `/mnt/onboard/.adds/koreader/settings/`)
@@ -238,6 +253,8 @@ let this list go stale.
     — revisit once there's a real preference, and document the chosen
     set here (or vendor the resulting `start_menu_items` block from
     `settings/bookshelf.lua` once it's disabled) so it's reproducible.
+    See "Micromodules" below for the specific home-screen module swap
+    that *is* decided (Clock + Reading streak).
 13. Bookshelf chip bar (Home/Recent/Calibre-style tabs): **see the
     open question below** — the mechanism for the "Calibre" OPDS chip
     seen on the live rebuild isn't confirmed yet.
@@ -295,6 +312,47 @@ on the Calibre chip entry).
 the chip → **Edit** (not the trash icon) → there's a download-folder
 option once the chip's source is OPDS (it isn't shown for the plain
 Home/Recent/etc. built-in sources) → pick the folder → Save.
+
+**This regressed once already** (2026-08-29, after the rebuild): the Calibre
+chip on the live device had no `download_dir` at all even though the fix
+above had already been proven out — because the chip actually in use was
+created by hand via long-press → **+** → OPDS catalog (the normal chip-bar
+setup flow), and that creation flow does **not** ask for a download folder;
+only the separate **Edit** step does, and that step was never performed on
+this device. **If OPDS downloads start landing in the wrong folder again,
+check whether `download_dir` is actually set on the chip in
+`settings/bookshelf.lua` before assuming something else broke** — creating
+a chip is not the same as setting its download folder, and it's an easy
+step to forget since nothing prompts for it up front.
+
+## Micromodules (Bookshelf home screen)
+
+Bookshelf's home screen tile grid is built from swappable "micromodules"
+(`bookshelf.koplugin/micromodules/*.lua`). Reached via the grid button on
+Bookshelf's bottom bar. Current chosen set, matching the Kindle:
+
+1. Long-press the existing analog clock module → **remove/trash** it.
+2. Long-press an empty slot (or the same slot) → **+** → pick **Clock**
+   (the plain digital clock module, not the analog one just removed).
+3. Long-press the Clock module just added → **+** → pick **Reading
+   streak** (`reading_streak.lua` — current/best consecutive-day and
+   -week streak, pulled from KOReader's own `statistics.sqlite3`, works
+   offline).
+4. Long-press the Reading streak module → its settings dialog → **Tap
+   action** → choose **Reading insight** (opens the same "Reading
+   insights" popup as the Kindle) or **Reading calendar** (KOReader's
+   built-in stats calendar view) — either works standalone, but
+   **Reading insight requires `readinginsights.koplugin`** to be
+   installed (see the plugin list above) or the tap silently does
+   nothing despite the setting showing as selected correctly. This was
+   the actual root cause when the Kobo rebuild's Reading streak tap
+   didn't do anything on 2026-08-29: the module's own code was fine
+   (`Dispatcher:execute({ reading_insights_popup = true })`), but nothing
+   on this device had ever registered that Dispatcher action, because
+   `readinginsights.koplugin` — a separate plugin from `bookshelf`, only
+   ever installed on the Kindle — had never been copied over or vendored
+   into this repo. Fixed by pulling it from the Kindle, auditing it for
+   the `shared/` rule, and adding it to the plugin list above.
 
 ## Wi-Fi caveat: things can look connected but not actually pass traffic
 

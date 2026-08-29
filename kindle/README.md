@@ -148,6 +148,23 @@ in this repo as SpringBreak-specific until verified otherwise.
   where highlight notes don't currently make it into Crossbill (tracked in
   that note).
 
+- `../shared/koreader-plugins/readinginsights.koplugin/` — **third-party**,
+  vendored directly (see its own `LICENSE`/`README.md`). Powers the
+  "Reading insights" popup (goal progress, achievements, calendar,
+  records) and registers the Dispatcher actions behind it
+  (`reading_insights_popup`, `reading_stats_popup`,
+  `reading_calendar_popup`, `reading_records_popup`,
+  `reading_achievements_popup`). Was only ever installed on the Kindle
+  and never documented or vendored into this repo until 2026-08-29, found
+  when the Kobo's Bookshelf "Reading streak" micromodule's "Reading
+  insight" tap option turned out to do nothing on that device — the tap
+  handler calls `Dispatcher:execute({ reading_insights_popup = true })`,
+  and that action simply didn't exist without this plugin installed.
+  Pulled from this device, audited (uses `DataStorage` throughout, no
+  Kindle-only paths), moved straight to `shared/` and installed on Kobo
+  too. Its own self-update mechanism (`lib/updater.lua`) is
+  `DataStorage`-based as well, so it's safe to update from either device.
+
 - `koreader-settings/` — **ours.** Backups of the KOReader settings files
   that hold server URLs/credentials (Wallabag, Calibre OPDS, kosync), so a
   new device can be configured by copying files instead of retyping

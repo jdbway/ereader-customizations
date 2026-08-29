@@ -1,0 +1,1638 @@
+# Reading Insights plugin translation (hu)
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Jan"
+msgstr "Jan."
+
+msgid "Feb"
+msgstr "Febr."
+
+msgid "Mar"
+msgstr "Márc."
+
+msgid "Apr"
+msgstr "Ápr."
+
+msgid "May"
+msgstr "Máj."
+
+msgid "Jun"
+msgstr "Jún."
+
+msgid "Jul"
+msgstr "Júl."
+
+msgid "Aug"
+msgstr "Aug."
+
+msgid "Sep"
+msgstr "Szept."
+
+msgid "Oct"
+msgstr "Okt."
+
+msgid "Nov"
+msgstr "Nov."
+
+msgid "Dec"
+msgstr "Dec."
+
+msgid "January"
+msgstr "Január"
+
+msgid "February"
+msgstr "Február"
+
+msgid "March"
+msgstr "Március"
+
+msgid "April"
+msgstr "Április"
+
+msgid "May "
+msgstr "Május"
+
+msgid "June"
+msgstr "Június"
+
+msgid "July"
+msgstr "Július"
+
+msgid "August"
+msgstr "Augusztus"
+
+msgid "September"
+msgstr "Szeptember"
+
+msgid "October"
+msgstr "Október"
+
+msgid "November"
+msgstr "November"
+
+msgid "December"
+msgstr "December"
+
+msgid "second read"
+msgstr "olvasott mp"
+
+msgid "seconds read"
+msgstr "olvasott mp"
+
+msgid "minute read"
+msgstr "olvasott perc"
+
+msgid "minutes read"
+msgstr "olvasott perc"
+
+msgid "hour read"
+msgstr "olvasott óra"
+
+msgid "hours read"
+msgstr "olvasott óra"
+
+msgid "day read"
+msgstr "olvasással töltött nap"
+
+msgid "days read"
+msgstr "olvasással töltött nap"
+
+msgid "book read"
+msgstr "olvasott könyv"
+
+msgid "books read"
+msgstr "olvasott könyv"
+
+msgid "day/book avg"
+msgstr "átlag nap/könyv"
+
+msgid "days/book avg"
+msgstr "átlag nap/könyv"
+
+msgid "of days read"
+msgstr "olvasott nap"
+
+msgid "page read"
+msgstr "olvasott oldal"
+
+msgid "pages read"
+msgstr "olvasott oldal"
+
+msgid "week"
+msgstr "hét"
+
+msgid "weeks"
+msgstr "hét"
+
+msgid "No streak"
+msgstr "Nincs sorozat"
+
+msgid "Current streak"
+msgstr "Aktuális sorozat"
+
+msgid "Best streak"
+msgstr "Leghosszabb sorozat"
+
+msgid "Days read per month"
+msgstr "Havonta olvasott napok"
+
+msgid "Time read per month"
+msgstr "Havi olvasási idő"
+
+msgid "Books read per month"
+msgstr "Havonta olvasott könyvek"
+
+msgid "Unknown"
+msgstr "Ismeretlen"
+
+msgid "No books read"
+msgstr "Nincs olvasott könyv"
+
+msgid "No books read in %1"
+msgstr "Nincs olvasott könyv: %1"
+
+msgid "No books read in "
+msgstr "Nincs olvasott könyv: "
+
+msgid "%1 - book read %2"
+msgstr "%1: %2 könyv olvasva"
+
+msgid "%1 - books read %2"
+msgstr "%1: %2 könyv olvasva"
+
+msgid "Reading goal"
+msgstr "Olvasási cél"
+
+msgid "%1 - reading goal"
+msgstr "%1 - olvasási cél"
+
+msgid "book finished"
+msgstr "elolvasott könyv"
+
+msgid "books finished"
+msgstr "elolvasott könyv"
+
+msgid "book goal"
+msgstr "könyves cél"
+
+msgid "books goal"
+msgstr "könyves cél"
+
+msgid "%1 - book finished %2"
+msgstr "%1: %2 könyv elolvasva"
+
+msgid "%1 - books finished %2"
+msgstr "%1: %2 könyv elolvasva"
+
+msgid "No books finished in %1"
+msgstr "Nincs elolvasott könyv: %1"
+
+msgid "Mark book finished - %1"
+msgstr "Elolvasott könyv megjelölése - %1"
+
+msgid "No books read in this year"
+msgstr "Ebben az évben nincs olvasott könyv"
+
+msgid "Reloading data..."
+msgstr "Adatok újraolvasása..."
+
+msgid "Reading insights"
+msgstr "Olvasási áttekintés"
+
+msgid "Reading insights: all time statistics"
+msgstr "Olvasási áttekintés: összesített statisztika"
+
+msgid "Reading insights: current book progress"
+msgstr "Olvasási áttekintés: aktuális könyv haladása"
+
+msgid "Reading insights: book progress calendar"
+msgstr "Olvasási áttekintés: könyv haladás naptár"
+
+msgid "All books read %1"
+msgstr "Összesen: %1 könyv olvasva"
+
+msgid "Total read"
+msgstr "Összes olvasás"
+
+msgid "Last week"
+msgstr "Legutóbbi hét"
+
+msgid "Months"
+msgstr "Hónapok"
+
+msgid "Bar chart height"
+msgstr "Oszlopdiagram magassága"
+
+msgid "Set"
+msgstr "Beállítás"
+
+msgid "avg/day"
+msgstr "átlag oldal/nap"
+
+msgid "Today"
+msgstr "Ma"
+
+msgid "Yesterday"
+msgstr "Tegnap"
+
+msgid "Mon"
+msgstr "Hét."
+
+msgid "Tue"
+msgstr "Kedd"
+
+msgid "Wed"
+msgstr "Sze."
+
+msgid "Thu"
+msgstr "Csüt."
+
+msgid "Fri"
+msgstr "Pén."
+
+msgid "Sat"
+msgstr "Szo."
+
+msgid "Sun"
+msgstr "Vas."
+
+msgid "read time avg/day"
+msgstr "átlag idő/nap"
+
+msgid "reading time"
+msgstr "olvasási idő"
+
+msgid "No streak dates"
+msgstr "Nincs megjeleníthető dátum"
+
+msgid "CalendarView not available"
+msgstr "CalendarView nem elérhető"
+
+msgid "Reading time over the last 8 weeks"
+msgstr "Elmúlt 8 hét olvasási ideje"
+
+msgid "Pages read over the last 8 weeks"
+msgstr "Elmúlt 8 hét olvasott oldalainak száma"
+
+msgid "Average daily reading time, last 8 weeks"
+msgstr "Elmúlt 8 hét átlagos napi olvasási ideje"
+
+msgid "Average daily pages, last 8 weeks"
+msgstr "Elmúlt 8 hét átlagos napi oldalszáma"
+
+msgid "No reading data in the last 8 weeks"
+msgstr "Nincs olvasási adat az elmúlt 8 héten"
+
+msgid "avg time/day"
+msgstr "átlag idő/nap"
+
+msgid "avg pages/day"
+msgstr "átlag oldal/nap"
+
+msgid "page read today"
+msgstr "oldal olvasva ma"
+
+msgid "pages read today"
+msgstr "oldal olvasva ma"
+
+msgid "book read in this streak"
+msgstr "könyvet olvasva ez alatt"
+
+msgid "books read in this streak"
+msgstr "könyv olvasva ez alatt"
+
+msgid "Show Reading insights"
+msgstr "Olvasási áttekintés megnyitása"
+
+msgid "Full-screen refresh on open/close"
+msgstr "Teljes képernyő frissítés megnyitáskor/bezáráskor"
+
+msgid "8-week chart order"
+msgstr "8 hetes grafikon sorrendje"
+
+msgid "Advanced settings"
+msgstr "Speciális beállítások"
+
+msgid "Reading heatmap range"
+msgstr "Heatmap időtartama"
+
+msgid "3 months"
+msgstr "3 hónap"
+
+msgid "4 months"
+msgstr "4 hónap"
+
+msgid "6 months"
+msgstr "6 hónap"
+
+msgid "Time format"
+msgstr "Időformátum"
+
+msgid "24-hour"
+msgstr "24 órás"
+
+msgid "12-hour (AM/PM)"
+msgstr "12 órás (AM/PM)"
+
+msgid "First day of week"
+msgstr "A hét első napja"
+
+msgid "Newest first"
+msgstr "Legújabb először"
+
+msgid "Oldest first"
+msgstr "Legrégebbi először"
+
+msgid "Newest first (descending)"
+msgstr "Legújabb először (csökkenő)"
+
+msgid "Oldest first (ascending)"
+msgstr "Legrégebbi először (növekvő)"
+
+msgid "Loading data…"
+msgstr "Adatok betöltése…"
+
+msgid "Book progress"
+msgstr "Könyv haladás"
+
+msgid "Show Book progress"
+msgstr "Könyv haladás megnyitása"
+
+msgid "Show Book progress calendar"
+msgstr "Könyv haladás naptár megnyitása"
+
+msgid "Book progress calendar"
+msgstr "Könyv haladás naptár"
+
+msgid "No reading data for this book yet."
+msgstr "Ehhez a könyvhöz még nincs olvasási adat."
+
+msgid "This chapter"
+msgstr "Aktuális fejezet"
+
+msgid "Next chapter"
+msgstr "Következő fejezet"
+
+msgid "This book"
+msgstr "Könyv"
+
+msgid "Pace"
+msgstr "Haladás"
+
+msgid "Chapters"
+msgstr "Fejezetek"
+
+msgid "today for all books"
+msgstr "ma: összes könyv"
+
+msgid "to go"
+msgstr "van hátra"
+
+msgid "to read"
+msgstr "olvasás"
+
+msgid "read"
+msgstr "elolvasva"
+
+msgid "read time"
+msgstr "olvasás"
+
+msgid "read today"
+msgstr "olvasott idő ma"
+
+msgid "per day"
+msgstr "naponta"
+
+msgid "second"
+msgstr "mp"
+
+msgid "seconds"
+msgstr "mp"
+
+msgid "minute"
+msgstr "perc"
+
+msgid "minutes"
+msgstr "perc"
+
+msgid "hour"
+msgstr "óra"
+
+msgid "hours"
+msgstr "óra"
+
+msgid "week reading"
+msgstr "olvasási hét"
+
+msgid "weeks reading"
+msgstr "olvasási hét"
+
+msgid "month reading"
+msgstr "olvasási hónap"
+
+msgid "months reading"
+msgstr "olvasási hónap"
+
+msgid "day reading"
+msgstr "olvasási nap"
+
+msgid "days reading"
+msgstr "olvasási nap"
+
+msgid "week to go"
+msgstr "hátralévő hét"
+
+msgid "weeks to go"
+msgstr "hátralévő hét"
+
+msgid "month to go"
+msgstr "hátralévő hónap"
+
+msgid "months to go"
+msgstr "hátralévő hónap"
+
+msgid "day to go"
+msgstr "hátralévő nap"
+
+msgid "days to go"
+msgstr "hátralévő nap"
+
+msgid "page"
+msgstr "oldal"
+
+msgid "pages"
+msgstr "oldal"
+
+msgid "page left"
+msgstr "hátralévő oldal"
+
+msgid "pages left"
+msgstr "hátralévő oldal"
+
+msgid "page per minute"
+msgstr "oldal percenként"
+
+msgid "pages per minute"
+msgstr "oldal percenként"
+
+msgid "less than"
+msgstr "kevesebb mint"
+
+msgid "read so far"
+msgstr "olvasási idő"
+
+msgid "reading time left"
+msgstr "hátralévő idő"
+
+msgid "(%d day left)"
+msgstr "(még %d nap)"
+
+msgid "(%d days left)"
+msgstr "(még %d nap)"
+
+msgid "day of reading left"
+msgstr "nap olvasás van hátra"
+
+msgid "days of reading left"
+msgstr "nap olvasás van hátra"
+
+msgid "day since started"
+msgstr "nappal ezelőtt elkezdve"
+
+msgid "days since started"
+msgstr "nappal ezelőtt elkezdve"
+
+msgid "Colors"
+msgstr "Színek"
+
+msgid "Active column color"
+msgstr "Aktív oszlop színe"
+
+msgid "Inactive column color"
+msgstr "Inaktív oszlop színe"
+
+msgid "Trend chart line color"
+msgstr "Trend diagram vonalának színe"
+
+msgid "Separator line color"
+msgstr "Elválasztó vonal színe"
+
+msgid "Label color"
+msgstr "Fejlécek színe"
+
+msgid "Value color"
+msgstr "Értékek színe"
+
+msgid "Section color"
+msgstr "Szekció színe"
+
+msgid "Chart label color"
+msgstr "Diagram felirat színe"
+
+msgid "Settings"
+msgstr "Beállítások"
+
+msgid "Reset all colors to default"
+msgstr "Összes szín visszaállítása alapértelmezettre"
+
+msgid "Cancel"
+msgstr "Mégse"
+
+msgid "Default"
+msgstr "Alapértelmezett"
+
+msgid "Save"
+msgstr "Mentés"
+
+msgid "Pick with color wheel"
+msgstr "Kiválasztás színkerékkel"
+
+msgid "Apply"
+msgstr "Alkalmaz"
+
+msgid "Brightness: %d%%"
+msgstr "Fényerő: %d%%"
+
+msgid "Enter a hex color code (e.g. #1E90FF), the way KOReader expects it."
+msgstr "Add meg a szín hex kódját (pl. #1E90FF), ahogy a KOReader is kezeli."
+
+msgid "Not a valid hex color code, e.g. #1E90FF."
+msgstr "Ez nem érvényes hex színkód, pl. #1E90FF."
+
+msgid "Reset all colors to their default values?"
+msgstr "Biztosan visszaállítod az összes színt az alapértelmezettre?"
+
+msgid "Reset"
+msgstr "Visszaállítás"
+
+msgid "Font"
+msgstr "Betűtípus"
+
+msgid "Fonts"
+msgstr "Betűtípusok"
+
+msgid "Choose a font"
+msgstr "Válassz betűtípust"
+
+msgid "Section headers"
+msgstr "Szekciófejlécek"
+
+msgid "Values (big numbers)"
+msgstr "Értékek (nagy számok)"
+
+msgid "Labels"
+msgstr "Fejlécek"
+
+msgid "Chart/axis labels"
+msgstr "Diagram-/tengelyfeliratok"
+
+msgid "Chapter-bar arrows"
+msgstr "Fejezetsáv nyilai"
+
+msgid "Font name"
+msgstr "Betűtípus neve"
+
+msgid "Enter a bundled font file name (e.g. NotoSans-Bold.ttf) or a KOReader font alias (e.g. tfont, cfont). If it can't be found, this role falls back to its default font."
+msgstr "Add meg egy csomagolt betűtípus fájlnevét (pl. NotoSans-Bold.ttf) vagy egy KOReader betűtípus-aliast (pl. tfont, cfont). Ha nem található, ez a szerep visszaáll az alapértelmezett betűtípusra."
+
+msgid "Please enter a non-empty font name."
+msgstr "Adj meg egy nem üres betűtípusnevet."
+
+msgid "Font size"
+msgstr "Betűméret"
+
+msgid "Custom font name (type manually)"
+msgstr "Egyéni betűtípus neve (kézi beírás)"
+
+msgid "Reset to default"
+msgstr "Visszaállítás alapértelmezettre"
+
+msgid "Reset all fonts to default"
+msgstr "Összes betűtípus visszaállítása alapértelmezettre"
+
+msgid "Reset all fonts to their default values?"
+msgstr "Biztosan visszaállítod az összes betűtípust az alapértelmezettre?"
+
+msgid "Set"
+msgstr "Beállít"
+
+msgid "Tomorrow"
+msgstr "Holnap"
+
+msgid "Monday"
+msgstr "Hétfő"
+
+msgid "Tuesday"
+msgstr "Kedd"
+
+msgid "Wednesday"
+msgstr "Szerda"
+
+msgid "Thursday"
+msgstr "Csütörtök"
+
+msgid "Friday"
+msgstr "Péntek"
+
+msgid "Saturday"
+msgstr "Szombat"
+
+msgid "Sunday"
+msgstr "Vasárnap"
+
+msgid "Started:"
+msgstr "Elkezdve:"
+
+msgid "Expected finish:"
+msgstr "Várható befejezés:"
+msgid "Use as sleep screen"
+msgstr "Használat alvó képernyőként"
+
+msgid "Reading insights sleep screen"
+msgstr "Olvasási áttekintés alvó képernyő"
+
+msgid "Sleep-screen indicator"
+msgstr "Alvó képernyő jelzés"
+
+msgid "Off"
+msgstr "Ki"
+
+msgid "File manager only"
+msgstr "Csak fájlkezelőből"
+
+msgid "File manager + book"
+msgstr "Fájlkezelőből és könyvből is"
+
+msgid "Only when locking from the file manager"
+msgstr "Csak akkor, ha fájlkezelőből alszik el a készülék"
+
+msgid "File manager and book view"
+msgstr "Fájlkezelőből és könyv olvasása közben is"
+
+msgid "Transition"
+msgstr "Átmenet"
+
+msgid "Slight delay"
+msgstr "Kis késleltetés"
+
+msgid "Instant"
+msgstr "Azonnali"
+
+msgid "Slight delay (0.1s)"
+msgstr "Kis késleltetés (0,1 mp)"
+
+msgid "sleeping…"
+msgstr "alvó mód…"
+
+msgid "Indicator"
+msgstr "Jelzés"
+
+msgid "\"(sleeping…)\" after the title"
+msgstr "„(alvó mód…)” a cím után"
+
+msgid "None"
+msgstr "Semmi"
+
+msgid "%d p"
+msgstr "%d o"
+
+msgid "Updates"
+msgstr "Frissítések"
+
+msgid "Notify on wake when update available"
+msgstr "Értesítés ébredéskor, ha van elérhető frissítés"
+
+msgid "Update available"
+msgstr "Elérhető frissítés"
+
+msgid "Installed version"
+msgstr "Telepített verzió"
+
+msgid "Developer updates"
+msgstr "Fejlesztői frissítések"
+
+msgid "Development branch"
+msgstr "Fejlesztői ág"
+
+msgid "Branch name (leave empty for stable)"
+msgstr "Ág neve (üresen hagyva a stabil verzió)"
+
+msgid "Check for updates"
+msgstr "Frissítések keresése"
+
+msgid "Install branch"
+msgstr "Ág telepítése"
+
+msgid "Reset to latest stable release"
+msgstr "Visszaállítás a legújabb stabil kiadásra"
+
+msgid "Installed: v"
+msgstr "Telepítve: v"
+
+msgid "This will clear the development branch setting and install the latest stable release of Reading insights, then restart KOReader. Continue?"
+msgstr "Ez törli a fejlesztői ág beállítást, telepíti az Olvasási áttekintés legújabb stabil kiadását, majd újraindítja a KOReadert. Folytatod?"
+
+msgid "Reading insights update available: v"
+msgstr "Olvasási áttekintés frissítés elérhető: v"
+
+msgid "Open the releases page in a browser?"
+msgstr "Megnyitod a kiadások oldalát böngészőben?"
+
+msgid "Open"
+msgstr "Megnyitás"
+
+msgid "Checking for updates..."
+msgstr "Frissítések keresése…"
+
+msgid "Could not check for updates."
+msgstr "Nem sikerült ellenőrizni a frissítéseket."
+
+msgid "Reading insights is up to date."
+msgstr "Az Olvasási áttekintés naprakész."
+
+msgid "Version: "
+msgstr "Verzió: "
+
+msgid "Update available!"
+msgstr "Elérhető frissítés!"
+
+msgid "Installed: "
+msgstr "Telepítve: "
+
+msgid "Latest: "
+msgstr "Legújabb: "
+
+msgid "Close"
+msgstr "Bezárás"
+
+msgid "Update and restart"
+msgstr "Frissítés és újraindítás"
+
+msgid "No download available for this release."
+msgstr "Ehhez a kiadáshoz nincs letölthető fájl."
+
+msgid "Downloading update..."
+msgstr "Frissítés letöltése…"
+
+msgid "Download failed."
+msgstr "A letöltés sikertelen."
+
+msgid "Installation failed: "
+msgstr "A telepítés sikertelen: "
+
+msgid "Reading insights updated to v"
+msgstr "Az Olvasási áttekintés frissítve erre: v"
+
+msgid "Restart KOReader now?"
+msgstr "Újraindítod most a KOReadert?"
+
+msgid "Restart"
+msgstr "Újraindítás"
+
+msgid "Could not install branch:"
+msgstr "Nem sikerült telepíteni az ágat:"
+
+msgid "Downloading latest release..."
+msgstr "Legújabb kiadás letöltése…"
+
+msgid "Could not fetch latest release."
+msgstr "Nem sikerült lekérni a legújabb kiadást."
+
+msgid "Latest release has no downloadable zip."
+msgstr "A legújabb kiadáshoz nincs letölthető zip fájl."
+
+msgid "Reading heatmap"
+msgstr "Olvasási hőtérkép"
+
+msgid "Time of day heatmap"
+msgstr "Napszak szerinti hőtérkép"
+
+msgid "Calendar heatmap"
+msgstr "Naptár hőtérkép"
+
+msgid "Less"
+msgstr "Kevesebb"
+
+msgid "More"
+msgstr "Több"
+
+msgid "No reading (0%)"
+msgstr "Nincs olvasás (0%)"
+
+msgid "Low activity (25%)"
+msgstr "Alacsony aktivitás (25%)"
+
+msgid "Medium activity (50%)"
+msgstr "Közepes aktivitás (50%)"
+
+msgid "High activity (75%)"
+msgstr "Magas aktivitás (75%)"
+
+msgid "Peak activity (100%)"
+msgstr "Csúcsaktivitás (100%)"
+
+msgid "Show long durations (24h+) as days"
+msgstr "24 óra feletti időtartamok napokban"
+
+msgid "Date format"
+msgstr "Dátumformátum"
+
+msgid "Book progress calendar cell content"
+msgstr "Könyv haladás naptár cella tartalma"
+
+msgid "Percent"
+msgstr "Százalék"
+
+msgid "Pages"
+msgstr "Oldal"
+
+msgid "Time"
+msgstr "Idő"
+
+msgid "day"
+msgstr "nap"
+
+msgid "days"
+msgstr "nap"
+
+msgid "No reading on this day."
+msgstr "Ezen a napon nem volt olvasás."
+
+msgid "About"
+msgstr "Névjegy"
+
+msgid "Reading insight"
+msgstr "Olvasási áttekintés"
+
+msgid "A full-screen overlay with a comprehensive overview of your reading history, powered by KOReader's statistics database."
+msgstr "Egy teljes képernyős áttekintés az olvasási előzményeidről, a KOReader statisztikai adatbázisára építve."
+
+msgid "Most reading time in a day"
+msgstr "Legtöbb napi olvasási idő"
+
+msgid "Most pages in a day"
+msgstr "Legtöbb oldal egy nap alatt"
+
+msgid "Best daily streak"
+msgstr "Leghosszabb napi sorozat"
+
+msgid "Fastest book finished"
+msgstr "Leggyorsabban kiolvasott könyv"
+
+msgid "Last milestone"
+msgstr "Utolsó mérföldkő"
+
+msgid "Next milestone"
+msgstr "Következő mérföldkő"
+
+msgid "Records"
+msgstr "Rekordok"
+
+msgid "%d hour left"
+msgstr "%d óra van hátra"
+
+msgid "%d hours left"
+msgstr "%d óra van hátra"
+
+msgid "Reading insights: records"
+msgstr "Olvasási áttekintés: rekordok"
+
+msgid "Show Records"
+msgstr "Rekordok megjelenítése"
+
+msgid "Sub-values (date / book title)"
+msgstr "Alértékek (dátum / könyvcím)"
+
+msgid "Reading goal section"
+msgstr "Olvasási cél szakasz"
+
+msgid "Shows the number of books finished this year next to your yearly goal. Long press the goal value to change it."
+msgstr "Az idén befejezett könyvek számát mutatja az éves cél mellett. A cél értékét hosszan nyomva módosíthatod."
+
+msgid "book to read"
+msgstr "könyv a cél"
+
+msgid "books to read"
+msgstr "könyv a cél"
+
+msgid "* = changed by you"
+msgstr "* = általad módosítva"
+
+msgid "You changed 1 book. Go back?"
+msgstr "1 könyvet módosítottál. Visszalépsz?"
+
+msgid "You changed %d books. Go back?"
+msgstr "%d könyvet módosítottál. Visszalépsz?"
+
+msgid "Keep editing"
+msgstr "Folytatom a szerkesztést"
+
+msgid "Automatic"
+msgstr "Automatikus"
+
+msgid "Sizes the Reading insights bar charts so the page fits the screen without a scroll bar."
+msgstr "Az Olvasási áttekintés oszlopdiagramjait úgy méretezi, hogy az oldal görgetősáv nélkül elférjen a képernyőn."
+
+msgid "Last read (newest first)"
+msgstr "Utolsó olvasás szerint (legújabb elöl)"
+
+msgid "Last read (oldest first)"
+msgstr "Utolsó olvasás szerint (legrégebbi elöl)"
+
+msgid "Title (A to Z)"
+msgstr "Cím szerint (A-tól Z-ig)"
+
+msgid "Title (Z to A)"
+msgstr "Cím szerint (Z-től A-ig)"
+
+msgid "Books finished in %1"
+msgstr "%1 - befejezett könyvek"
+
+msgid "Mark books finished"
+msgstr "Könyvek befejezettnek jelölése"
+
+msgid "Add book"
+msgstr "Könyv hozzáadása"
+
+msgid "Edit book"
+msgstr "Könyv szerkesztése"
+
+msgid "Edit"
+msgstr "Szerkesztés"
+
+msgid "Delete"
+msgstr "Törlés"
+
+msgid "Delete \"%1\"?"
+msgstr "Törlöd ezt: \"%1\"?"
+
+msgid "Title"
+msgstr "Cím"
+
+msgid "Author"
+msgstr "Szerző"
+
+msgid "Please enter a title"
+msgstr "Adj meg egy címet"
+
+msgid "Date read (%1)"
+msgstr "Olvasás dátuma (%1)"
+
+msgid "Please enter the date as %1"
+msgstr "A dátumot %1 formában add meg"
+
+msgid "Reload data"
+msgstr "Adatok újratöltése"
+
+msgid "Add books manually"
+msgstr "Könyvek kézi felvétele"
+
+msgid "Add books manually - %1"
+msgstr "Könyvek kézi felvétele - %1"
+
+msgid "Date & time"
+msgstr "Dátum és idő"
+
+msgid "Reading insight popup"
+msgstr "Olvasási áttekintés ablak"
+
+msgid "Last week chapter bar order"
+msgstr "Múlt heti oszlopok sorrendje"
+
+msgid "Today on the left"
+msgstr "Ma a bal oldalon"
+
+msgid "Today on the right"
+msgstr "Ma a jobb oldalon"
+
+msgid "Reading goal display"
+msgstr "Olvasási cél megjelenítése"
+
+msgid "Goal total"
+msgstr "Teljes cél"
+
+msgid "Remaining"
+msgstr "Hátralévő"
+
+msgid "book left"
+msgstr "könyv van hátra"
+
+msgid "books left"
+msgstr "könyv van hátra"
+
+msgid "night"
+msgstr "éjszaka"
+
+msgid "morning"
+msgstr "reggel"
+
+msgid "late morning"
+msgstr "délelőtt"
+
+msgid "afternoon"
+msgstr "délután"
+
+msgid "evening"
+msgstr "este"
+
+msgid "You read most in the %1, around %2"
+msgstr "Legtöbbet %1 %2 közt olvasol"
+
+msgid "Achievements"
+msgstr "Teljesítmények"
+
+msgid "Show Achievements"
+msgstr "Teljesítmények megnyitása"
+
+msgid "Reading insights: achievements"
+msgstr "Olvasási áttekintés: teljesítmények"
+
+msgid "earned"
+msgstr "megszerezve"
+
+msgid "Locked"
+msgstr "Zárolt"
+
+msgid "Set reading goal"
+msgstr "Olvasási cél beállítása"
+
+msgid "First book"
+msgstr "Első könyv"
+
+msgid "Finish your first book"
+msgstr "Fejezd be az első könyvedet"
+
+msgid "Bookworm"
+msgstr "Könyvmoly"
+
+msgid "Finish 10 books"
+msgstr "Olvass el 10 könyvet"
+
+msgid "Bibliophile"
+msgstr "Bibliofil"
+
+msgid "Finish 50 books"
+msgstr "Olvass el 50 könyvet"
+
+msgid "100 hours"
+msgstr "100 óra"
+
+msgid "Read for 100 hours in total"
+msgstr "Olvass összesen 100 órát"
+
+msgid "1000 hours"
+msgstr "1000 óra"
+
+msgid "Read for 1000 hours in total"
+msgstr "Olvass összesen 1000 órát"
+
+msgid "Weekly streak"
+msgstr "Heti sorozat"
+
+msgid "Read on 7 days in a row"
+msgstr "Olvass 7 egymást követő napon"
+
+msgid "Monthly streak"
+msgstr "Havi sorozat"
+
+msgid "Read on 30 days in a row"
+msgstr "Olvass 30 egymást követő napon"
+
+msgid "Marathon"
+msgstr "Maraton"
+
+msgid "Read for 3 hours in a single day"
+msgstr "Olvass 3 órát egyetlen nap alatt"
+
+msgid "Page turner"
+msgstr "Lapozó"
+
+msgid "Read 300 pages in a single day"
+msgstr "Olvass 300 oldalt egyetlen nap alatt"
+
+msgid "Night owl"
+msgstr "Éjjeli bagoly"
+
+msgid "Read between midnight and 4 a.m."
+msgstr "Olvass éjfél és hajnali 4 között"
+
+msgid "Earned (newest first)"
+msgstr "Megszerzés (legújabb elöl)"
+
+msgid "Earned (oldest first)"
+msgstr "Megszerzés (legrégebbi elöl)"
+
+msgid "Name (A to Z)"
+msgstr "Név (A-Z)"
+
+msgid "Name (Z to A)"
+msgstr "Név (Z-A)"
+
+msgid "Five books"
+msgstr "Öt könyv"
+
+msgid "Collector"
+msgstr "Gyűjtő"
+
+msgid "Century of books"
+msgstr "Száz könyv"
+
+msgid "Library"
+msgstr "Könyvtár"
+
+msgid "Prolific month"
+msgstr "Termékeny hónap"
+
+msgid "Ten a year"
+msgstr "Éves tízes"
+
+msgid "Fifty a year"
+msgstr "Éves ötvenes"
+
+msgid "In one sitting"
+msgstr "Egyszuszra"
+
+msgid "Brick"
+msgstr "Tégla"
+
+msgid "Tome"
+msgstr "Monstrum"
+
+msgid "First hour"
+msgstr "Első óra"
+
+msgid "Five hours"
+msgstr "Öt óra"
+
+msgid "Ten hours"
+msgstr "Tíz óra"
+
+msgid "Twenty-five hours"
+msgstr "Huszonöt óra"
+
+msgid "Fifty hours"
+msgstr "Ötven óra"
+
+msgid "250 hours"
+msgstr "250 óra"
+
+msgid "500 hours"
+msgstr "500 óra"
+
+msgid "2500 hours"
+msgstr "2500 óra"
+
+msgid "5000 hours"
+msgstr "5000 óra"
+
+msgid "10000 hours"
+msgstr "10000 óra"
+
+msgid "Intense month"
+msgstr "Intenzív hónap"
+
+msgid "100 hours in a year"
+msgstr "100 óra egy évben"
+
+msgid "500 hours in a year"
+msgstr "500 óra egy évben"
+
+msgid "1000 pages"
+msgstr "1000 oldal"
+
+msgid "10000 pages"
+msgstr "10000 oldal"
+
+msgid "50000 pages"
+msgstr "50000 oldal"
+
+msgid "100000 pages"
+msgstr "100000 oldal"
+
+msgid "Devourer"
+msgstr "Habzsoló"
+
+msgid "Unstoppable"
+msgstr "Megállíthatatlan"
+
+msgid "Getting into it"
+msgstr "Rákaptál"
+
+msgid "Two weeks"
+msgstr "Két hét"
+
+msgid "Hundred-day streak"
+msgstr "Százas széria"
+
+msgid "A full year"
+msgstr "Egy teljes év"
+
+msgid "Monthly rhythm"
+msgstr "Havi ritmus"
+
+msgid "Quarter"
+msgstr "Negyedév"
+
+msgid "Perfect month"
+msgstr "Hiánytalan hónap"
+
+msgid "Weekend warrior"
+msgstr "Hétvégi harcos"
+
+msgid "Absorbed"
+msgstr "Elmélyült"
+
+msgid "Marathon day"
+msgstr "Maratoni nap"
+
+msgid "One sitting"
+msgstr "Egyhuzamban"
+
+msgid "Deep session"
+msgstr "Kétórás mélymerülés"
+
+msgid "Past midnight"
+msgstr "Éjfél után"
+
+msgid "Early bird"
+msgstr "Korán kelő"
+
+msgid "Lunch break"
+msgstr "Ebédszünet"
+
+msgid "Around the clock"
+msgstr "Körben az órán"
+
+msgid "Full week"
+msgstr "Teljes hét"
+
+msgid "New Year's Eve reader"
+msgstr "Szilveszteri olvasó"
+
+msgid "New Year's resolution"
+msgstr "Újévi fogadalom"
+
+msgid "Speed reader"
+msgstr "Gyorsolvasó"
+
+msgid "Devoted"
+msgstr "Elkötelezett"
+
+msgid "Well-read"
+msgstr "Sokszínű"
+
+msgid "Literary"
+msgstr "Irodalmár"
+
+msgid "Explorer"
+msgstr "Kalandozó"
+
+msgid "Finish 5 books"
+msgstr "Olvass el 5 könyvet"
+
+msgid "Finish 25 books"
+msgstr "Olvass el 25 könyvet"
+
+msgid "Finish 100 books"
+msgstr "Olvass el 100 könyvet"
+
+msgid "Finish 250 books"
+msgstr "Olvass el 250 könyvet"
+
+msgid "Finish 3 books in one calendar month"
+msgstr "Fejezz be 3 könyvet egy naptári hónapban"
+
+msgid "Finish 10 books in one year"
+msgstr "Fejezz be 10 könyvet egy évben"
+
+msgid "Finish 50 books in one year"
+msgstr "Fejezz be 50 könyvet egy évben"
+
+msgid "Finish a book on the day you started it"
+msgstr "Fejezz be egy könyvet aznap, amikor elkezdted"
+
+msgid "Finish a book of 500+ pages"
+msgstr "Fejezz be egy 500+ oldalas könyvet"
+
+msgid "Finish a book of 1000+ pages"
+msgstr "Fejezz be egy 1000+ oldalas könyvet"
+
+msgid "Read for 1 hour in total"
+msgstr "Olvass összesen 1 órát"
+
+msgid "Read for 5 hours in total"
+msgstr "Olvass összesen 5 órát"
+
+msgid "Read for 10 hours in total"
+msgstr "Olvass összesen 10 órát"
+
+msgid "Read for 25 hours in total"
+msgstr "Olvass összesen 25 órát"
+
+msgid "Read for 50 hours in total"
+msgstr "Olvass összesen 50 órát"
+
+msgid "Read for 250 hours in total"
+msgstr "Olvass összesen 250 órát"
+
+msgid "Read for 500 hours in total"
+msgstr "Olvass összesen 500 órát"
+
+msgid "Read for 2500 hours in total"
+msgstr "Olvass összesen 2500 órát"
+
+msgid "Read for 5000 hours in total"
+msgstr "Olvass összesen 5000 órát"
+
+msgid "Read for 10000 hours in total"
+msgstr "Olvass összesen 10000 órát"
+
+msgid "Read for 50 hours in one calendar month"
+msgstr "Olvass 50 órát egy naptári hónapban"
+
+msgid "Read for 100 hours in one year"
+msgstr "Olvass 100 órát egy évben"
+
+msgid "Read for 500 hours in one year"
+msgstr "Olvass 500 órát egy évben"
+
+msgid "Read 1000 pages in total"
+msgstr "Olvass összesen 1000 oldalt"
+
+msgid "Read 10000 pages in total"
+msgstr "Olvass összesen 10000 oldalt"
+
+msgid "Read 50000 pages in total"
+msgstr "Olvass összesen 50000 oldalt"
+
+msgid "Read 100000 pages in total"
+msgstr "Olvass összesen 100000 oldalt"
+
+msgid "Read 500 pages in a single day"
+msgstr "Olvass 500 oldalt egyetlen nap alatt"
+
+msgid "Read 1000 pages in a single day"
+msgstr "Olvass 1000 oldalt egyetlen nap alatt"
+
+msgid "Read on 3 days in a row"
+msgstr "Olvass 3 egymást követő napon"
+
+msgid "Read on 14 days in a row"
+msgstr "Olvass 14 egymást követő napon"
+
+msgid "Read on 100 days in a row"
+msgstr "Olvass 100 egymást követő napon"
+
+msgid "Read on 365 days in a row"
+msgstr "Olvass 365 egymást követő napon"
+
+msgid "A 4-week reading streak"
+msgstr "4 hetes olvasási sorozat"
+
+msgid "A 12-week reading streak"
+msgstr "12 hetes olvasási sorozat"
+
+msgid "Read on every day of a calendar month"
+msgstr "Olvass egy naptári hónap minden napján"
+
+msgid "Read on both weekend days, 4 weekends in a row"
+msgstr "Olvass szombaton és vasárnap is, 4 egymást követő hétvégén"
+
+msgid "Read for 5 hours in a single day"
+msgstr "Olvass 5 órát egyetlen nap alatt"
+
+msgid "Read for 6 hours in a single day"
+msgstr "Olvass 6 órát egyetlen nap alatt"
+
+msgid "Read for 1 hour without a break"
+msgstr "Olvass 1 órát megszakítás nélkül"
+
+msgid "Read for 2 hours without a break"
+msgstr "Olvass 2 órát megszakítás nélkül"
+
+msgid "Read on both sides of midnight in one session"
+msgstr "Olvass éjfél előtt és után is egy ülésben"
+
+msgid "Read between 5 and 7 a.m."
+msgstr "Olvass hajnali 5 és 7 között"
+
+msgid "Read between noon and 1 p.m."
+msgstr "Olvass dél és 13 óra között"
+
+msgid "Read in every hour of the day at some point"
+msgstr "Olvass már a nap mind a 24 órájában"
+
+msgid "Read on every day of the week at some point"
+msgstr "Olvass már a hét mind a 7 napján"
+
+msgid "Read on 31 December"
+msgstr "Olvass december 31-én"
+
+msgid "Read on 1 January"
+msgstr "Olvass január 1-én"
+
+msgid "Average over 60 pages per hour in a book"
+msgstr "Érj el 60 oldal/óra feletti átlagot egy könyvben"
+
+msgid "Spend over 20 hours on a single book"
+msgstr "Tölts több mint 20 órát egyetlen könyvvel"
+
+msgid "Finish books by 5 different authors"
+msgstr "Fejezz be 5 különböző szerzőtől könyvet"
+
+msgid "Finish books by 25 different authors"
+msgstr "Fejezz be 25 különböző szerzőtől könyvet"
+
+msgid "Open 50 different books"
+msgstr "Nyiss meg 50 különböző könyvet"
+
+msgid "Grand library"
+msgstr "Nagy könyvtár"
+
+msgid "Adventurer"
+msgstr "Kalandor"
+
+msgid "Cartographer"
+msgstr "Térképész"
+
+msgid "Well-versed"
+msgstr "Nagy műveltségű"
+
+msgid "100 reading days"
+msgstr "100 olvasónap"
+
+msgid "365 reading days"
+msgstr "365 olvasónap"
+
+msgid "1000 reading days"
+msgstr "1000 olvasónap"
+
+msgid "Every month"
+msgstr "Minden hónap"
+
+msgid "Four seasons"
+msgstr "Négy évszak"
+
+msgid "Complete week"
+msgstr "Kerek hét"
+
+msgid "Veteran"
+msgstr "Veterán"
+
+msgid "Reading anniversary"
+msgstr "Olvasási évforduló"
+
+msgid "Iron focus"
+msgstr "Vasfegyelem"
+
+msgid "Sprint"
+msgstr "Sprint"
+
+msgid "Big month"
+msgstr "Nagy hónap"
+
+msgid "Big week"
+msgstr "Nagy hét"
+
+msgid "Comeback"
+msgstr "Visszatérő"
+
+msgid "Author loyalty"
+msgstr "Szerzőhűség"
+
+msgid "Finish 500 books"
+msgstr "Olvass el 500 könyvet"
+
+msgid "Open 100 different books"
+msgstr "Nyiss meg 100 különböző könyvet"
+
+msgid "Open 250 different books"
+msgstr "Nyiss meg 250 különböző könyvet"
+
+msgid "Finish books by 50 different authors"
+msgstr "Fejezz be 50 különböző szerzőtől könyvet"
+
+msgid "Read on 100 different days"
+msgstr "Olvass 100 különböző napon"
+
+msgid "Read on 365 different days"
+msgstr "Olvass 365 különböző napon"
+
+msgid "Read on 1000 different days"
+msgstr "Olvass 1000 különböző napon"
+
+msgid "Read in every month of one year"
+msgstr "Olvass egy év minden hónapjában"
+
+msgid "Read in all four seasons"
+msgstr "Olvass mind a négy évszakban"
+
+msgid "Read every day of one calendar week (Mon-Sun)"
+msgstr "Olvass egy naptári hét minden napján (hétfőtől vasárnapig)"
+
+msgid "Your reading history spans 5 calendar years"
+msgstr "Az olvasási előzményed 5 naptári évet ölel át"
+
+msgid "One year since your first reading"
+msgstr "Egy év telt el az első olvasásod óta"
+
+msgid "Read for 3 hours without a break"
+msgstr "Olvass 3 órát megszakítás nélkül"
+
+msgid "Read 100 pages in one session"
+msgstr "Olvass 100 oldalt egyetlen ülésben"
+
+msgid "Read 5000 pages in one calendar month"
+msgstr "Olvass 5000 oldalt egy naptári hónapban"
+
+msgid "Read 20 hours in one week"
+msgstr "Olvass 20 órát egyetlen héten"
+
+msgid "Read again after a 30-day break"
+msgstr "Olvass újra egy 30 napos szünet után"
+
+msgid "Finish 5 books by the same author"
+msgstr "Fejezz be 5 könyvet ugyanattól a szerzőtől"
+
+msgid "Achievement refresh"
+msgstr "Teljesítmények frissítése"
+
+msgid "Once a day"
+msgstr "Naponta egyszer"
+
+msgid "Every open"
+msgstr "Minden megnyitáskor"
+
+msgid "Reloading achievements..."
+msgstr "Teljesítmények újratöltése..."
+
+msgid "Show all"
+msgstr "Összes mutatása"
+
+msgid "Show earned only"
+msgstr "Csak a megszerzettek"
+
+msgid "Show locked only"
+msgstr "Csak a hátralévők"
+
+msgid "Shows the reading goal and achievements section of the Reading insights popup."
+msgstr "Az Olvasási áttekintés popup olvasási cél és teljesítmények szekcióját mutatja."
+
+msgid "Reading goal & achievements"
+msgstr "Olvasási cél és teljesítmények"
+
+msgid "Reading goal only"
+msgstr "Csak olvasási cél"
+
+msgid "Time of day"
+msgstr "Napszak"
+
+msgid "Time of day view"
+msgstr "Napszak nézet"
+
+msgid "Chart"
+msgstr "Diagram"
+
+msgid "Heatmap"
+msgstr "Hőtérkép"
+
+msgid "Night"
+msgstr "Éjszaka"
+
+msgid "Morning"
+msgstr "Reggel"
+
+msgid "Afternoon"
+msgstr "Délután"
+
+msgid "Evening"
+msgstr "Este"
+
+msgid "Reading time by time of day"
+msgstr "Olvasási idő napszakonként"
+
+msgid "Book progress popup"
+msgstr "Könyv haladás ablak"
+
+msgid "Chapter bar"
+msgstr "Fejezetsáv"
+
+msgid "Show the chapter bar chart in the \"This book\" section."
+msgstr "A fejezetsáv megjelenítése a „Könyv” szakaszban."
+
+msgid "Chapters per page"
+msgstr "Fejezetek oldalanként"
+
+msgid "How many chapters the chapter bar shows at once before paging with the arrows."
+msgstr "Hány fejezetet mutat egyszerre a fejezetsáv, mielőtt a nyilakkal lapozni kell."
+
+msgid "Custom value"
+msgstr "Egyéni érték"
+
+msgid "Started / expected finish row"
+msgstr "„Kezdve / várható befejezés” sor"
+
+msgid "Show the \"started …\" and \"expected finish\" date row in the \"Pace\" section."
+msgstr "A „kezdve…” és „várható befejezés” dátumsor megjelenítése a „Haladás” szakaszban."
