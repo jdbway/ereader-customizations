@@ -6,12 +6,70 @@ Handles highlight uploads, and other API operations.
 ]]
 
 local Network = require("modules/network")
+local UpgradeRequired = require("modules/upgrade_required")
 local logger = require("logger")
 
 -- Handle empty array JSON serialization
 local JSON = require("json")
 -- The most reliable way to get the marker for an empty array is to decode one
 local empty_array = JSON.decode("[]") or {}
+
+--- Fetch JSON, recognising a server that refuses this plugin version
+-- These three wrappers are this module's only route to the network, so the
+-- refusal is recognised in one place and a call added later inherits it.
+-- @param url string The URL to fetch
+-- @param token string|nil Bearer token for authorization
+-- @return number|nil HTTP status code
+-- @return table|nil Parsed JSON response
+-- @return any Error message, or the upgrade error when the plugin was refused
+local function getJson(url, token)
+	local code, response_data, err = Network.getJson(url, token)
+	return code, response_data, UpgradeRequired.fromResponse(code, response_data) or err
+end
+
+--- Post JSON, recognising a server that refuses this plugin version
+-- @param url string The URL to post to
+-- @param payload table The data to send
+-- @param token string|nil Bearer token for authorization
+-- @return number|nil HTTP status code
+-- @return table|nil Parsed JSON response
+-- @return any Error message, or the upgrade error when the plugin was refused
+local function postJson(url, payload, token)
+	local code, response_data, err = Network.postJson(url, payload, token)
+	return code, response_data, UpgradeRequired.fromResponse(code, response_data) or err
+end
+
+--- Post a multipart body, recognising a server that refuses this plugin version
+-- @param url string The URL to post to
+-- @param files table Array of file objects
+-- @param token string|nil Bearer token for authorization
+-- @return number|nil HTTP status code
+-- @return string Response body
+-- @return any Error message, or the upgrade error when the plugin was refused
+local function postMultipart(url, files, token)
+	local code, response_text, err = Network.postMultipart(url, files, token)
+	if code ~= UpgradeRequired.STATUS then
+		return code, response_text, err
+	end
+
+	-- A multipart upload hands back an undecoded body, so the detail is decoded
+	-- here; one that will not decode is still a refusal, only a vaguer one.
+	local decoded, body = pcall(JSON.decode, response_text)
+	return code, response_text, UpgradeRequired.new(decoded and body or nil)
+end
+
+--- Keep the server's refusal, or describe the failure by its status
+-- A refusal has to survive as itself: it is the one failure the plugin acts on
+-- rather than merely reports.
+-- @param err any The error the request came back with
+-- @param message string What to say about any other failure
+-- @return any The error to report
+local function failureError(err, message)
+	if UpgradeRequired.is(err) then
+		return err
+	end
+	return message
+end
 
 local ApiClient = {}
 ApiClient.__index = ApiClient
@@ -33,13 +91,61 @@ function ApiClient:getApiUrl()
 	return self.settings:getBaseUrl() .. "/api/v1"
 end
 
---- Upload highlights to the server
--- @param book_data table Book metadata
--- @param highlights table Array of highlights
--- @return boolean Success status
--- @return table|nil Response data containing book_id, highlights_created, highlights_skipped
+--- Fetch a JSON resource with the caller's bearer token
+-- Every GET the plugin makes answers the same three ways: 200 with a body, 404
+-- for a book the server has never been told about, and anything else a failure
+-- carrying its status.
+-- @param path string Path below the API root, starting with a slash
+-- @param what string What is being fetched, for the log lines
+-- @return number|nil HTTP status code
+-- @return table|nil Response data, nil for anything but a 200 with a body
 -- @return string|nil Error message
-function ApiClient:uploadHighlights(client_book_id, highlights)
+function ApiClient:_authorizedGet(path, what)
+	local token, auth_err = self.auth:getValidToken()
+	if not token then
+		return nil, nil, auth_err or "Authentication failed"
+	end
+
+	local api_url = self:getApiUrl() .. path
+	logger.dbg("Crossbill API: Fetching", what, "from", api_url)
+
+	local code, response_data, err = getJson(api_url, token)
+
+	if not code then
+		logger.err("Crossbill API: Network error fetching", what, err)
+		return nil, nil, err or "Network error"
+	end
+
+	if code == 200 and response_data then
+		logger.dbg("Crossbill API: Fetched", what)
+		return code, response_data, nil
+	end
+
+	if code == 404 then
+		logger.dbg("Crossbill API: Book not found (404) fetching", what)
+		return code, nil, nil
+	end
+
+	logger.warn("Crossbill API: Fetching", what, "failed with code:", code)
+	return code, nil, failureError(err, "Fetch failed: " .. tostring(code))
+end
+
+--- Upload highlights to the server
+-- Removals ride inside the upload rather than in a call of their own: one round
+-- trip on an e-reader's WiFi, and one server transaction, so a sync cannot die
+-- between the two halves. The field is left out entirely when there is nothing
+-- to remove, which is the payload every older plugin sent.
+-- @param client_book_id string The client-side book ID (hash of title|author)
+-- @param highlights table Array of highlights; one the device made since its
+--   last pull carries is_new, which lets the server revive a copy it had
+--   removed or deleted under the same text
+-- @param device_id string|nil Identifier of the device the highlights came from
+-- @param removed_ids table|nil Server ids of highlights deleted on this device
+-- @return boolean Success status
+-- @return table|nil Response data containing book_id, highlights_created,
+--   highlights_skipped, highlights_removed
+-- @return string|nil Error message
+function ApiClient:uploadHighlights(client_book_id, highlights, device_id, removed_ids)
 	local token, auth_err = self.auth:getValidToken()
 	if not token then
 		return false, nil, auth_err or "Authentication failed"
@@ -47,13 +153,18 @@ function ApiClient:uploadHighlights(client_book_id, highlights)
 
 	local payload = {
 		client_book_id = client_book_id,
-		highlights = highlights,
+		-- An empty Lua table encodes as a JSON object, which the server rejects
+		-- where it expects a list. A removal-only push carries no highlights, so
+		-- the empty case has to be the decoder's array marker.
+		highlights = (#highlights > 0) and highlights or empty_array,
+		device_id = device_id,
+		removed_ids = (removed_ids and #removed_ids > 0) and removed_ids or nil,
 	}
 
 	local api_url = self:getApiUrl() .. "/highlights/upload"
 	logger.dbg("Crossbill API: Sending highlights to", api_url)
 
-	local code, response_data, err = Network.postJson(api_url, payload, token)
+	local code, response_data, err = postJson(api_url, payload, token)
 
 	if not code then
 		logger.err("Crossbill API: Network error:", err)
@@ -65,7 +176,7 @@ function ApiClient:uploadHighlights(client_book_id, highlights)
 		return true, response_data, nil
 	else
 		logger.err("Crossbill API: Upload failed with code:", code)
-		return false, nil, "Upload failed: " .. tostring(code)
+		return false, nil, failureError(err, "Upload failed: " .. tostring(code))
 	end
 end
 
@@ -75,31 +186,7 @@ end
 -- @return table|nil Response data containing book_id, bookname, author, has_ebook
 -- @return string|nil Error message
 function ApiClient:getBookMetadata(client_book_id)
-	local token, auth_err = self.auth:getValidToken()
-	if not token then
-		return nil, nil, auth_err or "Authentication failed"
-	end
-
-	local api_url = self:getApiUrl() .. "/ereader/books/" .. client_book_id
-	logger.dbg("Crossbill API: Fetching book metadata from", api_url)
-
-	local code, response_data, err = Network.getJson(api_url, token)
-
-	if not code then
-		logger.err("Crossbill API: Network error fetching book metadata:", err)
-		return nil, nil, err or "Network error"
-	end
-
-	if code == 200 and response_data then
-		logger.dbg("Crossbill API: Book metadata fetched successfully")
-		return code, response_data, nil
-	elseif code == 404 then
-		logger.dbg("Crossbill API: Book not found (404)")
-		return code, nil, nil
-	else
-		logger.warn("Crossbill API: Fetch book metadata failed with code:", code)
-		return code, nil, "Fetch failed: " .. tostring(code)
-	end
+	return self:_authorizedGet("/ereader/books/" .. client_book_id, "book metadata")
 end
 
 --- Get a book's chapter digests from the server by client_book_id
@@ -108,31 +195,34 @@ end
 -- @return table|nil Response data containing an "items" array of chapter digests
 -- @return string|nil Error message
 function ApiClient:getBookDigest(client_book_id)
-	local token, auth_err = self.auth:getValidToken()
-	if not token then
-		return nil, nil, auth_err or "Authentication failed"
+	return self:_authorizedGet("/ereader/books/" .. client_book_id .. "/digest", "book digests")
+end
+
+--- Get a book's highlights from the server by client_book_id
+-- The server is the master copy: this returns every live highlight of the book,
+-- including ones made on other devices.
+-- @param client_book_id string The client-side book ID (hash of title|author)
+-- @return number|nil HTTP status code
+-- @return table|nil Array of highlight items, empty when the book has none
+-- @return string|nil Error message
+function ApiClient:getHighlights(client_book_id)
+	local code, response_data, err =
+		self:_authorizedGet("/ereader/books/" .. client_book_id .. "/highlights", "highlights")
+	if not response_data then
+		return code, nil, err
 	end
 
-	local api_url = self:getApiUrl() .. "/ereader/books/" .. client_book_id .. "/digest"
-	logger.dbg("Crossbill API: Fetching book digests from", api_url)
-
-	local code, response_data, err = Network.getJson(api_url, token)
-
-	if not code then
-		logger.err("Crossbill API: Network error fetching digests:", err)
-		return nil, nil, err or "Network error"
+	-- An empty list decodes to the JSON library's array marker rather than a
+	-- plain table, so copy the items into one.
+	local items = {}
+	if type(response_data.items) == "table" then
+		for _, item in ipairs(response_data.items) do
+			table.insert(items, item)
+		end
 	end
 
-	if code == 200 and response_data then
-		logger.dbg("Crossbill API: Book digests fetched successfully")
-		return code, response_data, nil
-	elseif code == 404 then
-		logger.dbg("Crossbill API: Book not found for digests (404)")
-		return code, nil, nil
-	else
-		logger.warn("Crossbill API: Fetch book digests failed with code:", code)
-		return code, nil, "Fetch failed: " .. tostring(code)
-	end
+	logger.dbg("Crossbill API: Fetched", #items, "highlights")
+	return code, items, nil
 end
 
 --- Create a new book on the server
@@ -149,7 +239,7 @@ function ApiClient:createBook(book_data)
 	local api_url = self:getApiUrl() .. "/ereader/books"
 	logger.dbg("Crossbill API: Creating book on server", api_url)
 
-	local code, response_data, err = Network.postJson(api_url, book_data, token)
+	local code, response_data, err = postJson(api_url, book_data, token)
 
 	if not code then
 		logger.err("Crossbill API: Network error creating book:", err)
@@ -161,7 +251,7 @@ function ApiClient:createBook(book_data)
 		return true, response_data, nil
 	else
 		logger.err("Crossbill API: Create book failed with code:", code)
-		return false, nil, "Create book failed: " .. tostring(code)
+		return false, nil, failureError(err, "Create book failed: " .. tostring(code))
 	end
 end
 
@@ -190,7 +280,7 @@ function ApiClient:uploadEpub(client_book_id, epub_data, filename)
 		},
 	}
 
-	local code, _, err = Network.postMultipart(api_url, files, token)
+	local code, _, err = postMultipart(api_url, files, token)
 
 	if not code then
 		logger.err("Crossbill API: Network error uploading EPUB:", err)
@@ -202,7 +292,7 @@ function ApiClient:uploadEpub(client_book_id, epub_data, filename)
 		return true, nil, nil
 	else
 		logger.warn("Crossbill API: EPUB upload failed with code:", code)
-		return false, nil, "Upload failed: " .. tostring(code)
+		return false, nil, failureError(err, "Upload failed: " .. tostring(code))
 	end
 end
 
@@ -263,7 +353,7 @@ function ApiClient:uploadReadingSessions(client_book_id, sessions)
 	local api_url = self:getApiUrl() .. "/reading_sessions/upload"
 	logger.dbg("Crossbill API: Sending", #api_sessions, "reading sessions to", api_url)
 
-	local code, response_data, err = Network.postJson(api_url, payload, token)
+	local code, response_data, err = postJson(api_url, payload, token)
 
 	if not code then
 		logger.err("Crossbill API: Network error:", err)
@@ -275,7 +365,7 @@ function ApiClient:uploadReadingSessions(client_book_id, sessions)
 		return true, response_data, nil
 	else
 		logger.warn("Crossbill API: Reading sessions upload failed with code:", code)
-		return false, nil, "Upload failed: " .. tostring(code)
+		return false, nil, failureError(err, "Upload failed: " .. tostring(code))
 	end
 end
 

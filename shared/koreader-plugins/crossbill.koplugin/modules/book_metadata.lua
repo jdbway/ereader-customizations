@@ -9,7 +9,6 @@ Extracts book metadata from KOReader documents including:
 ]]
 
 local DocSettings = require("docsettings")
-local FileManagerBookInfo = require("apps/filemanager/filemanagerbookinfo")
 local logger = require("logger")
 local md5 = require("ffi/sha2").md5
 
@@ -147,12 +146,6 @@ end
 -- @return string Document file path
 function BookMetadata:getDocPath()
 	return self.ui.document.file
-end
-
---- Check if document is available
--- @return boolean True if document is loaded
-function BookMetadata:hasDocument()
-	return self.ui.document ~= nil
 end
 
 return BookMetadata

@@ -37,6 +37,23 @@ only appears in KOReader's Tools menu while a **document is open**
 (`is_doc_only = true` in its `main.lua`) — if it's missing from Tools, open
 a book first.
 
+**Server enforces a minimum client version.** Found 2026-08-29: every
+sync attempt on kobo-sabrina was failing with HTTP 426 on both the
+metadata-fetch and create-book calls — traced (via `curl -v` against
+`/api/v1/ereader/books/...` directly) to a JSON body reading
+`{"code":"client_upgrade_required","min_supported_version":"0.12.0",...}`.
+The installed plugin was `0.10.2` on both Kindle and Kobo (an old vendored
+snapshot, predates that server-side gate). **Fixed** by updating
+`shared/koreader-plugins/crossbill.koplugin/` to the latest upstream
+release (`0.14.0` as of 2026-08-29,
+[Crossbill-App/koreader-plugin releases](https://github.com/Crossbill-App/koreader-plugin/releases)),
+which also adds a proper `upgrade_required.lua` handler for this exact
+scenario going forward (a real in-KOReader message instead of a silent
+log-only failure) and its own `modules/update/` self-updater. If a sync
+ever silently fails like this again, check the plugin's `_meta.lua`
+`version` against the server's current minimum before assuming it's a
+config or network problem.
+
 ## Secrets
 
 - **Crossbill account password** — not committed anywhere in this repo.

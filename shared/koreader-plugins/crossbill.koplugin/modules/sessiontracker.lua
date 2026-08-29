@@ -8,8 +8,8 @@ page numbers for fixed-layout docs) for later sync and analytics.
 
 local logger = require("logger")
 local SQ3 = require("lua-ljsqlite3/init")
-local Device = require("device")
 local BookMetadata = require("modules/book_metadata")
+local DeviceIdentity = require("modules/device_identity")
 
 local SessionTracker = {}
 SessionTracker.__index = SessionTracker
@@ -130,19 +130,9 @@ function SessionTracker:getBookFileHash(file_path)
 end
 
 --- Get device identifier
--- @return string Device ID or "unknown"
+-- @return string Stable device ID
 function SessionTracker:_getDeviceId()
-	local success, device_info = pcall(function()
-		return Device:info()
-	end)
-
-	if success and device_info then
-		-- Try to construct a meaningful device ID
-		local model = Device.model or "unknown"
-		return model
-	end
-
-	return "unknown"
+	return DeviceIdentity.getDeviceId()
 end
 
 --- Capture current reading position from document
@@ -560,60 +550,6 @@ function SessionTracker:getUnsyncedSessionsForBook(book_file_hash)
 
 	if not success then
 		logger.err("Crossbill SessionTracker: Error fetching unsynced sessions for book:", err)
-	end
-
-	return sessions
-end
-
---- Get sessions for a specific book
--- @param book_file_hash string MD5 hash of the book file path
--- @return table Array of session records
-function SessionTracker:getSessionsForBook(book_file_hash)
-	if not self._initialized or not self.db then
-		return {}
-	end
-
-	local sessions = {}
-	local success, err = pcall(function()
-		local stmt = self.db:prepare([[
-            SELECT id, book_file, book_hash, book_title, book_author,
-                   start_time, end_time, duration_seconds,
-                   position_type, start_position, end_position,
-                   start_page, end_page, total_pages,
-                   device_id, created_at, synced
-            FROM sessions
-            WHERE book_hash = ?
-            ORDER BY start_time DESC
-        ]])
-
-		stmt:bind(book_file_hash)
-
-		for row in stmt:rows() do
-			table.insert(sessions, {
-				id = row[1],
-				book_file = row[2],
-				book_hash = row[3],
-				book_title = row[4],
-				book_author = row[5],
-				start_time = row[6],
-				end_time = row[7],
-				duration_seconds = row[8],
-				position_type = row[9],
-				start_position = row[10],
-				end_position = row[11],
-				start_page = row[12],
-				end_page = row[13],
-				total_pages = row[14],
-				device_id = row[15],
-				created_at = row[16],
-				synced = row[17],
-			})
-		end
-		stmt:close()
-	end)
-
-	if not success then
-		logger.err("Crossbill SessionTracker: Error fetching sessions for book:", err)
 	end
 
 	return sessions

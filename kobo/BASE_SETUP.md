@@ -179,6 +179,16 @@ actual device-specific assumptions (hardcoded `/mnt/us` paths,
   credentials, not tied to one user) also need filling in on-device —
   get them from the Wallabag instance itself. Points at the
   `Books/Wallabag` library folder below.
+- **Sleep screen wallpaper — show the book cover**: Settings → Screen →
+  Sleep Screen → Wallpaper → **Show book cover on sleep screen**. Not a
+  per-feature settings file — a single key in the global
+  `settings.reader.lua` (KOReader core, not a plugin), at the KOReader
+  install root, not under `settings/`:
+  `["screensaver_type"] = "cover"`. Universal, identical on Kindle — see
+  `kindle/BASE_SETUP.md`'s own copy of this note. Already set correctly
+  on both live devices as of 2026-08-29 (confirmed via SSH), so nothing
+  to fix here — this exists purely so a fresh device doesn't need
+  rediscovering it by trial and error through the menu.
 
 ### Home / library folder (create on `/mnt/onboard`, not under `.adds`)
 Kobo's Nickel scans `/mnt/onboard` itself for content, unlike Kindle's
@@ -289,6 +299,10 @@ let this list go stale.
     micromodules (Clock + Reading streak): all consolidated under
     "Bookshelf home screen" above — do all of it there in one pass now
     that `Books/` exists and the plugins are installed.
+12. Sleep screen wallpaper: Settings → Screen → Sleep Screen → Wallpaper
+    → **Show book cover on sleep screen**. A single global KOReader
+    setting, not device-specific — see "KOReader settings" above for the
+    exact key if setting it via file edit instead of the UI.
 
 ## Wi-Fi caveat: things can look connected but not actually pass traffic
 

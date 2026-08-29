@@ -11,6 +11,10 @@ local UIManager = require("ui/uimanager")
 local InfoMessage = require("ui/widget/infomessage")
 local MultiInputDialog = require("ui/widget/multiinputdialog")
 local TextViewer = require("ui/widget/textviewer")
+local ConfirmBox = require("ui/widget/confirmbox")
+local Trapper = require("ui/trapper")
+local UpgradeRequired = require("modules/upgrade_required")
+local meta = require("_meta")
 local logger = require("logger")
 local _ = require("gettext")
 
@@ -30,23 +34,90 @@ local UI = {}
 --- Show an informational message to the user
 -- @param text string The message to display
 -- @param timeout number|nil Auto-dismiss timeout in seconds (nil = no auto-dismiss)
+-- @return table The widget now on screen, for a caller that may dismiss it early
 function UI.showMessage(text, timeout)
-	UIManager:show(InfoMessage:new({
+	local message = InfoMessage:new({
 		text = text,
 		timeout = timeout,
-	}))
+	})
+	UIManager:show(message)
+	return message
+end
+
+--- Take a message this module put on screen back down
+-- @param widget table|nil A widget an earlier show returned, nil to do nothing
+function UI.dismiss(widget)
+	if not widget then
+		return
+	end
+
+	UIManager:close(widget)
 end
 
 --- Show a syncing in progress message
+-- @return table The message widget, for a sync that ends before its timeout
 function UI.showSyncingMessage()
-	UI.showMessage(_("Syncing highlights..."), 2)
+	return UI.showMessage(_("Syncing with Crossbill..."), 2)
 end
 
---- Show sync success message
--- @param created number Number of new highlights
--- @param skipped number Number of duplicate highlights
-function UI.showSyncSuccess(created, skipped)
-	UI.showMessage(string.format(_("Synced successfully!\n%d new, %d duplicates"), created or 0, skipped or 0), 3)
+--- Show the outcome of a sync: what was uploaded, and what the pull brought back
+-- @param result table Sync result with the upload counts and the pull outcome
+function UI.showSyncSuccess(result)
+	local lines = {}
+
+	local uploaded = result.highlights_created or 0
+	if uploaded > 0 then
+		table.insert(lines, string.format(_("Uploaded %d new highlights."), uploaded))
+	end
+
+	local removed = result.highlights_removed or 0
+	if removed > 0 then
+		table.insert(lines, string.format(_("%d removed from your devices."), removed))
+	end
+
+	local pull = result.pull or {}
+	local pulled = pull.inserted or 0
+	if pulled > 0 then
+		table.insert(lines, string.format(_("Pulled %d highlights from Crossbill."), pulled))
+	end
+
+	local skipped = (pull.skipped_unplaceable or 0) + (pull.skipped_invalid or 0)
+	if skipped > 0 then
+		table.insert(lines, string.format(_("Skipped: %d"), skipped))
+	end
+
+	if result.pull_error then
+		table.insert(lines, _("Pull failed: ") .. tostring(result.pull_error))
+	end
+
+	if #lines == 0 then
+		table.insert(lines, _("Highlights are up to date."))
+	end
+
+	UI.showMessage(table.concat(lines, "\n"), 6)
+end
+
+--- Ask before a book's whole highlight set leaves the reader's devices
+-- Only ever asked when every highlight the device last pulled has gone at once,
+-- which is as much the signature of a lost sidecar or of a second copy of the
+-- book as of a deliberate clear-out, so the question is worth the
+-- interruption. It blocks, which a ConfirmBox can only do inside a
+-- Trapper coroutine; without one Trapper answers "OK" by itself, so an
+-- unwrapped caller is refused rather than silently agreed with.
+-- @param count number How many highlights would be removed
+-- @return boolean True when the reader confirmed the removal
+function UI.confirmRemoveAll(count)
+	if not coroutine.running() then
+		logger.warn("Crossbill: Cannot ask about removing highlights outside a Trapper coroutine")
+		return false
+	end
+
+	local confirmed = Trapper:confirm(
+		string.format(_("Remove all %d highlights of this book from your devices?"), count),
+		_("Keep"),
+		_("Remove")
+	)
+	return confirmed == true
 end
 
 --- Show sync error message
@@ -59,6 +130,15 @@ end
 -- @param code number|string The error code
 function UI.showSyncFailed(code)
 	UI.showMessage(_("Sync failed: ") .. tostring(code or "unknown error"), 3)
+end
+
+--- Tell the reader the server has turned this plugin away as too old
+-- A plain message with nothing to answer: a sync can be running while the book
+-- or the device is closing, where a dialog awaiting dismissal would hold that
+-- up. It stays on screen long enough to read an address off it.
+-- @param err table|nil The refusal, or nil when there is nothing to go on
+function UI.showUpgradeRequired(err)
+	UI.showMessage(UpgradeRequired.message(err), 10)
 end
 
 --- Show authentication error message
@@ -269,8 +349,7 @@ end
 
 --- Show server configuration dialog
 -- @param settings Settings instance
--- @param on_save function Callback when settings are saved
-function UI.showConfigureServerDialog(settings, on_save)
+function UI.showConfigureServerDialog(settings)
 	local dialog
 	dialog = MultiInputDialog:new({
 		title = _("Crossbill Settings"),
@@ -309,10 +388,6 @@ function UI.showConfigureServerDialog(settings, on_save)
 						settings:updateServerConfig(base_url, username, password)
 						UIManager:close(dialog)
 						UI.showSettingsSaved()
-
-						if on_save then
-							on_save()
-						end
 					end,
 				},
 			},
@@ -325,8 +400,7 @@ end
 
 --- Show minimum reading session duration configuration dialog
 -- @param settings Settings instance
--- @param on_save function Callback when settings are saved
-function UI.showMinSessionDurationDialog(settings, on_save)
+function UI.showMinSessionDurationDialog(settings)
 	local dialog
 	dialog = MultiInputDialog:new({
 		title = _("Minimum Reading Session Duration"),
@@ -357,10 +431,6 @@ function UI.showMinSessionDurationDialog(settings, on_save)
 							settings:save()
 							UIManager:close(dialog)
 							UI.showSettingsSaved()
-
-							if on_save then
-								on_save()
-							end
 						else
 							UI.showMessage(_("Invalid duration. Please enter a number greater than 0."), 3)
 						end
@@ -372,6 +442,147 @@ function UI.showMinSessionDurationDialog(settings, on_save)
 
 	UIManager:show(dialog)
 	dialog:onShowKeyboard()
+end
+
+--- Show what this plugin is and where it comes from
+-- Name and version are read from `_meta.lua` rather than written out here, so
+-- the side-by-side test build names itself and the version can never go stale.
+-- The address is shown as text: a reader on an e-ink device copies it by hand.
+function UI.showAbout()
+	local lines = {
+		meta.fullname,
+		string.format(_("Version %s"), tostring(meta.version)),
+		"",
+		_("Source code and issues:"),
+		meta.homepage,
+	}
+
+	UI.showMessage(table.concat(lines, "\n"))
+end
+
+--- Tell the reader the update check is under way
+-- No timeout: a request can outlast any guess at one, and unlike a sync there
+-- is nothing else on screen to say work is happening. The caller takes the
+-- message back down on every path out.
+-- @return table The message widget, for the caller to dismiss
+function UI.showUpdateChecking()
+	local message = UI.showMessage(_("Checking for updates..."))
+	-- The check blocks the same tick that showed this, so without a repaint
+	-- here the reader would see nothing at all until the result arrives.
+	UIManager:forceRePaint()
+	return message
+end
+
+--- Tell the reader a newer version has been published
+-- Offered as a question only when the release carries both the archive and the
+-- signature: a button that cannot succeed is worse than no button. Otherwise
+-- the address is shown as text, for a reader to copy by hand as About's is.
+-- @param result table The check result
+-- @param on_install function|nil Called when the reader asks to install
+function UI.showUpdateAvailable(result, on_install)
+	local lines = {
+		string.format(_("%s %s is available."), meta.fullname, result.latest),
+		string.format(_("You have %s."), result.current),
+	}
+
+	if on_install and result.download_url and result.signature_url then
+		UIManager:show(ConfirmBox:new({
+			text = table.concat(lines, "\n"),
+			ok_text = _("Install"),
+			ok_callback = on_install,
+			cancel_text = _("Not now"),
+		}))
+		return
+	end
+
+	table.insert(lines, "")
+	table.insert(lines, _("Download:"))
+	table.insert(lines, result.release_url)
+	UI.showMessage(table.concat(lines, "\n"), 10)
+end
+
+--- Tell the reader the update is being fetched and put in place
+-- No timeout, and taken down by the caller on every path out, as the check's
+-- message is: several blocking steps run behind it.
+-- @return table The message widget, for the caller to dismiss
+function UI.showInstallingUpdate()
+	local message = UI.showMessage(_("Installing update..."))
+	UIManager:forceRePaint()
+	return message
+end
+
+--- Tell the reader the update is in place, and offer the restart it needs
+-- `askForRestart` is KOReader's own: it asks where restarting is possible and
+-- says the update waits for the next start where it is not, which is a
+-- per-platform judgement the plugin has no business making. It does nothing at
+-- all when the device's event handlers were never installed, though -- its own
+-- source only says they "should always exist" -- and a reader who is told
+-- nothing after an install has no way of knowing it worked. So the message is
+-- shown here in the one case KOReader would swallow it.
+-- @param version string The version now installed
+function UI.showUpdateInstalled(version)
+	local text = string.format(_("%s %s is installed."), meta.fullname, version)
+
+	if UIManager.event_handlers and UIManager.event_handlers.PowerOff then
+		UIManager:askForRestart(text)
+		return
+	end
+
+	UI.showMessage(text, 10)
+end
+
+--- Tell the reader the update could not be installed
+-- One message for every way of failing except one, and it carries the address
+-- so the reader can do by hand what the plugin would not do for them.
+-- @param result table The check result, for the address
+function UI.showInstallFailed(result)
+	local lines = {
+		_("Could not install the update."),
+		"",
+		_("You can download it yourself from:"),
+		result and result.release_url or meta.homepage,
+	}
+
+	UI.showMessage(table.concat(lines, "\n"), 10)
+end
+
+--- Tell the reader the update was not signed by a key the plugin trusts
+-- Said apart from every other failure on purpose. The others mean something
+-- went wrong; this one means the archive is not what it claims to be, and a
+-- reader deciding whether to install it by hand should know which they have.
+function UI.showInstallUnverified()
+	local lines = {
+		_("The update could not be verified and was not installed."),
+		"",
+		_("It was not signed by a key this plugin trusts."),
+	}
+
+	UI.showMessage(table.concat(lines, "\n"), 10)
+end
+
+--- Tell the reader there is nothing to update to
+-- A plugin ahead of the newest release is not up to date, so it is told what it
+-- is running and what was published rather than being reassured.
+-- @param result table The check result
+function UI.showNoUpdate(result)
+	if result.ahead then
+		local lines = {
+			string.format(_("You are running %s."), result.current),
+			string.format(_("The latest release is %s."), result.latest),
+		}
+		UI.showMessage(table.concat(lines, "\n"), 5)
+		return
+	end
+
+	UI.showMessage(string.format(_("%s %s is the latest version."), meta.fullname, result.current), 3)
+end
+
+--- Tell the reader the check did not complete
+-- One message for every failure: nothing a reader could do differs between
+-- being offline, being rate limited and a release that will not parse, and what
+-- tells those apart is in the log.
+function UI.showUpdateCheckFailed()
+	UI.showMessage(_("Could not check for updates. Please try again later."), 5)
 end
 
 --- Build the main menu structure for the plugin
@@ -386,6 +597,7 @@ end
 --   - is_session_tracking_enabled: function() Returns session tracking state
 --   - on_toggle_session_tracking: function() Called when session tracking is toggled
 --   - on_configure_min_session_duration: function() Called when min session duration is configured
+--   - on_check_for_updates: function() Called when an update check is requested
 -- @return table Menu item table for KOReader
 function UI.buildMenuItems(handlers)
 	return {
@@ -422,6 +634,18 @@ function UI.buildMenuItems(handlers)
 						callback = handlers.on_configure_min_session_duration,
 					},
 				},
+			},
+			{
+				-- Beside About, which is where the running version is shown.
+				-- The menu closes behind it: the check may put a WiFi prompt
+				-- and then a result on screen seconds apart.
+				text = _("Check for Updates"),
+				callback = handlers.on_check_for_updates,
+			},
+			{
+				text = _("About"),
+				keep_menu_open = true,
+				callback = UI.showAbout,
 			},
 		},
 	}

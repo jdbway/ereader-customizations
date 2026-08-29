@@ -5,15 +5,57 @@ Provides HTTP/HTTPS request utilities and WiFi management.
 Abstracts away the complexity of KOReader's networking layer.
 ]]
 
-local socket = require("socket")
 local http = require("socket.http")
 local https = require("ssl.https")
 local ltn12 = require("ltn12")
 local socketutil = require("socketutil")
 local NetworkMgr = require("ui/network/manager")
+local JSON = require("json")
 local logger = require("logger")
+local meta = require("_meta")
 
 local Network = {}
+
+-- How long a request may stall, and how long it may take start to finish.
+-- KOReader leaves the total at -1 -- no limit at all -- so without these a
+-- server that accepts a connection and then stops sending blocks the reader's
+-- screen for as long as it likes. The file presets rather than the "large"
+-- ones: the plugin's JSON bodies carry every highlight of a book, and aborting
+-- a slow but working sync is worse than waiting a little longer for it.
+Network.BLOCK_TIMEOUT = socketutil.FILE_BLOCK_TIMEOUT
+Network.TOTAL_TIMEOUT = socketutil.FILE_TOTAL_TIMEOUT
+
+-- A total of -1 means "no limit", which is what an upload whose size the plugin
+-- does not control needs: the stall timeout still ends a dead connection.
+Network.NO_TOTAL_TIMEOUT = -1
+
+-- What a response that outgrew what the caller would accept is reported as
+Network.TOO_LARGE_CODE = "response too large"
+
+-- Identifies the plugin to the server, which refuses versions it no longer
+-- supports. Read from `_meta.lua` rather than repeated here, so it cannot drift.
+Network.CLIENT_HEADER = "X-Crossbill-Client"
+Network.CLIENT_HEADER_VALUE = "koreader-plugin/" .. tostring(meta.version)
+
+--- Decode a response body, keeping the status code the request came back with
+-- An empty body is not an error: some endpoints answer with a status only.
+-- @param code number The HTTP status code
+-- @param response_text string|nil The raw response body
+-- @return number HTTP status code
+-- @return table|nil Parsed JSON response
+-- @return string|nil Error message
+local function decodedResponse(code, response_text)
+	if not response_text or response_text == "" then
+		return code, nil, nil
+	end
+
+	local ok, response_data = pcall(JSON.decode, response_text)
+	if not ok then
+		return code, nil, "Invalid JSON response"
+	end
+
+	return code, response_data, nil
+end
 
 -- Track whether we enabled WiFi (so we can turn it off after sync)
 local wifi_enabled_by_us = false
@@ -32,12 +74,39 @@ function Network.urlEncode(str)
 	return str
 end
 
+--- Stop feeding a sink once the response outgrows what the caller accepts
+-- A cap is only worth having before the bytes are in memory, so it is applied
+-- as they arrive rather than checked afterwards.
+-- @param sink function The sink to feed
+-- @param max_bytes number|nil The most to accept, nil to accept anything
+-- @return function The sink, wrapped when there is a cap
+local function cappedSink(sink, max_bytes)
+	if not max_bytes then
+		return sink
+	end
+
+	local received = 0
+	return function(chunk, err)
+		if chunk then
+			received = received + #chunk
+			if received > max_bytes then
+				return nil, Network.TOO_LARGE_CODE
+			end
+		end
+
+		return sink(chunk, err)
+	end
+end
+
 --- Make an HTTP/HTTPS request
 -- @param options table Request options
 --   - url: string (required) The URL to request
 --   - method: string (default "GET") HTTP method
 --   - headers: table HTTP headers
 --   - body: string Request body
+--   - block_timeout: number How long the request may stall
+--   - total_timeout: number How long it may take start to finish, -1 for no limit
+--   - max_bytes: number The largest response to accept
 -- @return number|nil HTTP status code
 -- @return string Response body
 -- @return string|nil Error message
@@ -52,12 +121,24 @@ function Network.request(options)
 		headers["Content-Length"] = tostring(#body)
 	end
 
+	-- Every call passes through here, so no call site can forget it.
+	headers[Network.CLIENT_HEADER] = Network.CLIENT_HEADER_VALUE
+
+	-- Before the sink is built, not after: `socketutil.table_sink` reads the
+	-- total it has to honour at the moment it is created.
+	socketutil:set_timeout(
+		options.block_timeout or Network.BLOCK_TIMEOUT,
+		options.total_timeout or Network.TOTAL_TIMEOUT
+	)
+
 	local response_body = {}
 	local request = {
 		url = url,
 		method = method,
 		headers = headers,
-		sink = ltn12.sink.table(response_body),
+		-- socketutil's sink rather than ltn12's: the total timeout is only
+		-- enforced by the sink, so ltn12's would leave it decorative.
+		sink = cappedSink(socketutil.table_sink(response_body), options.max_bytes),
 	}
 
 	if body then
@@ -65,26 +146,31 @@ function Network.request(options)
 	end
 
 	-- Use HTTP or HTTPS based on URL scheme
-	local code, status_or_err
+	local result, code_or_err
 	if url:match("^https://") then
 		logger.dbg("Crossbill Network: Using HTTPS for", url)
-		code, status_or_err = socket.skip(1, https.request(request))
+		result, code_or_err = https.request(request)
 	else
 		logger.dbg("Crossbill Network: Using HTTP for", url)
-		code, status_or_err = socket.skip(1, http.request(request))
+		result, code_or_err = http.request(request)
 	end
 
 	-- Reset socket timeout
 	socketutil:reset_timeout()
 
-	local response_text = table.concat(response_body)
-	logger.dbg("Crossbill Network: Response code:", code)
-
-	if code then
-		return code, response_text, nil
-	else
-		return nil, "", status_or_err or "Unknown network error"
+	-- LuaSocket answers `nil, message` for a request that never completed, and
+	-- `1, status` for one that did. Told apart by the first value: the message
+	-- travels where a status would, so testing the second alone would report a
+	-- timeout as though it were an HTTP status.
+	if not result then
+		local err = code_or_err or "Unknown network error"
+		logger.dbg("Crossbill Network: Request failed:", tostring(err))
+		return nil, "", tostring(err)
 	end
+
+	logger.dbg("Crossbill Network: Response code:", code_or_err)
+
+	return code_or_err, table.concat(response_body), nil
 end
 
 --- Make a JSON POST request
@@ -95,7 +181,6 @@ end
 -- @return table|nil Parsed JSON response
 -- @return string|nil Error message
 function Network.postJson(url, data, token)
-	local JSON = require("json")
 	local body = JSON.encode(data)
 
 	local headers = {
@@ -118,33 +203,28 @@ function Network.postJson(url, data, token)
 		return nil, nil, err
 	end
 
-	if response_text and response_text ~= "" then
-		local ok, response_data = pcall(JSON.decode, response_text)
-		if ok then
-			return code, response_data, nil
-		else
-			return code, nil, "Invalid JSON response"
-		end
-	end
-
-	return code, nil, nil
+	return decodedResponse(code, response_text)
 end
 
 --- Make a JSON GET request
 -- @param url string The URL to request
 -- @param token string|nil Bearer token for authorization
+-- @param extra_headers table|nil Headers a particular host insists on, added
+--   last so a caller can also replace one of the defaults
 -- @return number|nil HTTP status code
 -- @return table|nil Parsed JSON response
 -- @return string|nil Error message
-function Network.getJson(url, token)
-	local JSON = require("json")
-
+function Network.getJson(url, token, extra_headers)
 	local headers = {
 		["Accept"] = "application/json",
 	}
 
 	if token then
 		headers["Authorization"] = "Bearer " .. token
+	end
+
+	for name, value in pairs(extra_headers or {}) do
+		headers[name] = value
 	end
 
 	local code, response_text, err = Network.request({
@@ -157,16 +237,7 @@ function Network.getJson(url, token)
 		return nil, nil, err
 	end
 
-	if response_text and response_text ~= "" then
-		local ok, response_data = pcall(JSON.decode, response_text)
-		if ok then
-			return code, response_data, nil
-		else
-			return code, nil, "Invalid JSON response"
-		end
-	end
-
-	return code, nil, nil
+	return decodedResponse(code, response_text)
 end
 
 --- Make a form-urlencoded POST request
@@ -176,8 +247,6 @@ end
 -- @return table|nil Parsed JSON response
 -- @return string|nil Error message
 function Network.postForm(url, data)
-	local JSON = require("json")
-
 	-- Build form-urlencoded body
 	local parts = {}
 	for key, value in pairs(data) do
@@ -201,16 +270,7 @@ function Network.postForm(url, data)
 		return nil, nil, err
 	end
 
-	if response_text and response_text ~= "" then
-		local ok, response_data = pcall(JSON.decode, response_text)
-		if ok then
-			return code, response_data, nil
-		else
-			return code, nil, "Invalid JSON response"
-		end
-	end
-
-	return code, nil, nil
+	return decodedResponse(code, response_text)
 end
 
 --- Make a multipart/form-data POST request
@@ -251,6 +311,10 @@ function Network.postMultipart(url, files, token)
 		method = "POST",
 		headers = headers,
 		body = body,
+		-- A whole EPUB goes up here, and how long that legitimately takes
+		-- depends on the book and the WiFi rather than on anything the plugin
+		-- knows. A stalled connection still ends; a slow one is left alone.
+		total_timeout = Network.NO_TOTAL_TIMEOUT,
 	})
 end
 
@@ -280,12 +344,6 @@ function Network.disableWifiIfNeeded()
 	else
 		logger.info("Crossbill Network: WiFi was already on, leaving it enabled")
 	end
-end
-
---- Check if we enabled WiFi
--- @return boolean True if we enabled WiFi
-function Network.didWeEnableWifi()
-	return wifi_enabled_by_us
 end
 
 --- Check whether the device currently has a network connection

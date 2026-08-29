@@ -2,13 +2,14 @@
 Crossbill Sync Plugin for KOReader
 
 A plugin to synchronize book highlights with a Crossbill server.
-Supports manual sync, auto-sync on suspend/exit 
+Supports manual sync, auto-sync on suspend/exit
 ]]
 
 local WidgetContainer = require("ui/widget/container/widgetcontainer")
 local Dispatcher = require("dispatcher")
 local logger = require("logger")
 local DataStorage = require("datastorage")
+local Trapper = require("ui/trapper")
 local _ = require("gettext")
 
 local Settings = require("modules/settings")
@@ -19,9 +20,16 @@ local SessionTracker = require("modules/sessiontracker")
 local DigestCache = require("modules/digest_cache")
 local DigestService = require("modules/digest_service")
 local FileUploader = require("modules/file_uploader")
+local HighlightImporter = require("modules/highlight_importer")
+local HighlightSnapshot = require("modules/highlight_snapshot")
+local HighlightSnapshotStore = require("modules/highlight_snapshot_store")
 local SyncService = require("modules/sync_service")
 local UI = require("modules/ui")
 local BookMetadata = require("modules/book_metadata")
+local DocumentSupport = require("modules/document_support")
+local UpgradeRequired = require("modules/upgrade_required")
+local UpdateCheck = require("modules/update/check")
+local UpdateInstaller = require("modules/update/installer")
 
 local CrossbillSync = WidgetContainer:extend({
 	name = "Crossbill",
@@ -52,9 +60,19 @@ function CrossbillSync:onDispatcherRegisterActions()
 end
 
 --- Initialize the plugin
+-- Everything below the document check is skipped on a non-EPUB: no menu, no
+-- databases, no session. The gesture actions are registered first regardless,
+-- because they are global configuration -- a reader must be able to bind the
+-- gesture while a PDF happens to be open, even though it will do nothing here.
 function CrossbillSync:init()
 	-- Register gesture-bindable actions
 	self:onDispatcherRegisterActions()
+
+	self.is_supported_document = DocumentSupport.isSupportedDocument(self.ui)
+	if not self.is_supported_document then
+		logger.info("Crossbill: Not an EPUB, plugin stays inactive for this document")
+		return
+	end
 
 	-- Initialize settings
 	self.settings = Settings:new():load()
@@ -77,9 +95,23 @@ function CrossbillSync:init()
 	self.digest_cache:init(DataStorage:getSettingsDir())
 	self.digest_service = DigestService:new(self.api_client, self.digest_cache)
 
+	-- Initialize the importer that writes pulled highlights back to the book
+	self.highlight_importer = HighlightImporter:new()
+
+	-- Initialize the ledger (SQLite) of the server highlights last applied
+	self.highlight_snapshot = HighlightSnapshot:new({ store = HighlightSnapshotStore:new() })
+	self.highlight_snapshot:init(DataStorage:getSettingsDir())
+
 	-- Initialize sync service with all dependencies
-	self.sync_service =
-		SyncService:new(self.api_client, self.file_uploader, self.session_tracker, self.settings, self.digest_service)
+	self.sync_service = SyncService:new({
+		api_client = self.api_client,
+		file_uploader = self.file_uploader,
+		session_tracker = self.session_tracker,
+		settings = self.settings,
+		digest_service = self.digest_service,
+		highlight_importer = self.highlight_importer,
+		highlight_snapshot = self.highlight_snapshot,
+	})
 
 	-- Register menu
 	self.ui.menu:registerToMainMenu(self)
@@ -122,7 +154,102 @@ function CrossbillSync:addToMainMenu(menu_items)
 		on_configure_min_session_duration = function()
 			UI.showMinSessionDurationDialog(self.settings)
 		end,
+		on_check_for_updates = function()
+			self:checkForUpdates()
+		end,
 	})
+end
+
+--- Find out whether a newer plugin version has been published
+-- Follows the digest path: WiFi is turned on if it is off, the check runs once
+-- the device is online, and WiFi goes back off afterwards if the plugin was the
+-- one that turned it on.
+function CrossbillSync:checkForUpdates()
+	local callback = function()
+		self:performUpdateCheck()
+	end
+
+	if not Network.ensureWifiEnabled(callback) then
+		-- WiFi is being enabled; the callback runs when online
+		logger.info("Crossbill: Waiting for WiFi to check for updates...")
+		return
+	end
+
+	self:performUpdateCheck()
+end
+
+--- Ask what the newest release is and report what came back
+-- The "checking" message has no timeout, so it and the WiFi are both cleared
+-- here, before anything else can return.
+function CrossbillSync:performUpdateCheck()
+	local checking = UI.showUpdateChecking()
+
+	local completed, result, err = UpdateCheck.check()
+
+	UI.dismiss(checking)
+	Network.disableWifiIfNeeded()
+
+	if not completed then
+		-- The reader is told one thing whatever went wrong; this is where the
+		-- difference is kept.
+		logger.err("Crossbill: Update check failed:", tostring(err))
+		UI.showUpdateCheckFailed()
+		return
+	end
+
+	if not result.update_available then
+		UI.showNoUpdate(result)
+		return
+	end
+
+	UI.showUpdateAvailable(result, function()
+		self:installUpdate(result)
+	end)
+end
+
+--- Fetch the release the check found and put it in the plugin's place
+-- WiFi again rather than still: the check turned it back off before the reader
+-- was asked anything, and a reader who thinks it over for a minute should not
+-- find the answer has expired.
+-- @param result table The check result, carrying the archive and its signature
+function CrossbillSync:installUpdate(result)
+	local callback = function()
+		self:performInstall(result)
+	end
+
+	if not Network.ensureWifiEnabled(callback) then
+		logger.info("Crossbill: Waiting for WiFi to install the update...")
+		return
+	end
+
+	self:performInstall(result)
+end
+
+--- Install the update and ask for the restart that brings it into use
+-- `self.path` is where KOReader loaded this plugin from, which is the only
+-- honest answer to what should be replaced: a reader may have renamed it, and
+-- the installer refuses rather than guessing when the archive does not match.
+-- @param result table The check result
+function CrossbillSync:performInstall(result)
+	local installing = UI.showInstallingUpdate()
+
+	local ok, kind, detail = UpdateInstaller.install(self.path, result)
+
+	UI.dismiss(installing)
+	Network.disableWifiIfNeeded()
+
+	if ok then
+		UI.showUpdateInstalled(result.latest)
+		return
+	end
+
+	logger.err("Crossbill: Update install failed:", tostring(detail))
+
+	if kind == UpdateInstaller.UNVERIFIED then
+		UI.showInstallUnverified()
+	else
+		UI.showInstallFailed(result)
+	end
 end
 
 --- Show server configuration dialog
@@ -133,9 +260,14 @@ end
 --- Show a digest result: popup on success, matching info message otherwise
 -- @param item table|nil The matched digest item
 -- @param err_kind string|nil The error kind returned by the digest service
-function CrossbillSync:_showDigestResult(item, err_kind)
+-- @param err table|nil The refusal, when that is the error kind
+function CrossbillSync:_showDigestResult(item, err_kind, err)
 	if item then
 		UI.showDigestPopup(item)
+	elseif err_kind == UpgradeRequired.KIND then
+		-- The digest is beside the point: nothing is served to this plugin
+		-- until it is updated.
+		UI.showUpgradeRequired(err)
 	elseif err_kind == "book_unknown" then
 		UI.showDigestBookUnknown()
 	elseif err_kind == "no_digest_for_book" then
@@ -150,6 +282,11 @@ end
 
 --- Show the current chapter's digest
 function CrossbillSync:showChapterDigest()
+	if not self.is_supported_document then
+		logger.warn("Crossbill: Cannot show digest - the open document is not an EPUB")
+		return
+	end
+
 	if not self.ui.document then
 		logger.warn("Crossbill: Cannot show digest - no document available")
 		return
@@ -165,18 +302,18 @@ function CrossbillSync:showChapterDigest()
 	end
 
 	local client_book_id = book_data.client_book_id
-	local item, err_kind = self.digest_service:getForCurrentChapter(self.ui, client_book_id)
+	local item, err_kind, err = self.digest_service:getForCurrentChapter(self.ui, client_book_id)
 
 	-- Anything other than a missing cache can be shown immediately (no network needed).
 	if err_kind ~= "no_cache" then
-		self:_showDigestResult(item, err_kind)
+		self:_showDigestResult(item, err_kind, err)
 		return
 	end
 
 	-- Nothing cached and the fetch failed: retry once online if WiFi is off.
 	local callback = function()
-		local retry_item, retry_err = self.digest_service:getForCurrentChapter(self.ui, client_book_id)
-		self:_showDigestResult(retry_item, retry_err)
+		local retry_item, retry_err_kind, retry_err = self.digest_service:getForCurrentChapter(self.ui, client_book_id)
+		self:_showDigestResult(retry_item, retry_err_kind, retry_err)
 		Network.disableWifiIfNeeded()
 	end
 
@@ -187,19 +324,24 @@ function CrossbillSync:showChapterDigest()
 	end
 
 	-- Already online but still no cache: the fetch genuinely failed
-	self:_showDigestResult(item, err_kind)
+	self:_showDigestResult(item, err_kind, err)
 	Network.disableWifiIfNeeded()
 end
 
 --- Check if session tracking is currently active
 -- @return boolean True if session tracking is enabled and tracker is available
 function CrossbillSync:isSessionTrackingActive()
-	return self.settings:isSessionTrackingEnabled() and self.session_tracker ~= nil
+	return self.is_supported_document and self.settings:isSessionTrackingEnabled() and self.session_tracker ~= nil
 end
 
 --- Sync the currently open book's data
 -- @param is_autosync boolean If true, run in silent mode (no UI feedback)
 function CrossbillSync:syncCurrentBook(is_autosync)
+	if not self.is_supported_document then
+		logger.warn("Crossbill: Cannot sync - the open document is not an EPUB")
+		return
+	end
+
 	local callback = function()
 		self:performSync(is_autosync)
 	end
@@ -222,8 +364,28 @@ function CrossbillSync:performSync(is_autosync)
 		return
 	end
 
+	if is_autosync then
+		-- An autosync runs while the book is being torn down and has nobody to
+		-- put a question to, so it stays a plain call that never blocks.
+		self:_runSync(true)
+		return
+	end
+
+	-- A manual sync may have to ask before withdrawing highlights from the
+	-- reader's other devices, and a ConfirmBox can only block inside a Trapper
+	-- coroutine. Everything after the question -- the summary, the restarted
+	-- session, the WiFi cleanup -- has to resume in that same coroutine, so the
+	-- whole sync goes inside the wrapper rather than just the dialog.
+	Trapper:wrap(function()
+		self:_runSync(false)
+	end)
+end
+
+--- Run one sync from start to finish, including what has to follow it
+-- @param is_autosync boolean If true, run in silent mode
+function CrossbillSync:_runSync(is_autosync)
 	if not is_autosync then
-		UI.showSyncingMessage()
+		self.syncing_message = UI.showSyncingMessage()
 	end
 
 	-- End current session before sync so it gets included
@@ -234,6 +396,9 @@ function CrossbillSync:performSync(is_autosync)
 	local success, err = pcall(function()
 		self:doSync(is_autosync)
 	end)
+
+	-- Past this point the message is the timeout's to clear, not the sync's.
+	self.syncing_message = nil
 
 	if not success then
 		logger.err("Crossbill: Error in sync:", err)
@@ -251,10 +416,33 @@ function CrossbillSync:performSync(is_autosync)
 	Network.disableWifiIfNeeded()
 end
 
+--- Tell the reader the server has turned this plugin away
+-- A manual sync's "Syncing..." message clears on a timeout rather than when the
+-- sync ends, so it has to come down before the refusal replaces it.
+-- @param err table The server's refusal
+function CrossbillSync:_reportUpgradeRequired(err)
+	UI.dismiss(self.syncing_message)
+	self.syncing_message = nil
+	UI.showUpgradeRequired(err)
+end
+
 --- Execute the sync workflow
 -- @param is_autosync boolean If true, run in silent mode
 function CrossbillSync:doSync(is_autosync)
-	local result = self.sync_service:syncBook(self.ui)
+	local result = self.sync_service:syncBook(self.ui, {
+		-- Only a manual sync has a reader in front of it to answer.
+		confirm_removal = (not is_autosync) and UI.confirmRemoveAll or nil,
+		-- An autosync says it too: one that has quietly stopped working is
+		-- exactly what a reader needs told about.
+		on_upgrade_required = function(err)
+			self:_reportUpgradeRequired(err)
+		end,
+	})
+
+	if result.upgrade_required then
+		-- The refusal is the one message this attempt gets.
+		return
+	end
 
 	if not result.success and not is_autosync then
 		if result.error and result.error:match("^Authentication") then
@@ -267,7 +455,7 @@ function CrossbillSync:doSync(is_autosync)
 
 	-- Show success message for manual syncs
 	if not is_autosync then
-		UI.showSyncSuccess(result.highlights_created, result.highlights_skipped)
+		UI.showSyncSuccess(result)
 	end
 end
 
@@ -321,19 +509,24 @@ end
 
 --- Called when device goes to sleep/suspend
 function CrossbillSync:onSuspend()
+	if not self.is_supported_document then
+		return false
+	end
 	if self:isSessionTrackingActive() then
 		self.session_tracker:endSession(self.ui.document, self.ui, "suspend")
 	end
 	if self.settings:isAutosyncEnabled() then
 		logger.info("Crossbill: Auto-syncing on suspend")
 		self:syncCurrentBook(true)
-	else
 	end
 	return false
 end
 
 --- Called when KOReader exits
 function CrossbillSync:onExit()
+	if not self.is_supported_document then
+		return false
+	end
 	if self:isSessionTrackingActive() then
 		self.session_tracker:endSession(self.ui.document, self.ui, "app_exit")
 	end
@@ -347,6 +540,9 @@ function CrossbillSync:onExit()
 	end
 	if self.digest_cache then
 		self.digest_cache:close()
+	end
+	if self.highlight_snapshot then
+		self.highlight_snapshot:close()
 	end
 	return false
 end

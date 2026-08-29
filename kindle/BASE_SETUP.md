@@ -124,31 +124,25 @@ top:
   Installed straight from upstream,
   [omer-faruq/assistant.koplugin](https://github.com/omer-faruq/assistant.koplugin).
 
-### Not yet audited/documented (found 2026-08-29, needs your input)
+### Known experiments — installed, not part of the base setup
 
 Four more third-party plugins are live and actively configured (their
-gesture bindings are in `koreader-settings/gestures.lua`) but were never
-documented anywhere in this repo — found while cross-referencing a fresh
-device backup against this file:
+gesture bindings are in `koreader-settings/gestures.lua`) but aren't part
+of normal usage — confirmed 2026-08-29: things being tried out, not
+components a new device needs. Listed here only so a future audit doesn't
+mistake them for an undocumented gap again; **don't vendor or install
+these on a new device** unless that changes.
 
-- **`ReadMastery.koplugin`** — "Gamify your reading experience with XP,
+- `ReadMastery.koplugin` — "Gamify your reading experience with XP,
   Levels, Streaks, and Achievements." Bound to `tap_left_bottom_corner`
-  (`readmastery_show_stats`). Already confirmed unmodified-from-upstream
-  in `koreader-settings/README.md`'s plugin-source audit, just never got
-  its own bullet here.
-- **`glimpse.koplugin`** — "Peek at maps, family trees and other
-  reference images from anywhere in the book." Also bound to
+  (`readmastery_show_stats`).
+- `glimpse.koplugin` — "Peek at maps, family trees and other reference
+  images from anywhere in the book." Also bound to
   `tap_left_bottom_corner` (`glimpse_show`).
-- **`homeassistant.koplugin`** — lets KOReader control Home Assistant
-  entities via its REST API. Likely needs a URL + long-lived access
-  token, same secret-handling story as Immich's API key — not yet
-  identified where that's stored on-device.
-- **`heartbeat.koplugin`** — sends KOReader's current state (book info,
+- `homeassistant.koplugin` — lets KOReader control Home Assistant
+  entities via its REST API.
+- `heartbeat.koplugin` — sends KOReader's current state (book info,
   battery level) to a Home Assistant binary sensor.
-
-None of these are vendored or have a plugin-list bullet with real detail
-yet. Do that in a follow-up once there's confirmation on whether they're
-keepers.
 
 ### KOReader settings (`koreader-settings/`, copy into
 `/mnt/us/koreader/settings/` — or `/mnt/base-us/koreader/settings/`, same
@@ -177,6 +171,16 @@ Summary:
   `collection.lua` (built-in collection ordering, no book membership
   data), `bookshortcuts.lua` (folder-shortcut preference), `text_editor.lua`
   (font/size prefs; contains one device-specific `last_path`, harmless).
+- **Sleep screen wallpaper — show the book cover**: Settings → Screen →
+  Sleep Screen → Wallpaper → **Show book cover on sleep screen**. Not a
+  per-feature settings file — a single key in the global
+  `settings.reader.lua` (KOReader core, not a plugin), at the KOReader
+  install root rather than `settings/`:
+  `["screensaver_type"] = "cover"`. Universal, identical on Kobo — see
+  `kobo/BASE_SETUP.md`'s own copy of this note. Already set correctly on
+  both live devices as of 2026-08-29 (confirmed via SSH), so nothing to
+  fix here — this exists purely so a fresh device doesn't need
+  rediscovering it by trial and error through the menu.
 
 ### Home / library folder
 
@@ -315,5 +319,7 @@ remount to place back). Summary of what's live:
    history there first — this is a read-only-filesystem edit).
 8. Bookshelf home screen: gestures, start menu, chip bar, micromodules —
    see that section above.
-9. Investigate and decide on the four undocumented plugins (see "Not yet
-   audited/documented" above) before treating this file as complete.
+9. Sleep screen wallpaper: Settings → Screen → Sleep Screen → Wallpaper →
+   **Show book cover on sleep screen**. A single global KOReader setting,
+   not device-specific — see "KOReader settings" above for the exact key
+   if setting it via file edit instead of the UI.
