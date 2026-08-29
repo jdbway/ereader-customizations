@@ -8,17 +8,45 @@ source instead of vendored wholesale.
 
 ## Components
 
-### Core jailbreak / launcher
-- **KOReader** — not vendored (large prebuilt binary release, one per
-  device architecture/firmware). Get the current Kobo build from
-  [koreader.rocks](https://koreader.rocks/) or the
+### Core jailbreak / launcher — bootstrapping a factory-fresh device
+- **KOReader + KFMon + NickelMenu, bundled** — not vendored (large
+  prebuilt binary release). On a factory-fresh device (nothing sideloaded
+  yet — this is the actual from-scratch path used to rebuild
+  `kobo-sabrina` on 2026-08-29), use the community "one-click package"
+  rather than installing KOReader and NickelMenu separately:
+  1. Download the current package from the first post of the
+     [MobileRead KOReader-on-Kobo thread](https://www.mobileread.com/forums/showpost.php?p=3797095&postcount=1)
+     — as of 2026-08-29 this is
+     [OCP-KOReader-v2026.03.zip](https://storage.gra.cloud.ovh.net/v1/AUTH_2ac4bfee353948ec8ea7fd1710574097/kfmon-pub/OCP-KOReader-v2026.03.zip)
+     (~41.6MB). **Check that forum post for a newer version before reusing
+     this link** — the filename/version changes over time and the link
+     above will go stale.
+  2. Connect the Kobo via USB, extract the zip's contents **directly to
+     the root of the Kobo's drive** (use "Extract Here", not manual
+     copy — and not into a subfolder named after the zip).
+  3. Safely eject, then unplug. The device shows "processing a book,"
+     then **restarts on its own** to apply it — let it run, don't
+     interrupt.
+  4. After it settles at the Nickel home screen, a **KOReader** tile
+     appears on Home/Library (NickelMenu + the launcher entry are part of
+     this same package — no separate NickelMenu install needed for this
+     path).
+  5. Tap **KOReader** once to launch it, then enable remote access:
+     KOReader's own menu → gear icon → **Network** → toggle **SSH
+     server** on (starts `dropbear` on port 2222 — this is what every
+     `ssh root@<device-ip> -p 2222` command in this repo's notes connects
+     to). Note the device's IP shown on that same screen.
+  6. From here on, everything below (plugins, settings, Tailscale) can be
+     deployed over that SSH connection instead of USB.
+- For a device that **already has NickelMenu but not KOReader** (not the
+  fresh-device case above), see
+  [pgaskin/NickelMenu](https://github.com/pgaskin/NickelMenu) for the
+  separate NickelMenu installer, and add the entry from
+  `nickelmenu/koreader` in this folder (→
+  `/mnt/onboard/.adds/nm/koreader`) once KOReader itself is installed
+  from [koreader.rocks](https://koreader.rocks/) or the
   [koreader/koreader releases](https://github.com/koreader/koreader/releases)
-  page, extract to `/mnt/onboard/.adds/koreader/`.
-- **NickelMenu** — not vendored (native binary + install package). Get from
-  [pgaskin/NickelMenu](https://github.com/pgaskin/NickelMenu). This repo
-  vendors only the config: `nickelmenu/koreader` → copy to
-  `/mnt/onboard/.adds/nm/koreader` to add the "KOReader" entry to Nickel's
-  menu that launches `koreader.sh`.
+  page.
 
 ### KOReader plugins (`koreader-plugins/`, copy each to
 `/mnt/onboard/.adds/koreader/plugins/`)
@@ -55,6 +83,25 @@ source instead of vendored wholesale.
 - **opds.lua** — OPDS catalog list, including the Calibre server
   (`https://calibre.truepob.com/opds`). **Password is intentionally
   blanked before committing** — fill in manually on-device after copying.
+- **wallabag.lua** — Wallabag article sync
+  (`https://wallabag.truepob.com`, username `jon`). **Password
+  intentionally blanked before committing** — fill in on-device.
+  `client_id`/`client_secret` (this Wallabag instance's OAuth app
+  credentials, not tied to one user) also need filling in on-device —
+  get them from the Wallabag instance itself. Points at the
+  `Books/Wallabag` library folder below.
+
+### Home / library folder (create on `/mnt/onboard`, not under `.adds`)
+Kobo's Nickel scans `/mnt/onboard` itself for content, unlike Kindle's
+dedicated `koreader/epubs/books/` convention — so the library lives at
+top level, not inside the koreader install:
+- `/mnt/onboard/Books/` — general library root; point `bookshelf.koplugin`
+  and KOReader's own file browser home directory here.
+- `/mnt/onboard/Books/Wallabag/` — where `wallabag.koplugin` downloads
+  synced articles (matches `wallabag.lua`'s `directory` above); has its
+  own `archive/` subfolder created automatically by the plugin.
+- Adjust the folder name if a different convention is wanted — `Books` is
+  just a reasonable default, not something KOReader/Nickel requires.
 
 ### Tailscale (`../kobo/tailscale/`, scripts go in
 `/mnt/onboard/.adds/tailscale/bin/`)
@@ -72,21 +119,31 @@ this file and the `koreader-plugins/` folder as they're identified, don't
 let this list go stale.
 
 ## Install order (rough)
-1. NickelMenu (native install package).
-2. KOReader (extract release zip to `.adds/koreader/`).
-3. Copy `nickelmenu/koreader` config in, restart Nickel/reboot so the menu
+1. Bootstrap via the one-click package (USB) per "Core jailbreak /
+   launcher" above — gets KOReader + KFMon + NickelMenu on in one step on
+   a factory-fresh device.
+2. Launch KOReader once via its new Home/Library tile, enable its SSH
+   server (Network settings menu), note the device IP. Everything from
+   here on can go over that SSH connection instead of USB.
+3. (Skip if using the one-click package above — only needed when adding
+   KOReader to a device that already has NickelMenu some other way.)
+   Copy `nickelmenu/koreader` config in, restart Nickel/reboot so the menu
    entry appears, launch KOReader once via NickelMenu.
 4. Copy each `koreader-plugins/*.koplugin` folder into
    `.adds/koreader/plugins/`, restart KOReader.
-5. Copy `koreader-settings/opds.lua` into `.adds/koreader/settings/`, fill
-   in the Calibre password on-device.
-6. Set up Tailscale: create `.adds/tailscale/bin/up.args`, run
+5. Create `/mnt/onboard/Books/` and `/mnt/onboard/Books/Wallabag/` (see
+   "Home / library folder" above), point KOReader's file browser and
+   `bookshelf.koplugin` at `Books/`.
+6. Copy `koreader-settings/opds.lua` and `wallabag.lua` into
+   `.adds/koreader/settings/`, fill in the Calibre password and the
+   Wallabag password/client_id/client_secret on-device.
+7. Set up Tailscale: create `.adds/tailscale/bin/up.args`, run
    `update_tailscale.sh` to install the binaries, then use
    `networkextras.koplugin`'s Start Tailscale action from KOReader.
-7. Configure Crossbill server URL/credentials via KOReader's own Tools →
+8. Configure Crossbill server URL/credentials via KOReader's own Tools →
    Crossbill → Settings menu (see the NOTE file referenced above for why
    this can't just be copied as a file).
-8. Configure `cwasync.koplugin` against the Calibre-Web-Automated
+9. Configure `cwasync.koplugin` against the Calibre-Web-Automated
    instance's `/kosync` endpoint via its own in-KOReader setup screen.
 
 ## Important: do not repeat the auto-start incident
