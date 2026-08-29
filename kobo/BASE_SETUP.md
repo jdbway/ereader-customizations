@@ -88,11 +88,19 @@ source instead of vendored wholesale.
   server (`https://crossbill.truepob.com`). Config lives in KOReader's
   own `settings.reader.lua` under the `crossbill_sync` key, not a vendored
   file — see `../kindle/koreader-settings/crossbill-NOTE.md` for the
-  exact keys and current known issues.
+  exact keys and current known issues. **Turn on Auto-sync** in its
+  Settings menu after configuring the server — off by default, and
+  without it the plugin only pushes on suspend/exit (see the NOTE file).
 - **cwasync.koplugin** — the "CWA / Calibre-Web-NextGen" progress-sync
-  plugin (upstream: `new-usemame/cwasync.koplugin`). Point it at the
-  Calibre-Web-Automated instance's `/kosync` endpoint per its own setup
-  UI.
+  plugin (upstream: `new-usemame/cwasync.koplugin`). **Shows up in
+  KOReader's Tools menu as "NextGen Progress Sync"**, not "cwasync" —
+  don't go looking for the package name on-device. Sub-items: "Set
+  NextGen Server", "Login", "Automatically keep documents in sync".
+  Point the server at the Calibre-Web-Automated instance's `/kosync`
+  endpoint — **double-check the URL carefully**, `calibre` vs. `caliber`
+  is an easy typo that silently fails rather than erroring obviously.
+  See the Wi-Fi caveat below if Login hangs/times out even with a
+  correct URL.
 - **bookshelf.koplugin** — the home-screen replacement in use on the
   Kindle fleet; carries a Kobo-aware source module already
   (`lib/bookshelf_kobo_source.lua`).
@@ -173,8 +181,62 @@ let this list go stale.
 9. Configure Crossbill server URL/credentials via KOReader's own Tools →
    Crossbill → Settings menu (see the NOTE file referenced above for why
    this can't just be copied as a file).
-10. Configure `cwasync.koplugin` against the Calibre-Web-Automated
-    instance's `/kosync` endpoint via its own in-KOReader setup screen.
+10. Configure "NextGen Progress Sync" (`cwasync.koplugin`) against the
+    Calibre-Web-Automated instance's `/kosync` endpoint via its own
+    in-KOReader setup screen (Tools menu — it does *not* show up under
+    the plugin's package name). See the Wi-Fi caveat below if Login
+    hangs.
+11. Gestures: Settings → Taps and Gestures → Gesture Manager → Tap Corner
+    → **Bottom Left** → set to General → **Bookshelf: open start menu**.
+    This corner defaults to **Screen and lights → Toggle frontlight** —
+    explicitly **uncheck that default action**, it doesn't get replaced
+    automatically just by assigning the new one.
+12. Start menu contents (which items appear in Bookshelf's start menu,
+    opened via the gesture above): **not decided yet** — placeholder.
+    Current on-device state (from the live rebuild, 2026-08-29) has the
+    stock seeded set (quote of the day, reading calendar, toggle Wi-Fi,
+    toggle night mode, Bookshelf menu, exit bookshelf, close book, sleep)
+    — revisit once there's a real preference, and document the chosen
+    set here (or vendor the resulting `start_menu_items` block from
+    `settings/bookshelf.lua` once it's disabled) so it's reproducible.
+13. Bookshelf chip bar (Home/Recent/Calibre-style tabs): **see the
+    open question below** — the mechanism for the "Calibre" OPDS chip
+    seen on the live rebuild isn't confirmed yet.
+
+## Open question: Bookshelf's auto-appearing "Calibre" chip
+
+On the 2026-08-29 rebuild, the chip bar showed exactly Home / Recent /
+Calibre (the custom OPDS catalog) with no manual chip-editor visit — but
+`settings/bookshelf.lua` has no `tabs` key saved at all, and the plugin's
+own source (`lib/bookshelf_tab_model.lua`) shows OPDS catalogs are
+**not** auto-converted into chips; a chip only exists if explicitly
+added with `source = {kind="opds", id=<serverKey>}` in the saved `tabs`
+list, and `lib/bookshelf_opds_catalogs.lua`'s write path confirms the
+same — nothing found that auto-seeds one from `opds.lua`'s server list.
+Somewhat contradicts what was actually seen on-screen. Once resolved
+(was a chip manually added and just not yet flushed to disk, is there a
+seed path not found by this read, or something else), document either:
+- the exact `tabs` block to write into `settings/bookshelf.lua` to
+  reproduce Home/Recent/Calibre on a new device without touching the UI
+  (the "config behind the scenes" outcome hoped for), or
+- confirmation that this has to be set up by hand in Bookshelf's chip
+  editor on each new device, if no file-only path exists.
+
+## Wi-Fi caveat: things can look connected but not actually pass traffic
+
+Observed during "NextGen Progress Sync" setup (2026-08-29): its Login
+button highlighted then timed out with no error, even with a correct
+server URL — and SSH to the device was *also* unreachable at the same
+time, despite Wi-Fi showing as on. Toggling Wi-Fi off/on didn't fix it.
+Opening the OPDS library view (which apparently forces a fresh
+connection attempt) triggered a visible "connecting to wifi" message,
+and immediately after that, both SSH and the sync login started working.
+This matches the same general flakiness this device showed all through
+initial setup and the auto-start incident — not new, but now observed
+from *inside* KOReader too, not just from SSH externally. If a plugin's
+network action seems stuck despite Wi-Fi showing connected, try forcing
+a fresh connection via the OPDS browser (or similar) before assuming the
+plugin itself is broken.
 
 ## Important: do not repeat the auto-start incident
 
