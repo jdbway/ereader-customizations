@@ -167,6 +167,39 @@ actual device-specific assumptions (hardcoded `/mnt/us` paths,
   self-update mechanism too, so it's safe to update via its own in-plugin
   updater on either device.
 
+### Fonts — WP-Fonts collection (Kobo only, deliberately not vendored)
+
+[Chairzard/WP-Fonts](https://github.com/Chairzard/WP-Fonts) — "the
+internet's largest repository of modified and unmodified fonts for
+KOReader," ~292MB across two folders (`Modified Fonts`: KOReader-flavored
+renamed/reworked variants; `Unmodified Fonts`: stock releases), 1023 font
+files total. Deployed to `kobo-sabrina` 2026-08-29 (Kobo only, at the
+user's explicit request — not installed on Kindle). **Not vendored into
+this repo** — same reasoning as the Tailscale binaries below: a 292MB
+binary asset would bloat every future clone permanently, and it's
+trivially re-obtained from source.
+
+**To reproduce**: download the repo archive
+(`https://github.com/Chairzard/WP-Fonts/archive/refs/heads/main.zip`) and
+extract its `Modified Fonts/` and `Unmodified Fonts/` folders into
+`/mnt/onboard/.adds/koreader/fonts/wp-fonts/` (KOReader scans its fonts
+directory recursively, same as the bundled `droid`/`freefont`/`nerdfonts`/
+`noto`/`urw` subfolders already there — no extra config needed for
+KOReader to find them).
+
+**Vfat trap**: `/mnt/onboard` is a `vfat` filesystem, which rejects
+directory names with a trailing space — the repo's "M PLUS Code Latin "
+folder (note the trailing space in its actual name) fails to extract with
+`unzip: can't create directory ... Invalid argument` and aborts the whole
+archive partway through on BusyBox `unzip` (it doesn't skip and
+continue). Work around it with `unzip -x 'WP-Fonts-main/Modified
+Fonts/M PLUS Code Latin */*'` to exclude just that folder, then fetch its
+3 files individually via GitHub's raw-content URLs into a manually
+created `M PLUS Code Latin` folder (no trailing space). Also extract
+**onto `/mnt/onboard` directly, not `/tmp`** — `/tmp` here is a ~219MB
+RAM-backed partition, nowhere near enough for a 158MB zip plus its ~292MB
+extracted contents.
+
 ### KOReader settings (`koreader-settings/`, copy into
 `/mnt/onboard/.adds/koreader/settings/`)
 - **opds.lua** — OPDS catalog list, including the Calibre server
@@ -303,6 +336,8 @@ let this list go stale.
     → **Show book cover on sleep screen**. A single global KOReader
     setting, not device-specific — see "KOReader settings" above for the
     exact key if setting it via file edit instead of the UI.
+13. Fonts (optional, Kobo only): see "Fonts — WP-Fonts collection" above
+    — not required for a working device, purely a nice-to-have.
 
 ## Wi-Fi caveat: things can look connected but not actually pass traffic
 
