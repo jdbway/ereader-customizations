@@ -35,7 +35,10 @@ local _ = require("gettext")
 local ok_lfs, lfs = pcall(require, "libs/libkoreader-lfs")
 
 local SERVER = "https://immich.truepob.com"
-local CHECK_INTERVAL = 300 -- seconds; local-only, so cheap to run often
+-- Matches the old shell-script watcher's 30s poll -- a local directory
+-- listing costs nothing, so there's no reason for this to be slower than
+-- the design it replaced just because network calls are now conditional.
+local CHECK_INTERVAL = 30
 
 local ImmichUpload = WidgetContainer:extend{
     name = "immichupload",
