@@ -19,9 +19,11 @@ else
 fi
 echo "Installed version : $CURRENT" >> "$LOG"
 
-# Resolve the latest release tag from the GitHub API
+# Resolve the latest release tag from the GitHub API. Uses wget, not curl --
+# unlike the Kindle, this device's BusyBox wget handles TLS fine, and curl
+# isn't installed here at all.
 log "Checking latest Tailscale version..."
-LATEST_VERSIONS=$(curl -sf --user-agent "tailscale-koreader-updater/1.0" \
+LATEST_VERSIONS=$(wget -q -O- -U "tailscale-koreader-updater/1.0" \
     "https://api.github.com/repos/tailscale/tailscale/releases?per_page=${VERSIONS_TO_TRY}" 2>>"$LOG" \
     | sed -e 's/[{}]/''/g' | awk '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' \
     | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/')
@@ -38,8 +40,7 @@ for version in $LATEST_VERSIONS; do
     LATEST=$version
     echo "Checking $LATEST" >> "$LOG"
     URL="https://pkgs.tailscale.com/stable/tailscale_${LATEST}_${ARCH}.tgz"
-    status=$(curl -s -o /dev/null -I -w "%{http_code}" ${URL})
-    if [ "$status" = "200" ]; then
+    if wget --spider -q "$URL" 2>>"$LOG"; then
         echo "Using $LATEST" >> "$LOG"
         break
     else
@@ -65,7 +66,7 @@ mkdir -p "$TMP_DIR"
 URL="https://pkgs.tailscale.com/stable/tailscale_${LATEST}_${ARCH}.tgz"
 echo "Downloading $URL..." >> "$LOG"
 log "Downloading tailscale v$LATEST (~31 MB). Please wait..."
-curl -sL --user-agent "tailscale-koreader-updater/1.0" -o "$TMP_DIR/ts.tgz" "$URL" 2>>"$LOG"
+wget -q -O "$TMP_DIR/ts.tgz" -U "tailscale-koreader-updater/1.0" "$URL" 2>>"$LOG"
 
 if [ $? -ne 0 ] || [ ! -s "$TMP_DIR/ts.tgz" ]; then
     log "ERROR: Download failed. Check Wi-Fi connectivity and try again."
