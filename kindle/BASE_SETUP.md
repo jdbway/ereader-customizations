@@ -150,7 +150,7 @@ None of these are vendored or have a plugin-list bullet with real detail
 yet. Do that in a follow-up once there's confirmation on whether they're
 keepers.
 
-## KOReader settings (`koreader-settings/`, copy into
+### KOReader settings (`koreader-settings/`, copy into
 `/mnt/us/koreader/settings/` — or `/mnt/base-us/koreader/settings/`, same
 underlying data, see "Two valid mount points" under SSH access below)
 
@@ -178,7 +178,7 @@ Summary:
   data), `bookshortcuts.lua` (folder-shortcut preference), `text_editor.lua`
   (font/size prefs; contains one device-specific `last_path`, harmless).
 
-## Home / library folder
+### Home / library folder
 
 Kindle's own convention: `/mnt/us/koreader/epubs/books/` — unlike Kobo,
 where Nickel scans `/mnt/onboard` itself so the library has to live at
@@ -195,7 +195,7 @@ exact same silent-fallback trap that broke downloads on the Kobo rebuild,
 just not yet triggered here because nothing has knocked the "last used"
 folder over to Wallabag's. Don't rely on that luck holding.
 
-## Bookshelf home screen (gestures, start menu, chip bar, micromodules)
+### Bookshelf home screen (gestures, start menu, chip bar, micromodules)
 
 The mechanism — chip bar, per-chip download folder, micromodules — is
 pure `bookshelf.koplugin` behavior, documented once in
@@ -219,7 +219,7 @@ Read that first. This device's specifics:
   Reading insight, via `readinginsights.koplugin` — this is the
   reference behavior the Kobo setup was matched against).
 
-## Tailscale binary itself — deliberately not vendored
+### Tailscale binary itself — deliberately not vendored
 
 `/mnt/us/extensions/tailscale/bin/{tailscale,tailscaled}` are Tailscale's
 own official prebuilt binaries. Currently version **1.102.2**,
@@ -240,7 +240,7 @@ is a small loop that re-asserts `nameserver 100.100.100.100` every 10s,
 launched from `start_tailscale.sh`. Verified to survive a real reboot and
 self-heal a forced overwrite.
 
-## Boot hooks
+### Boot hooks
 
 See `boot-hooks/README.md` for the full detail — this is the one part of
 the setup that genuinely can't be reproduced by a normal file copy (both
