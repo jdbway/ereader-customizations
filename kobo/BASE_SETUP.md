@@ -8,6 +8,28 @@ source instead of vendored wholesale.
 
 ## Components
 
+### System utilities
+- **curl** — the OCP package's base image ships BusyBox `wget` but no
+  `curl` at all. Not strictly required (`update_tailscale.sh` uses `wget`
+  specifically because of this — see its own comment), but handy to have
+  for manual debugging/ad hoc use, so it's part of the base install
+  regardless. Not vendored (static binary, third-party build) — install:
+  ```sh
+  wget -q -O /usr/bin/curl 'https://github.com/moparisthebest/static-curl/releases/latest/download/curl-armhf'
+  chmod +x /usr/bin/curl
+  mkdir -p /etc/ssl/certs
+  wget -q -O /etc/ssl/certs/ca-certificates.crt 'https://curl.se/ca/cacert.pem'
+  ```
+  The CA bundle step matters: unlike this device's BusyBox `wget` (which
+  skips certificate verification entirely — worth knowing as its own
+  security caveat, not just a curl quirk), `curl` verifies TLS certs by
+  default and fails (exit 77, "problem with the local SSL certificate")
+  without a CA store, since the device has none at all otherwise. `armhf`
+  is correct for Kobo's hard-float ARM userspace (confirmed working on
+  2026-08-29; `moparisthebest/static-curl` doesn't publish a soft-float
+  ARM build, so there's no alternative to try if this ever stops
+  matching).
+
 ### Core jailbreak / launcher — bootstrapping a factory-fresh device
 - **KOReader + KFMon + NickelMenu, bundled** — not vendored (large
   prebuilt binary release). On a factory-fresh device (nothing sideloaded
@@ -132,26 +154,27 @@ let this list go stale.
 2. Launch KOReader once via its new Home/Library tile, enable its SSH
    server (Network settings menu), note the device IP. Everything from
    here on can go over that SSH connection instead of USB.
-3. (Skip if using the one-click package above — only needed when adding
+3. Install curl + CA bundle per "System utilities" above.
+4. (Skip if using the one-click package above — only needed when adding
    KOReader to a device that already has NickelMenu some other way.)
    Copy `nickelmenu/koreader` config in, restart Nickel/reboot so the menu
    entry appears, launch KOReader once via NickelMenu.
-4. Copy each `koreader-plugins/*.koplugin` folder into
+5. Copy each `koreader-plugins/*.koplugin` folder into
    `.adds/koreader/plugins/`, restart KOReader.
-5. Create `/mnt/onboard/Books/` and `/mnt/onboard/Books/Wallabag/` (see
+6. Create `/mnt/onboard/Books/` and `/mnt/onboard/Books/Wallabag/` (see
    "Home / library folder" above), point KOReader's file browser and
    `bookshelf.koplugin` at `Books/`.
-6. Copy `koreader-settings/opds.lua` and `wallabag.lua` into
+7. Copy `koreader-settings/opds.lua` and `wallabag.lua` into
    `.adds/koreader/settings/`, fill in the Calibre password and the
    Wallabag password/client_id/client_secret on-device.
-7. Set up Tailscale: create `.adds/tailscale/bin/up.args`, run
+8. Set up Tailscale: create `.adds/tailscale/bin/up.args`, run
    `update_tailscale.sh` to install the binaries, then use
    `networkextras.koplugin`'s Start Tailscale action from KOReader.
-8. Configure Crossbill server URL/credentials via KOReader's own Tools →
+9. Configure Crossbill server URL/credentials via KOReader's own Tools →
    Crossbill → Settings menu (see the NOTE file referenced above for why
    this can't just be copied as a file).
-9. Configure `cwasync.koplugin` against the Calibre-Web-Automated
-   instance's `/kosync` endpoint via its own in-KOReader setup screen.
+10. Configure `cwasync.koplugin` against the Calibre-Web-Automated
+    instance's `/kosync` endpoint via its own in-KOReader setup screen.
 
 ## Important: do not repeat the auto-start incident
 
