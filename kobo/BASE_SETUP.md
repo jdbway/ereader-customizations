@@ -192,6 +192,123 @@ top level, not inside the koreader install:
 - Adjust the folder name if a different convention is wanted — `Books` is
   just a reasonable default, not something KOReader/Nickel requires.
 
+### Bookshelf home screen (gestures, start menu, chip bar, micromodules)
+
+Everything about configuring `bookshelf.koplugin`'s home-screen UI, in one
+place — previously scattered across the install-order steps and two
+separate sections near the end of this file, which made a fix like the
+per-chip download folder one hard to find next to the OPDS setup it
+depends on. Do this after the plugin is installed and `Books/` exists
+(previous section).
+
+**Gesture to open the start menu**: Settings → Taps and Gestures →
+Gesture Manager → Tap Corner → **Bottom Left** → set to General →
+**Bookshelf: open start menu**. This corner defaults to **Screen and
+lights → Toggle frontlight** — explicitly **uncheck that default
+action**, it doesn't get replaced automatically just by assigning the
+new one.
+
+**Start menu contents** (which items appear in the start menu opened via
+that gesture): **not decided yet** — placeholder. Current on-device state
+(from the live rebuild, 2026-08-29) has the stock seeded set (quote of
+the day, reading calendar, toggle Wi-Fi, toggle night mode, Bookshelf
+menu, exit bookshelf, close book, sleep) — revisit once there's a real
+preference, and document the chosen set here (or vendor the resulting
+`start_menu_items` block from `settings/bookshelf.lua` once it's decided)
+so it's reproducible.
+
+**Chip bar (Home / Recent / Calibre)**: the "auto-appearing" Calibre chip
+on the 2026-08-29 rebuild wasn't automatic — it (and removing
+Series/Favourites) was done by hand in Bookshelf's chip editor, same as
+on Kindle: long-press an unwanted chip → trash icon → confirm, and tap
+**+** → Chip source → **OPDS catalog...** → pick the configured server
+from the list (the same list `opds.lua`, above, populates). This *can*
+be done by hand on each new device in under a minute.
+
+It can also be done as a pure file edit, confirmed working by writing it
+directly into `settings/bookshelf.lua`'s `tabs` key on 2026-08-29 (see
+`koreader-settings/bookshelf-tabs-template.lua` in this folder — merge
+just its `tabs` key into a device's real `settings/bookshelf.lua`, which
+also holds unrelated keys like `start_menu_items`; don't overwrite the
+whole file with the template). The one non-obvious part is `source.id`
+for an OPDS chip: it's not the catalog URL itself but a `djb2`-style hash
+of it (`lib/bookshelf_opds_source.lua`, `OpdsSource.serverKey()`) —
+`filter = {}` and `sort_priority = {}` (OPDS chips don't get a
+client-side sort; feed order is authoritative, per
+`SOURCE_SORT_DEFAULTS.opds` in `lib/bookshelf_chip_editor.lua`). To
+compute the key for a different catalog URL, run this on-device (needs
+KOReader's bundled `luajit`, matches the real algorithm exactly rather
+than reimplementing it — a from-scratch reimplementation attempt during
+this session's setup produced two different wrong answers before this
+approach was used instead):
+```sh
+/mnt/onboard/.adds/koreader/luajit -e '
+local url = "PUT_THE_OPDS_URL_HERE"
+local h = 5381
+for i = 1, #url do h = (h * 33 + url:byte(i)) % 4294967296 end
+print(string.format("%08x", h))'
+```
+Back up the device's current `settings/bookshelf.lua` before overwriting
+it (`cp ... bookshelf.lua.bak-...`), and restart KOReader afterward so it
+picks up the change from disk rather than overwriting it back with
+whatever's still cached in memory from the running session.
+
+**Per-chip download folder**: OPDS downloads made through an OPDS-source
+chip (like Calibre) default to KOReader's own global "last used"
+download folder if the chip doesn't specify one — which on 2026-08-29
+turned out to be the Wallabag folder (apparently left pointing there by
+Wallabag's own downloads), so every book downloaded from the Calibre
+chip landed in `Books/Wallabag/` instead of `Books/`. Fixed by setting
+`download_dir` directly on the chip; already included in the template
+above (`["download_dir"] = "/mnt/onboard/Books"` on the Calibre chip
+entry).
+
+**To change this manually on-device** instead of editing the file:
+long-press the chip → **Edit** (not the trash icon) → there's a
+download-folder option once the chip's source is OPDS (it isn't shown
+for the plain Home/Recent/etc. built-in sources) → pick the folder →
+Save.
+
+**This regressed once already** (2026-08-29, after the rebuild): the
+Calibre chip on the live device had no `download_dir` at all even though
+the fix above had already been proven out — because the chip actually in
+use was created by hand via long-press → **+** → OPDS catalog (the
+normal chip-bar setup flow above), and that creation flow does **not**
+ask for a download folder; only the separate **Edit** step does, and
+that step was never performed on this device. **If OPDS downloads start
+landing in the wrong folder again, check whether `download_dir` is
+actually set on the chip in `settings/bookshelf.lua` before assuming
+something else broke** — creating a chip is not the same as setting its
+download folder, and it's an easy step to forget since nothing prompts
+for it up front.
+
+**Micromodules** (Bookshelf's home-screen tile grid, reached via the
+grid button on Bookshelf's bottom bar). Current chosen set, matching the
+Kindle:
+
+1. Long-press the existing analog clock module → **remove/trash** it.
+2. Long-press an empty slot (or the same slot) → **+** → pick **Clock**
+   (the plain digital clock module, not the analog one just removed).
+3. Long-press the Clock module just added → **+** → pick **Reading
+   streak** (`reading_streak.lua` — current/best consecutive-day and
+   -week streak, pulled from KOReader's own `statistics.sqlite3`, works
+   offline).
+4. Long-press the Reading streak module → its settings dialog → **Tap
+   action** → choose **Reading insight** (opens the same "Reading
+   insights" popup as the Kindle) or **Reading calendar** (KOReader's
+   built-in stats calendar view) — either works standalone, but
+   **Reading insight requires `readinginsights.koplugin`** to be
+   installed (see the plugin list above) or the tap silently does
+   nothing despite the setting showing as selected correctly. This was
+   the actual root cause when the Kobo rebuild's Reading streak tap
+   didn't do anything on 2026-08-29: the module's own code was fine
+   (`Dispatcher:execute({ reading_insights_popup = true })`), but nothing
+   on this device had ever registered that Dispatcher action, because
+   `readinginsights.koplugin` — a separate plugin from `bookshelf`, only
+   ever installed on the Kindle — had never been copied over or vendored
+   into this repo. Fixed by pulling it from the Kindle, auditing it for
+   the `shared/` rule, and adding it to the plugin list above.
+
 ### Tailscale (`../kobo/tailscale/`, scripts go in
 `/mnt/onboard/.adds/tailscale/bin/`)
 - Binaries are **not vendored** — `update_tailscale.sh` downloads and
@@ -240,119 +357,10 @@ let this list go stale.
     in-KOReader setup screen (Tools menu — it does *not* show up under
     the plugin's package name). See the Wi-Fi caveat below if Login
     hangs.
-11. Gestures: Settings → Taps and Gestures → Gesture Manager → Tap Corner
-    → **Bottom Left** → set to General → **Bookshelf: open start menu**.
-    This corner defaults to **Screen and lights → Toggle frontlight** —
-    explicitly **uncheck that default action**, it doesn't get replaced
-    automatically just by assigning the new one.
-12. Start menu contents (which items appear in Bookshelf's start menu,
-    opened via the gesture above): **not decided yet** — placeholder.
-    Current on-device state (from the live rebuild, 2026-08-29) has the
-    stock seeded set (quote of the day, reading calendar, toggle Wi-Fi,
-    toggle night mode, Bookshelf menu, exit bookshelf, close book, sleep)
-    — revisit once there's a real preference, and document the chosen
-    set here (or vendor the resulting `start_menu_items` block from
-    `settings/bookshelf.lua` once it's disabled) so it's reproducible.
-    See "Micromodules" below for the specific home-screen module swap
-    that *is* decided (Clock + Reading streak).
-13. Bookshelf chip bar (Home/Recent/Calibre-style tabs): **see the
-    open question below** — the mechanism for the "Calibre" OPDS chip
-    seen on the live rebuild isn't confirmed yet.
-
-## Bookshelf chip bar (Home / Recent / Calibre)
-
-Resolved: the "auto-appearing" Calibre chip on the 2026-08-29 rebuild
-wasn't automatic — it (and removing Series/Favourites) was done by hand
-in Bookshelf's chip editor, same as on Kindle: long-press an unwanted
-chip → trash icon → confirm, and tap **+** → Chip source → **OPDS
-catalog...** → pick the configured server from the list (the same list
-`opds.lua` populates). This *can* be done by hand on each new device in
-under a minute.
-
-It can also be done as a pure file edit, confirmed working by writing it
-directly into `settings/bookshelf.lua`'s `tabs` key on 2026-08-29 (see
-`koreader-settings/bookshelf-tabs-template.lua` in this folder — merge
-just its `tabs` key into a device's real `settings/bookshelf.lua`, which
-also holds unrelated keys like `start_menu_items`; don't overwrite the
-whole file with the template). The one
-non-obvious part is `source.id` for an OPDS chip: it's not the catalog
-URL itself but a `djb2`-style hash of it (`lib/bookshelf_opds_source.lua`,
-`OpdsSource.serverKey()`) — `filter = {}` and `sort_priority = {}` (OPDS
-chips don't get a client-side sort; feed order is authoritative, per
-`SOURCE_SORT_DEFAULTS.opds` in `lib/bookshelf_chip_editor.lua`). To
-compute the key for a different catalog URL, run this on-device (needs
-KOReader's bundled `luajit`, matches the real algorithm exactly rather
-than reimplementing it — a from-scratch reimplementation attempt during
-this session's setup produced two different wrong answers before this
-approach was used instead):
-```sh
-/mnt/onboard/.adds/koreader/luajit -e '
-local url = "PUT_THE_OPDS_URL_HERE"
-local h = 5381
-for i = 1, #url do h = (h * 33 + url:byte(i)) % 4294967296 end
-print(string.format("%08x", h))'
-```
-Back up the device's current `settings/bookshelf.lua` before overwriting
-it (`cp ... bookshelf.lua.bak-...`), and restart KOReader afterward so it
-picks up the change from disk rather than overwriting it back with
-whatever's still cached in memory from the running session.
-
-### Per-chip download folder
-
-OPDS downloads made through an OPDS-source chip (like Calibre) default to
-KOReader's own global "last used" download folder if the chip doesn't
-specify one — which on 2026-08-29 turned out to be the Wallabag folder
-(apparently left pointing there by Wallabag's own downloads), so every
-book downloaded from the Calibre chip landed in `Books/Wallabag/` instead
-of `Books/`. Fixed by setting `download_dir` directly on the chip; already
-included in the template above (`["download_dir"] = "/mnt/onboard/Books"`
-on the Calibre chip entry).
-
-**To change this manually on-device** instead of editing the file: long-press
-the chip → **Edit** (not the trash icon) → there's a download-folder
-option once the chip's source is OPDS (it isn't shown for the plain
-Home/Recent/etc. built-in sources) → pick the folder → Save.
-
-**This regressed once already** (2026-08-29, after the rebuild): the Calibre
-chip on the live device had no `download_dir` at all even though the fix
-above had already been proven out — because the chip actually in use was
-created by hand via long-press → **+** → OPDS catalog (the normal chip-bar
-setup flow), and that creation flow does **not** ask for a download folder;
-only the separate **Edit** step does, and that step was never performed on
-this device. **If OPDS downloads start landing in the wrong folder again,
-check whether `download_dir` is actually set on the chip in
-`settings/bookshelf.lua` before assuming something else broke** — creating
-a chip is not the same as setting its download folder, and it's an easy
-step to forget since nothing prompts for it up front.
-
-## Micromodules (Bookshelf home screen)
-
-Bookshelf's home screen tile grid is built from swappable "micromodules"
-(`bookshelf.koplugin/micromodules/*.lua`). Reached via the grid button on
-Bookshelf's bottom bar. Current chosen set, matching the Kindle:
-
-1. Long-press the existing analog clock module → **remove/trash** it.
-2. Long-press an empty slot (or the same slot) → **+** → pick **Clock**
-   (the plain digital clock module, not the analog one just removed).
-3. Long-press the Clock module just added → **+** → pick **Reading
-   streak** (`reading_streak.lua` — current/best consecutive-day and
-   -week streak, pulled from KOReader's own `statistics.sqlite3`, works
-   offline).
-4. Long-press the Reading streak module → its settings dialog → **Tap
-   action** → choose **Reading insight** (opens the same "Reading
-   insights" popup as the Kindle) or **Reading calendar** (KOReader's
-   built-in stats calendar view) — either works standalone, but
-   **Reading insight requires `readinginsights.koplugin`** to be
-   installed (see the plugin list above) or the tap silently does
-   nothing despite the setting showing as selected correctly. This was
-   the actual root cause when the Kobo rebuild's Reading streak tap
-   didn't do anything on 2026-08-29: the module's own code was fine
-   (`Dispatcher:execute({ reading_insights_popup = true })`), but nothing
-   on this device had ever registered that Dispatcher action, because
-   `readinginsights.koplugin` — a separate plugin from `bookshelf`, only
-   ever installed on the Kindle — had never been copied over or vendored
-   into this repo. Fixed by pulling it from the Kindle, auditing it for
-   the `shared/` rule, and adding it to the plugin list above.
+11. Gestures, start menu, chip bar, per-chip download folder, and
+    micromodules (Clock + Reading streak): all consolidated under
+    "Bookshelf home screen" above — do all of it there in one pass now
+    that `Books/` exists and the plugins are installed.
 
 ## Wi-Fi caveat: things can look connected but not actually pass traffic
 
