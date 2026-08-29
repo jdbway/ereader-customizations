@@ -21,9 +21,16 @@ source instead of vendored wholesale.
      (~41.6MB). **Check that forum post for a newer version before reusing
      this link** — the filename/version changes over time and the link
      above will go stale.
-  2. Connect the Kobo via USB, extract the zip's contents **directly to
-     the root of the Kobo's drive** (use "Extract Here", not manual
-     copy — and not into a subfolder named after the zip).
+  2. Connect the Kobo via USB. **Extract the zip to a local folder on
+     your computer first**, then copy the *contents* of that extracted
+     folder (`.adds`, `.kobo`, `.kobo-images`, `fonts`, `kfmon.png`,
+     `koreader.png`, etc.) directly into the root of the Kobo's drive —
+     not the zip file itself, and not the extracted top-level folder
+     as a single item. Extracting straight onto the device with
+     "Extract Here" risks landing everything inside an extra
+     zip-named subfolder depending on the archive tool; extracting
+     locally first and verifying the file list before copying avoids
+     that ambiguity. Confirmed working this way on 2026-08-29.
   3. Safely eject, then unplug. The device shows "processing a book,"
      then **restarts on its own** to apply it — let it run, don't
      interrupt.
