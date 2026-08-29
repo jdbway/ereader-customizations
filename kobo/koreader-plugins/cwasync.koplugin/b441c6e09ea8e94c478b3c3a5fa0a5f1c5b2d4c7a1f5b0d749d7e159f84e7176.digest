@@ -1,0 +1,13 @@
+Plugin files digest: b441c6e09ea8e94c478b3c3a5fa0a5f1c5b2d4c7a1f5b0d749d7e159f84e7176
+Build date: Mon Jul 27 12:42:27 PM UTC 2026
+Files included:
+cwasync.koplugin/api.json
+cwasync.koplugin/CWASyncClient.lua
+cwasync.koplugin/device_annotations.lua
+cwasync.koplugin/kobo_sqlite_provider.lua
+cwasync.koplugin/koreader_annotations_provider.lua
+cwasync.koplugin/main.lua
+cwasync.koplugin/_meta.lua
+cwasync.koplugin/sync_logic.lua
+cwasync.koplugin/tests/device_annotations_test.lua
+cwasync.koplugin/tests/sync_logic_test.lua

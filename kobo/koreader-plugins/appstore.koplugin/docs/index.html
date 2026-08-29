@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="rGvl9BT59_TNaiSgdN20o6DKdhEkNjcqviuyzGLrhkU">
+<title>KOReader AppStore – Browse Community Plugins &amp; Patches</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="Browse every community KOReader plugin and user patch in one place: search GitHub, read the READMEs, sort by stars, and install straight from your e-reader.">
+<meta name="keywords" content="KOReader, KOReader plugins, KOReader patches, user patches, koplugin, e-reader, ebook reader, open source, GitHub, community plugins, KOReader extensions, Kobo, Kindle, reMarkable, Android">
+<meta name="author" content="omer-faruq">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="googlebot" content="index, follow">
+<link rel="canonical" href="https://omer-faruq.github.io/appstore.koplugin/">
+<meta name="application-name" content="KOReader AppStore">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#1a1a2e" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f0f2f5" media="(prefers-color-scheme: light)">
+
+<!-- Icons / PWA -->
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="sitemap" type="application/xml" href="sitemap.xml">
+
+<!-- Connection hints for the hosts this page talks to -->
+<link rel="preconnect" href="https://api.github.com" crossorigin>
+<link rel="dns-prefetch" href="https://api.github.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="dns-prefetch" href="https://raw.githubusercontent.com">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://omer-faruq.github.io/appstore.koplugin/">
+<meta property="og:title" content="KOReader AppStore – Browse Community Plugins &amp; Patches">
+<meta property="og:description" content="Browse and install community-created KOReader plugins and user patches. Search GitHub repositories, view READMEs, and manage updates directly from your e-reader.">
+<meta property="og:site_name" content="KOReader AppStore">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://omer-faruq.github.io/appstore.koplugin/og-image.png">
+<meta property="og:image:secure_url" content="https://omer-faruq.github.io/appstore.koplugin/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="KOReader AppStore – discover, install and update community plugins and user patches">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://omer-faruq.github.io/appstore.koplugin/">
+<meta name="twitter:title" content="KOReader AppStore – Browse Community Plugins &amp; Patches">
+<meta name="twitter:description" content="Browse and install community-created KOReader plugins and user patches. Search GitHub repositories, view READMEs, and manage updates.">
+<meta name="twitter:image" content="https://omer-faruq.github.io/appstore.koplugin/og-image.png">
+<meta name="twitter:image:alt" content="KOReader AppStore – discover, install and update community plugins and user patches">
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://omer-faruq.github.io/appstore.koplugin/#website",
+      "url": "https://omer-faruq.github.io/appstore.koplugin/",
+      "name": "KOReader AppStore",
+      "description": "Web catalogue of community-created KOReader plugins and user patches.",
+      "inLanguage": "en",
+      "publisher": { "@id": "https://github.com/omer-faruq#person" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://github.com/omer-faruq#person",
+      "name": "omer-faruq",
+      "url": "https://github.com/omer-faruq"
+    },
+    {
+      "@type": ["WebApplication", "SoftwareApplication"],
+      "@id": "https://omer-faruq.github.io/appstore.koplugin/#app",
+      "name": "KOReader AppStore",
+      "alternateName": "appstore.koplugin",
+      "url": "https://omer-faruq.github.io/appstore.koplugin/",
+      "description": "Discover, install, and update community-created KOReader plugins and user patches without leaving your device. Browse GitHub repositories with filtering, sorting, and offline-friendly caching.",
+      "applicationCategory": "UtilitiesApplication",
+      "applicationSubCategory": "E-reader plugin manager",
+      "operatingSystem": "KOReader (Kobo, Kindle, PocketBook, reMarkable, Android, Linux, macOS, Windows)",
+      "browserRequirements": "Requires JavaScript",
+      "softwareRequirements": "KOReader nightly or 2024.12+",
+      "image": "https://omer-faruq.github.io/appstore.koplugin/og-image.png",
+      "screenshot": "https://omer-faruq.github.io/appstore.koplugin/og-image.png",
+      "codeRepository": "https://github.com/omer-faruq/appstore.koplugin",
+      "downloadUrl": "https://github.com/omer-faruq/appstore.koplugin/releases",
+      "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://omer-faruq.github.io/appstore.koplugin/#website" },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Browse community plugins and patches",
+        "Search GitHub repositories",
+        "View README files",
+        "Install and update plugins",
+        "Offline-friendly cache",
+        "Filter by owner, stars, and topics",
+        "GitHub API integration"
+      ],
+      "author": { "@id": "https://github.com/omer-faruq#person" },
+      "maintainer": { "@id": "https://github.com/omer-faruq#person" }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://omer-faruq.github.io/appstore.koplugin/#faq",
+      "isPartOf": { "@id": "https://omer-faruq.github.io/appstore.koplugin/#website" },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the KOReader AppStore?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "KOReader AppStore is a plugin for KOReader that finds, installs and updates community-created plugins and user patches from GitHub without leaving your e-reader. This page is the web version of the same catalogue, so the collection can be browsed from a desktop browser too."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I install the AppStore plugin in KOReader?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Download the latest release, copy the appstore.koplugin folder into KOReader's plugins directory (koreader/plugins on Kobo and Kindle, /sdcard/koreader/plugins on Android, ~/.config/koreader/plugins on Linux), restart KOReader and open Tools then App Store."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between a KOReader plugin and a user patch?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A plugin is a self-contained .koplugin folder that KOReader loads as an add-on. A user patch is a single numbered Lua file (for example 2-my-patch.lua) placed in koreader/patches that changes KOReader's own behaviour at startup. AppStore browses and installs both."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need a GitHub token to use it?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Anonymous browsing works, but GitHub's search API allows only about 10 requests per minute. Adding a classic personal access token (no scopes required) raises that limit to roughly 30 requests per minute. Fine-grained tokens are not supported by GitHub's search API."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which devices does it support?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Anything that runs KOReader nightly or 2024.12 and newer: Kobo, Kindle, PocketBook, reMarkable, Android, and the Linux, macOS and Windows desktop builds. A network connection is needed to refresh the catalogue and download files."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the plugin work offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Browsing does. Results and README files are cached under data/cache/AppStore, so entries fetched earlier stay readable without a connection. Installing or updating still needs network access, and a static nightly-built index is used as a fallback when GitHub's API is unreachable."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1a1a2e;--bg2:#16213e;--bg3:#0f3460;
+  --card:#16213e;--card-hover:#1a2744;
+  --text:#e0e0e0;--text2:#a0a0b0;--text3:#707088;
+  --accent:#e94560;--accent2:#ff6b6b;
+  --border:#2a2a4a;--input-bg:#0f1a30;
+  --star:#f5c518;--tag:#533483;
+  --success:#4caf50;--warn:#ff9800;
+  --radius:8px;--shadow:0 2px 8px rgba(0,0,0,.3);
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --filter-banner-bg:#2a1a24;
+  --overlay-bg:rgba(0,0,0,.45);
+  --modal-overlay:rgba(0,0,0,.6);
+}
+[data-theme="light"]{
+  --bg:#f0f2f5;--bg2:#ffffff;--bg3:#d0d7e3;
+  --card:#ffffff;--card-hover:#f5f7fa;
+  --text:#1a1a2e;--text2:#555568;--text3:#888898;
+  --accent:#d6336c;--accent2:#c2255c;
+  --border:#d0d5dd;--input-bg:#f8f9fb;
+  --star:#e6a800;--tag:#e8dff5;
+  --success:#2e7d32;--warn:#e65100;
+  --shadow:0 2px 8px rgba(0,0,0,.08);
+  --filter-banner-bg:#fde8ee;
+  --overlay-bg:rgba(0,0,0,.25);
+  --modal-overlay:rgba(0,0,0,.35);
+}
+html{font-size:15px}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+a{color:var(--accent2);text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:inherit;cursor:pointer;border:none;border-radius:var(--radius);padding:.5rem 1rem;font-size:.9rem;transition:background .15s,transform .1s}
+button:active{transform:scale(.97)}
+input,select{font-family:inherit;font-size:.9rem;border:1px solid var(--border);border-radius:var(--radius);padding:.5rem .75rem;background:var(--input-bg);color:var(--text);outline:none;transition:border-color .15s}
+input:focus,select:focus{border-color:var(--accent)}
+
+/* Header */
+.header{background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 1.5rem;position:sticky;top:0;z-index:100;transition:transform .25s ease}
+.controls{transition:transform .25s ease}
+.header.hidden{transform:translateY(-100%)}
+.controls.hidden{transform:translateY(-100%)}
+.header-top{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.header h1{font-size:1.4rem;font-weight:700;color:var(--text);flex-shrink:0}
+.header h1 span{color:var(--accent)}
+.header-actions{margin-left:auto;display:flex;gap:.5rem;align-items:center}
+
+/* Tabs */
+.tabs{display:flex;gap:0;margin-top:.75rem}
+.tab-btn{background:transparent;color:var(--text2);padding:.5rem 1.25rem;border-bottom:2px solid transparent;border-radius:0;font-weight:500;font-size:.95rem}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* Controls bar */
+.controls{display:flex;gap:.75rem;padding:.75rem 1.5rem;background:var(--bg);align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border);position:sticky;z-index:99}
+.search-box{flex:1;min-width:270px;position:relative}
+.owner-filter-box{position:relative;min-width:140px}
+.owner-filter-box input{width:100%;padding-left:2rem}
+.owner-filter-box .owner-icon{position:absolute;left:.6rem;top:50%;transform:translateY(-50%);color:var(--text3);font-size:.8rem;pointer-events:none}
+.search-box input{width:100%;padding-left:2.2rem;padding-right:7.2rem}
+/* Same control in the same place as on the finder, so the gesture carries
+   between the two pages. */
+.ai-pill{position:absolute;right:.3rem;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:.3rem;padding:.32rem .7rem;font-size:.78rem;font-weight:600;white-space:nowrap;cursor:pointer;color:var(--accent2);background:var(--bg);border:1px solid var(--border);border-radius:999px;transition:all .2s}
+.ai-pill:hover{border-color:var(--accent);background:rgba(233,69,96,.1)}
+.search-icon{position:absolute;left:.7rem;top:50%;transform:translateY(-50%);color:var(--text3);font-size:.9rem;pointer-events:none}
+/* Filter banner */
+.filter-banner{display:none;align-items:center;gap:.6rem;padding:.5rem 1.5rem;background:var(--filter-banner-bg);border-bottom:1px solid var(--accent);font-size:.85rem;color:var(--accent2);position:sticky;z-index:98;transition:transform .25s ease}
+.filter-banner.hidden{transform:translateY(-100%)}
+.filter-banner.visible{display:flex}
+.filter-banner .filter-text{flex:1}
+.filter-banner .filter-clear{background:none;color:var(--accent2);font-size:1.1rem;padding:.2rem .5rem;border-radius:4px;line-height:1}
+.filter-banner .filter-clear:hover{background:rgba(233,69,96,.2)}
+/* Error banner */
+.error-banner{display:none;padding:.6rem 1.5rem;background:#d32f2f;color:#fff;font-size:.85rem;text-align:center;position:sticky;z-index:99}
+.error-banner.visible{display:block}
+.error-banner a{color:#fff;text-decoration:underline;font-weight:600}
+/* Search overlay */
+.search-overlay{display:none;position:fixed;inset:0;background:var(--overlay-bg);z-index:150;align-items:center;justify-content:center;flex-direction:column;gap:.75rem}
+.search-overlay.visible{display:flex}
+.search-overlay-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem 2.5rem;text-align:center;box-shadow:var(--shadow)}
+.search-overlay-box .spinner{width:32px;height:32px}
+/* Min stars input */
+.min-stars-box{display:flex;align-items:center;gap:.3rem;font-size:.8rem;color:var(--text3)}
+.min-stars-box input{width:70px;text-align:center;padding:.35rem .5rem;font-size:.8rem}
+.sort-select{min-width:180px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2)}
+.btn-secondary{background:var(--bg3);color:var(--text)}
+.btn-secondary:hover{background:var(--card-hover);border:1px solid var(--border)}
+.btn-icon{background:transparent;color:var(--text2);padding:.5rem;font-size:1.2rem;line-height:1}
+.btn-icon:hover{color:var(--text)}
+/* Links out to the plugin finder, which searches the same catalogue by what a
+   plugin does rather than by name. Styled as the share button so it reads as
+   one of the header actions rather than an advert. */
+.btn-finder{display:flex;align-items:center;gap:.3rem;padding:.4rem .7rem;font-size:.85rem;text-decoration:none;background:transparent;color:var(--text2);border:1px solid transparent;border-radius:var(--radius);transition:all .2s}
+.btn-finder:hover{color:var(--accent2);border-color:var(--accent);background:rgba(233,69,96,.1)}
+.btn-share{display:flex;align-items:center;gap:.3rem;padding:.4rem .7rem;font-size:.85rem;transition:all .2s;background:transparent;color:var(--text2);border:1px solid transparent;border-radius:var(--radius)}
+.btn-share:hover{color:var(--accent2);border-color:var(--accent);background:rgba(233,69,96,.1)}
+.btn-share.has-filter{color:var(--accent2);border-color:var(--accent)}
+.btn-share .share-icon{font-size:1.1rem}
+.btn-share .share-text{font-size:.8rem;font-weight:500}
+
+/* Stats bar */
+.stats-bar{padding:.4rem 1.5rem;color:var(--text3);font-size:.8rem;display:flex;gap:1rem;align-items:center}
+
+/* Repo list */
+.repo-list{padding:1rem 1.5rem;display:flex;flex-direction:column;gap:.75rem}
+.repo-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;transition:background .15s,border-color .15s;cursor:default}
+.repo-card:hover{background:var(--card-hover);border-color:var(--bg3)}
+.repo-card-header{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.4rem}
+.repo-name{font-weight:600;font-size:1rem;color:var(--accent2);flex:1;word-break:break-word}
+.repo-name a{color:inherit}
+.repo-stars{color:var(--star);font-size:.85rem;white-space:nowrap;display:flex;align-items:center;gap:.25rem}
+.repo-desc{color:var(--text2);font-size:.88rem;margin-bottom:.6rem;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.repo-meta{display:flex;gap:1rem;flex-wrap:wrap;font-size:.78rem;color:var(--text3);align-items:center}
+.repo-meta-item{display:flex;align-items:center;gap:.3rem}
+.lang-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.repo-topics{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.5rem}
+.topic-tag{background:var(--tag);color:var(--text2);font-size:.7rem;padding:.15rem .5rem;border-radius:10px}
+.repo-actions{margin-top:.6rem;display:flex;gap:.5rem}
+.btn-sm{font-size:.78rem;padding:.3rem .7rem}
+/* Fork badge */
+.fork-badge{display:inline-flex;align-items:center;gap:.25rem;font-size:.72rem;color:var(--text3);background:var(--input-bg);border:1px solid var(--border);border-radius:10px;padding:.15rem .55rem;cursor:pointer;position:relative;transition:color .15s,border-color .15s}
+.fork-badge:hover{color:var(--accent2);border-color:var(--accent)}
+.fork-popup{position:absolute;top:calc(100% + 6px);left:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:.5rem .75rem;font-size:.8rem;color:var(--text);white-space:nowrap;box-shadow:var(--shadow);z-index:10;display:none}
+.fork-popup.visible{display:block}
+
+/* Loading & empty states */
+.state-msg{text-align:center;padding:3rem 1rem;color:var(--text3)}
+.state-msg .icon{font-size:2.5rem;margin-bottom:.5rem}
+.spinner{display:inline-block;width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:var(--modal-overlay);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:12px;width:100%;max-width:700px;max-height:85vh;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.modal-header{display:flex;align-items:center;padding:1rem 1.25rem;border-bottom:1px solid var(--border)}
+.modal-header h2{font-size:1.1rem;flex:1}
+.modal-body{padding:1.25rem;overflow-y:auto;flex:1}
+.modal-footer{padding:.75rem 1.25rem;border-top:1px solid var(--border);display:flex;gap:.5rem;justify-content:flex-end}
+
+/* Settings form */
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-size:.85rem;color:var(--text2);margin-bottom:.3rem}
+.form-group input{width:100%}
+.form-hint{font-size:.75rem;color:var(--text3);margin-top:.25rem}
+.token-status{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;padding:.2rem .5rem;border-radius:4px}
+.token-ok{color:var(--success);background:rgba(76,175,80,.12)}
+.token-fail{color:var(--accent);background:rgba(233,69,96,.12)}
+
+/* README modal */
+.readme-content{font-size:.9rem;line-height:1.65;color:var(--text)}
+.readme-content h1,.readme-content h2,.readme-content h3{margin:1rem 0 .5rem;color:var(--text)}
+.readme-content h1{font-size:1.4rem;border-bottom:1px solid var(--border);padding-bottom:.3rem}
+.readme-content h2{font-size:1.15rem;border-bottom:1px solid var(--border);padding-bottom:.2rem}
+.readme-content h3{font-size:1rem}
+.readme-content p{margin:.5rem 0}
+.readme-content pre{background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem;overflow-x:auto;font-size:.82rem;margin:.5rem 0}
+.readme-content code{background:var(--input-bg);padding:.1rem .35rem;border-radius:3px;font-size:.85rem}
+.readme-content pre code{background:none;padding:0}
+.readme-content ul,.readme-content ol{margin:.5rem 0;padding-left:1.5rem}
+.readme-content li{margin:.2rem 0}
+.readme-content img{max-width:100%;border-radius:var(--radius)}
+.readme-content blockquote{border-left:3px solid var(--accent);padding:.5rem 1rem;margin:.5rem 0;color:var(--text2);background:rgba(233,69,96,.05)}
+.readme-content table{border-collapse:collapse;width:100%;margin:.5rem 0}
+.readme-content th,.readme-content td{border:1px solid var(--border);padding:.4rem .6rem;text-align:left;font-size:.85rem}
+.readme-content th{background:var(--bg3)}
+
+/* Toast */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(120%);background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:.6rem 1.2rem;font-size:.82rem;color:var(--text2);box-shadow:var(--shadow);z-index:300;opacity:0;transition:transform .3s ease,opacity .3s ease;pointer-events:none;max-width:90vw;text-align:center}
+.toast.visible{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
+.toast .toast-icon{margin-right:.4rem}
+
+/* Share Modal */
+.share-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.6rem;margin-bottom:1rem}
+.share-option{display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:var(--text2);cursor:pointer}
+.share-option input[type="checkbox"]{cursor:pointer}
+.share-count{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;font-size:.88rem;color:var(--text2)}
+.share-count input{width:100px}
+.share-preview{background:var(--input-bg);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem;max-height:300px;overflow-y:auto;font-family:monospace;font-size:.8rem;white-space:pre-wrap;word-break:break-word;color:var(--text);line-height:1.5}
+.share-preview:empty::before{content:'Click "Generate Preview" to see what will be shared...';color:var(--text3);font-family:var(--font);font-style:italic}
+.share-actions{display:flex;gap:.5rem;margin-top:1rem;justify-content:flex-end}
+.share-modal-body{max-height:calc(85vh - 120px);overflow-y:auto}
+
+/* Responsive */
+@media(max-width:600px){
+  .header{padding:.75rem 1rem}
+  .controls{padding:.6rem 1rem}
+  .repo-list{padding:.75rem}
+  .repo-meta{gap:.5rem}
+  .modal{max-width:100%;border-radius:8px}
+}
+
+/* Static page content (crawlable + useful without JS) */
+.page-info{max-width:60rem;margin:2.5rem auto 0;padding:0 1.5rem 3rem}
+.page-info section{border-top:1px solid var(--border);padding-top:1.75rem;margin-top:1.75rem}
+.page-info section:first-child{border-top:none;margin-top:0;padding-top:0}
+.page-info h2{font-size:1.15rem;margin-bottom:.6rem;color:var(--text)}
+.page-info h3{font-size:.95rem;margin:1rem 0 .3rem;color:var(--text)}
+.page-info p,.page-info li{color:var(--text2);font-size:.9rem;line-height:1.65}
+.page-info p{margin-bottom:.6rem}
+.page-info ul,.page-info ol{margin:0 0 .6rem 1.15rem}
+.page-info li{margin-bottom:.25rem}
+.page-info code{background:var(--input-bg);border:1px solid var(--border);border-radius:4px;padding:.05rem .3rem;font-size:.82rem}
+.site-footer{border-top:1px solid var(--border);background:var(--bg2);padding:1.5rem;text-align:center;color:var(--text3);font-size:.85rem}
+.site-footer nav{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:.6rem}
+.no-js{max-width:60rem;margin:1.5rem auto 0;padding:1rem 1.25rem;background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius);color:var(--text2);font-size:.9rem}
+.skip-link{position:absolute;left:-9999px;top:0;background:var(--accent);color:#fff;padding:.5rem 1rem;z-index:200;border-radius:0 0 var(--radius) 0}
+.skip-link:focus{left:0}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#results">Skip to the plugin list</a>
+
+<header class="header">
+  <div class="header-top">
+    <h1>📚 KOReader <span>AppStore</span></h1>
+    <div class="header-actions">
+      <a class="btn-finder" href="https://omer-faruq.github.io/koreader-plugin-index/"
+         target="_blank" rel="noopener"
+         title="Browse the same catalogue by category and maintenance status, on a nightly-cached copy">
+        <span class="share-icon">🔍</span>
+        <span class="share-text">Find by need</span>
+      </a>
+      <button class="btn-icon" onclick="app.refreshData()" title="Refresh" aria-label="Refresh the catalogue">🔄</button>
+      <button class="btn-share" id="shareBtn" onclick="app.openShareModal()" title="Export/share results" aria-label="Export or share the current results">
+        <span class="share-icon">🔗</span>
+        <span class="share-text">Share</span>
+      </button>
+      <button class="btn-icon" id="themeToggle" onclick="app.toggleTheme()" title="Toggle theme" aria-label="Toggle light or dark theme">🌙</button>
+      <button class="btn-icon" onclick="app.openSettings()" title="Settings" aria-label="Open settings">⚙️</button>
+    </div>
+  </div>
+  <nav class="tabs" aria-label="Catalogue sections">
+    <button class="tab-btn active" data-tab="plugins" onclick="app.switchTab('plugins')">Plugins</button>
+    <button class="tab-btn" data-tab="patches" onclick="app.switchTab('patches')">Patches</button>
+  </nav>
+</header>
+
+<div class="controls" role="search" aria-label="Catalogue filters">
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input type="search" id="searchInput" aria-label="Search plugin and patch repositories" placeholder="Search repos... (press Enter)" onkeydown="app.onSearchKeydown(event)">
+    <button class="ai-pill" onclick="app.openAiSearch()"
+      title="Describe what you need in plain words and have a model pick from the matches.&#10;&#10;Runs against a nightly-cached copy of this catalogue, so something published today may be missing. Needs an API key of your own; nothing is charged here.">
+      <span>✦</span> AI search
+    </button>
+  </div>
+  <div class="owner-filter-box">
+    <span class="owner-icon">👤</span>
+    <input type="text" id="ownerInput" list="ownerDatalist" aria-label="Filter by repository owner" placeholder="Owner filter" oninput="app.onOwnerInput(this.value)">
+    <datalist id="ownerDatalist"></datalist>
+  </div>
+  <select class="sort-select" id="sortSelect" aria-label="Sort results" onchange="app.onSortChange(this.value)">
+    <option value="stars_desc">⭐ Stars (high → low)</option>
+    <option value="updated_desc">🕐 Recently updated</option>
+    <option value="created_desc">📅 Newest first</option>
+    <option value="name_asc">🔤 Name (A → Z)</option>
+  </select>
+  <div class="min-stars-box">
+    <span>⭐ Min:</span>
+    <input type="number" id="minStarsInput" aria-label="Minimum number of stars" min="0" value="0" onkeydown="app.onMinStarsKeydown(event)" onchange="app.onMinStarsChange(this.value)">
+  </div>
+  <label id="includeForksLabel" style="display:none;align-items:center;gap:.4rem;font-size:.8rem;color:var(--text3);cursor:pointer">
+    <input type="checkbox" id="includeForks" checked onchange="app.onIncludeForksToggle(this.checked)"> Include Forks
+  </label>
+  <label style="display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:var(--text3);cursor:pointer">
+    <input type="checkbox" id="readmeSearch" onchange="app.onReadmeSearchToggle(this.checked)"> Search README
+  </label>
+</div>
+
+<div class="filter-banner" id="filterBanner">
+  <span class="filter-text" id="filterText"></span>
+  <button class="filter-clear" onclick="app.clearFilter()" title="Clear filter">✕</button>
+</div>
+<div class="error-banner" id="error-banner"></div>
+
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-overlay-box">
+    <div class="spinner"></div>
+    <p style="margin-top:.5rem;color:var(--text2);font-size:.9rem" id="searchOverlayText">Searching...</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<main id="results">
+<div class="stats-bar" id="statsBar"></div>
+<div class="repo-list" id="repoList" aria-live="polite"></div>
+
+<noscript>
+  <div class="no-js">
+    <strong>JavaScript is turned off.</strong> The live catalogue is fetched from the GitHub API in your
+    browser, so the list above stays empty without it. You can still read the overview below, or browse the
+    pre-built catalogue at
+    <a href="https://omer-faruq.github.io/koreader-plugin-index/">the KOReader plugin finder</a>
+    and the source at
+    <a href="https://github.com/omer-faruq/appstore.koplugin">github.com/omer-faruq/appstore.koplugin</a>.
+  </div>
+</noscript>
+
+<div class="page-info">
+  <section id="about">
+    <h2>What is KOReader AppStore?</h2>
+    <p>
+      <strong>KOReader AppStore</strong> (<code>appstore.koplugin</code>) is a plugin for
+      <a href="https://koreader.rocks/" rel="noopener">KOReader</a> that discovers, installs and updates
+      community-created <strong>KOReader plugins</strong> and <strong>user patches</strong> without leaving
+      your e-reader. It searches GitHub for the <code>koreader-plugin</code> and
+      <code>koreader-user-patch</code> topics, plus repositories named like <code>KOReader.patches</code> or
+      <code>[name].plugins</code>, then handles the download, the <code>_meta.lua</code> check and the copy
+      into the right folder for you.
+    </p>
+    <p>
+      This page is the web view of that same catalogue: the list at the top is fetched live from GitHub, so
+      you can search, filter by owner or stars, sort, read a README and share a result list from a desktop
+      browser before touching your device.
+    </p>
+  </section>
+
+  <section id="features">
+    <h2>What it does</h2>
+    <ul>
+      <li><strong>Unified browser</strong> for both plugins and user patches, with persistent filters and paging.</li>
+      <li><strong>Search and filter</strong> by name, owner, description, topics, minimum stars and fork status.</li>
+      <li><strong>README viewer</strong> that pulls <code>README.md</code> straight from GitHub.</li>
+      <li><strong>Install and update pipeline</strong> for <code>.koplugin</code> archives and numbered patch files, with SHA comparison.</li>
+      <li><strong>Offline-friendly cache</strong> under <code>data/cache/AppStore</code>, so fetched entries stay readable without a connection.</li>
+      <li><strong>Ignore release</strong> to hide a specific update until a newer one appears.</li>
+      <li><strong>Optional GitHub token</strong> to raise the API rate limit.</li>
+    </ul>
+  </section>
+
+  <section id="install">
+    <h2>Installing the plugin</h2>
+    <ol>
+      <li>Download the latest <a href="https://github.com/omer-faruq/appstore.koplugin/releases" rel="noopener">release</a>.</li>
+      <li>Copy the <code>appstore.koplugin</code> folder into KOReader&rsquo;s plugin directory &mdash;
+        <code>koreader/plugins/</code> on Kobo and Kindle, <code>/sdcard/koreader/plugins/</code> on Android,
+        <code>~/.config/koreader/plugins/</code> on Linux.</li>
+      <li>Restart KOReader.</li>
+      <li>Open <strong>Tools &rarr; App Store</strong>.</li>
+    </ol>
+    <p>Needs KOReader nightly or 2024.12+ and a network connection for downloads.</p>
+  </section>
+
+  <section id="faq">
+    <h2>Frequently asked questions</h2>
+
+    <h3>What is the difference between a plugin and a user patch?</h3>
+    <p>
+      A plugin is a self-contained <code>.koplugin</code> folder that KOReader loads as an add-on. A user
+      patch is a single numbered Lua file (for example <code>2-my-patch.lua</code>) in
+      <code>koreader/patches</code> that changes KOReader&rsquo;s own behaviour at startup. AppStore browses
+      and installs both.
+    </p>
+
+    <h3>Do I need a GitHub token?</h3>
+    <p>
+      No. Anonymous browsing works, but GitHub&rsquo;s search API allows only about 10 requests per minute.
+      Adding a <strong>classic</strong> personal access token (no scopes required) raises that to roughly 30
+      requests per minute. Fine-grained tokens are not supported by GitHub&rsquo;s search API. On this page
+      the token is stored in your browser only; in the plugin it goes into
+      <code>appstore_configuration.lua</code>.
+    </p>
+
+    <h3>Which devices are supported?</h3>
+    <p>
+      Anything that runs KOReader nightly or 2024.12 and newer: Kobo, Kindle, PocketBook, reMarkable,
+      Android, and the Linux, macOS and Windows desktop builds.
+    </p>
+
+    <h3>Does it work offline?</h3>
+    <p>
+      Browsing does. Results and READMEs are cached, so entries fetched earlier stay readable without a
+      connection. Installing and updating still need network access, and a static nightly-built index is
+      used as a fallback when GitHub&rsquo;s API cannot be reached.
+    </p>
+
+    <h3>Is it safe to install community plugins?</h3>
+    <p>
+      Plugins and patches are plain Lua that runs with the same rights as KOReader itself. AppStore only
+      fetches what upstream repositories publish; read the README and the source of anything you install,
+      exactly as you would for any other third-party add-on.
+    </p>
+  </section>
+</div>
+</main>
+
+<footer class="site-footer">
+  <nav aria-label="Project links">
+    <a href="https://github.com/omer-faruq/appstore.koplugin" rel="noopener">Source on GitHub</a>
+    <a href="https://github.com/omer-faruq/appstore.koplugin/releases" rel="noopener">Releases</a>
+    <a href="https://github.com/omer-faruq/appstore.koplugin/issues" rel="noopener">Issues</a>
+    <a href="https://omer-faruq.github.io/koreader-plugin-index/" rel="noopener">Plugin index (by need)</a>
+    <a href="https://koreader.rocks/" rel="noopener">KOReader</a>
+  </nav>
+  <p>
+    KOReader AppStore &mdash; an independent, community project by
+    <a href="https://github.com/omer-faruq" rel="noopener author">omer-faruq</a>, released under the
+    <a href="https://www.gnu.org/licenses/gpl-3.0.html" rel="noopener license">GPL-3.0</a> licence.
+    Not affiliated with the KOReader project or with GitHub.
+  </p>
+</footer>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>⚙️ Settings</h2>
+      <button class="btn-icon" onclick="app.closeSettings()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>GitHub Personal Access Token</label>
+        <input type="password" id="patInput" placeholder="ghp_xxxxxxxxxxxx">
+        <div class="form-hint">
+          A token increases the API rate limit (10 → 30 req/min). Use a <strong>classic</strong> token — fine-grained tokens are not supported by GitHub's search API.
+          <a href="https://github.com/settings/tokens" target="_blank">Create token</a> (no scopes needed, public repo access is sufficient).
+        </div>
+      </div>
+      <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:1.25rem">
+        <button class="btn-secondary btn-sm" onclick="app.testToken()">Test Token</button>
+        <span id="tokenStatus"></span>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:.5rem">
+        <label style="display:flex;align-items:center;justify-content:flex-start;gap:.5rem;cursor:pointer;margin-bottom:.3rem;color:var(--text);font-size:.9rem">
+          <input type="checkbox" id="includeZeroStarForksInput" style="width:auto;margin:0;cursor:pointer;flex:0 0 auto" onchange="app.onIncludeZeroStarForksToggle(this.checked)">
+          <span>Include 0-star forks</span>
+        </label>
+        <div class="form-hint">
+          When off (default), forks with 0 stars are skipped at the API level — they never reach the client. Most 0-star forks are personal copies that clutter search results. Enable this to include them. Toggling updates the URL and refreshes the repo list for all tabs.
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="app.closeSettings()">Cancel</button>
+      <button class="btn-primary" onclick="app.saveSettings()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Patches Files Modal -->
+<div class="modal-overlay" id="patchesModal">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <h2 id="patchesTitle">Patch Files</h2>
+      <button class="btn-icon" onclick="app.closePatchFiles()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="patchesContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Share Modal -->
+<div class="modal-overlay" id="shareModal">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-header">
+      <h2>🔗 Share Results</h2>
+      <button class="btn-icon" onclick="app.closeShareModal()">✕</button>
+    </div>
+    <div class="modal-body share-modal-body">
+      <div class="share-count">
+        <label>Number of repositories to include:</label>
+        <input type="number" id="shareCountInput" min="1" max="100" value="10">
+      </div>
+      
+      <div style="margin-bottom:.75rem;font-size:.88rem;color:var(--text2);font-weight:500">Include fields:</div>
+      <div class="share-options">
+        <label class="share-option">
+          <input type="checkbox" id="shareFieldLink" checked>
+          <span>GitHub Link</span>
+        </label>
+        <label class="share-option">
+          <input type="checkbox" id="shareFieldStars" checked>
+          <span>⭐ Stars</span>
+        </label>
+        <label class="share-option">
+          <input type="checkbox" id="shareFieldDesc" checked>
+          <span>Description</span>
+        </label>
+        <label class="share-option">
+          <input type="checkbox" id="shareFieldFork">
+          <span>🔀 Fork Info</span>
+        </label>
+        <label class="share-option">
+          <input type="checkbox" id="shareFieldDates">
+          <span>Created/Updated</span>
+        </label>
+      </div>
+      
+      <div class="share-actions" id="shareActionButtons">
+        <button class="btn-secondary" onclick="app.generateSharePreview()">📋 Generate Preview</button>
+        <button class="btn-primary" id="shareCopyBtn" onclick="app.copyShareContent()" style="display:none">📋 Copy to Clipboard</button>
+      </div>
+      
+      <div class="share-preview" id="sharePreview"></div>
+    </div>
+  </div>
+</div>
+
+<!-- API Alert Modal -->
+<div class="modal-overlay" id="apiAlertModal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-header">
+      <h2 id="apiAlertTitle">⚠️ Rate limit reached</h2>
+      <button class="btn-icon" onclick="app.closeApiAlert()">✕</button>
+    </div>
+    <div class="modal-body" id="apiAlertBody"></div>
+    <div class="modal-footer">
+      <button class="btn-primary" onclick="app.closeApiAlert()">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- README Modal -->
+<div class="modal-overlay" id="readmeModal">
+  <div class="modal" style="max-width:800px">
+    <div class="modal-header">
+      <h2 id="readmeTitle">README</h2>
+      <button class="btn-icon" onclick="app.closeReadme()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="readme-content" id="readmeContent"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+<script>
+// ─── Storage abstraction (localStorage with memory fallback) ───
+const Storage = (() => {
+  let mem = {};
+  let hasLS = false;
+  try { localStorage.setItem('__test__', '1'); localStorage.removeItem('__test__'); hasLS = true; } catch(e) {}
+  const VOLATILE_PREFIXES = ['readme_', 'tree_'];
+  function evictVolatile() {
+    if (!hasLS) return;
+    try {
+      const toRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && VOLATILE_PREFIXES.some(p => key.startsWith(p))) toRemove.push(key);
+      }
+      for (const key of toRemove) localStorage.removeItem(key);
+    } catch(e) {}
+  }
+  return {
+    get(k) { if (hasLS) { try { return localStorage.getItem(k); } catch(e) {} } return mem[k] || null; },
+    set(k, v) {
+      if (hasLS) {
+        try { localStorage.setItem(k, v); return; } catch(e) {
+          evictVolatile();
+          try { localStorage.setItem(k, v); return; } catch(e2) {}
+        }
+      }
+      mem[k] = v;
+    },
+    remove(k) { if (hasLS) { try { localStorage.removeItem(k); return; } catch(e) {} } delete mem[k]; },
+    getJSON(k) { const v = this.get(k); if (!v) return null; try { return JSON.parse(v); } catch(e) { return null; } },
+    setJSON(k, v) { this.set(k, JSON.stringify(v)); },
+    get persistent() { return hasLS; }
+  };
+})();
+
+// ─── GitHub API client ───
+const GitHub = {
+  BASE: 'https://api.github.com',
+  getHeaders() {
+    const h = { 'Accept': 'application/vnd.github+json', 'User-Agent': 'KOReader-AppStore-Web' };
+    const token = Storage.get('github_pat');
+    if (token && token.trim()) h['Authorization'] = `token ${token.trim()}`;
+    return h;
+  },
+  async request(path, query) {
+    const url = query ? `${this.BASE}${path}?${query}` : `${this.BASE}${path}`;
+    const res = await fetch(url, { headers: this.getHeaders() });
+    if (!res.ok) {
+      let detail = res.statusText;
+      try {
+        const body = await res.json();
+        if (body.message) detail = body.message;
+      } catch(e) {}
+      const hasToken = !!(Storage.get('github_pat') || '').trim();
+      if (res.status === 429 || res.status === 403) {
+        const resetHeader = res.headers.get('X-RateLimit-Reset');
+        const remaining = res.headers.get('X-RateLimit-Remaining');
+        let extra = '';
+        if (resetHeader) {
+          const resetDate = new Date(parseInt(resetHeader) * 1000);
+          const mins = Math.max(1, Math.ceil((resetDate - Date.now()) / 60000));
+          extra = ` Resets in ~${mins} min.`;
+        }
+        if (!hasToken) extra += ' Add a GitHub token in ⚙️ Settings to increase the limit (10→30 req/min).';
+        throw new Error(`Rate limit exceeded (${res.status}).${extra} [${detail}]`);
+      }
+      throw new Error(`GitHub API ${res.status}: ${detail}`);
+    }
+    return res.json();
+  },
+  async searchRepos(q, sort = 'stars', order = 'desc', page = 1, perPage = 100) {
+    const params = new URLSearchParams({ q, sort, order, page, per_page: perPage });
+    return this.request('/search/repositories', params.toString());
+  },
+  async paginateQuery(q, sort = 'stars', order = 'desc') {
+    const all = [];
+    let page = 1;
+    let totalCount = 0;
+    while (true) {
+      const data = await this.searchRepos(q, sort, order, page, 100);
+      if (page === 1) totalCount = data.total_count || 0;
+      const items = data.items || [];
+      if (items.length === 0) break;
+      all.push(...items);
+      if (items.length < 100) break;
+      page++;
+    }
+    return { items: all, totalCount };
+  },
+  async exhaustiveSearch(baseQuery, sort = 'stars', order = 'desc', dateFrom = null, dateTo = null, depth = 0) {
+    const LIMIT = 1000;
+    const MAX_DEPTH = 8;
+    const ORIGIN = '2010-01-01';
+    let query = baseQuery;
+    if (dateFrom && dateTo) query = `${baseQuery} created:${dateFrom}..${dateTo}`;
+    // Probe total_count
+    const probe = await this.searchRepos(query, sort, order, 1, 1);
+    const totalCount = probe.total_count || 0;
+    if (totalCount < LIMIT || depth >= MAX_DEPTH) {
+      if (totalCount >= LIMIT) console.warn(`Date bisect depth limit reached, some results may be lost: ${query} (${totalCount})`);
+      const result = await this.paginateQuery(query, sort, order);
+      return result.items;
+    }
+    // Bisect by created date
+    console.info(`Query has ${totalCount} results (>=1000), bisecting by date: ${query}`);
+    const fromTs = dateFrom ? new Date(dateFrom).getTime() : new Date(ORIGIN).getTime();
+    const toTs = dateTo ? new Date(dateTo).getTime() : Date.now();
+    if (toTs - fromTs < 86400000) {
+      const result = await this.paginateQuery(query, sort, order);
+      return result.items;
+    }
+    const midTs = Math.floor((fromTs + toTs) / 2);
+    const midDate = new Date(midTs).toISOString().slice(0, 10);
+    const nextDate = new Date(midTs + 86400000).toISOString().slice(0, 10);
+    const fromStr = dateFrom || ORIGIN;
+    const toStr = dateTo || new Date().toISOString().slice(0, 10);
+    const left = await this.exhaustiveSearch(baseQuery, sort, order, fromStr, midDate, depth + 1);
+    const right = await this.exhaustiveSearch(baseQuery, sort, order, nextDate, toStr, depth + 1);
+    return [...left, ...right];
+  },
+  async fetchRepoTree(owner, repo, ref = 'HEAD') {
+    const cacheKey = `tree_${owner}/${repo}`;
+    const cached = Storage.getJSON(cacheKey);
+    if (cached && cached.tree && (Date.now() - cached.ts < 3600000)) return cached.tree;
+    const data = await this.request(`/repos/${owner}/${repo}/git/trees/${ref}`, 'recursive=1');
+    const tree = data.tree || [];
+    Storage.setJSON(cacheKey, { tree, ts: Date.now() });
+    return tree;
+  },
+  async fetchReadme(owner, repo) {
+    const cacheKey = `readme_${owner}/${repo}`;
+    const cached = Storage.getJSON(cacheKey);
+    if (cached && cached.content && (Date.now() - cached.ts < 3600000)) return cached.content;
+    const data = await this.request(`/repos/${owner}/${repo}/readme`);
+    let content = '';
+    if (data.content) {
+      const bin = atob(data.content.replace(/\n/g, ''));
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      content = new TextDecoder('utf-8').decode(bytes);
+    }
+    Storage.setJSON(cacheKey, { content, ts: Date.now() });
+    return content;
+  },
+  async testAuth() {
+    const res = await fetch(`${this.BASE}/rate_limit`, { headers: this.getHeaders() });
+    if (!res.ok) throw new Error(`${res.status}`);
+    const data = await res.json();
+    return data.rate;
+  }
+};
+
+// ─── Markdown → HTML (via marked.js) ───
+function md2html(md, owner, repo) {
+  if (!md) return '';
+  const baseRaw = (owner && repo) ? `https://raw.githubusercontent.com/${owner}/${repo}/HEAD/` : '';
+  const baseLink = (owner && repo) ? `https://github.com/${owner}/${repo}/blob/HEAD/` : '';
+  const renderer = new marked.Renderer();
+  renderer.image = function({ href, title, text }) {
+    if (baseRaw && href && !href.match(/^https?:\/\//)) href = baseRaw + href;
+    const t = title ? ` title="${esc(title)}"` : '';
+    return `<img src="${esc(href)}" alt="${esc(text)}"${t} loading="lazy" style="max-width:100%">`;
+  };
+  renderer.link = function({ href, title, text }) {
+    if (baseLink && href && !href.match(/^https?:\/\//) && !href.startsWith('#')) href = baseLink + href;
+    const t = title ? ` title="${esc(title)}"` : '';
+    return `<a href="${esc(href)}"${t} target="_blank" rel="noopener">${text}</a>`;
+  };
+  renderer.html = function({ text }) {
+    if (baseRaw) {
+      return text.replace(/(<img\s[^>]*src=["'])(?!https?:\/\/)([^"']+)(["'])/gi,
+        (m, pre, url, post) => pre + baseRaw + url + post);
+    }
+    return text;
+  };
+  return marked.parse(md, { renderer, gfm: true, breaks: false });
+}
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ─── Fallback when GitHub's API is unavailable (rate limit / network) ───
+// A static, pre-built plugin index that needs no API calls, so it still works
+// when we cannot talk to GitHub at all.
+const PLUGIN_INDEX_URL = 'https://omer-faruq.github.io/koreader-plugin-index/';
+function pluginIndexHint(style) {
+  return `<p style="margin-top:.75rem;${style || ''}">In the meantime you can browse the static `
+    + `<a href="${PLUGIN_INDEX_URL}" target="_blank" rel="noopener">KOReader Plugin Finder</a>`
+    + ` — it needs no GitHub API requests, so it works even while the limit is exhausted.</p>`;
+}
+
+// ─── Language colors (common ones) ───
+const LANG_COLORS = {
+  Lua:'#000080',Python:'#3572A5',JavaScript:'#f1e05a',TypeScript:'#3178c6',
+  Shell:'#89e051',C:'#555555','C++':'#f34b7d',Go:'#00ADD8',Rust:'#dea584',
+  Java:'#b07219',Ruby:'#701516',HTML:'#e34c26',CSS:'#563d7c',Vim:'#199f4b',
+  'Vim Script':'#199f4b',Makefile:'#427819',Zig:'#ec915c',Dart:'#00B4AB',
+};
+
+// ─── Time formatting ───
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  const diff = Math.floor((Date.now() - d.getTime()) / 1000);
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
+  if (diff < 2592000) return `${Math.floor(diff/86400)}d ago`;
+  if (diff < 31536000) return `${Math.floor(diff/2592000)}mo ago`;
+  return `${Math.floor(diff/31536000)}y ago`;
+}
+function shortDate(dateStr) {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+}
+
+// ─── App ───
+const app = {
+  tab: 'plugins',
+  sortMode: 'stars_desc',
+  tabState: {
+    plugins:  { query: '', minStars: 0, readmeSearch: false, includeForks: true, ownerFilter: '' },
+    patches:  { query: '', minStars: 0, readmeSearch: true, includeForks: true, ownerFilter: '' }
+  },
+  readmeCache: {},
+  data: { plugins: null, patches: null },
+  loading: { plugins: false, patches: false },
+  readmeLoading: {},
+
+  QUERIES: {
+    plugins: {
+      topics: ['topic:koreader-plugin'],
+      names: ['in:name ".koplugin"']
+    },
+    patches: {
+      topics: ['topic:koreader-user-patch'],
+      names: ['in:name "KOReader.patches"']
+    }
+  },
+
+  DEFAULTS: { tab: 'plugins', sort: 'stars_desc', q: '', owner: '', stars: 0, forks: true, readme_plugins: false, readme_patches: true, zeroStarForks: false },
+
+  includeZeroStarForks: false,
+
+  get ts() { return this.tabState[this.tab]; },
+
+  loadFromURL() {
+    const p = new URLSearchParams(window.location.search);
+    const tab = p.get('tab');
+    if (tab === 'plugins' || tab === 'patches') this.tab = tab;
+    const sort = p.get('sort');
+    if (sort && ['stars_desc','updated_desc','created_desc','name_asc'].includes(sort)) this.sortMode = sort;
+    const s = this.ts;
+    if (p.has('q')) s.query = p.get('q').toLowerCase();
+    if (p.has('owner')) s.ownerFilter = p.get('owner').toLowerCase();
+    if (p.has('stars')) s.minStars = Math.max(0, parseInt(p.get('stars')) || 0);
+    if (p.has('forks')) s.includeForks = p.get('forks') !== '0';
+    if (p.has('readme')) s.readmeSearch = p.get('readme') === '1';
+    this.includeZeroStarForks = p.get('zerostarforks') === '1';
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === this.tab));
+    document.getElementById('sortSelect').value = this.sortMode;
+  },
+
+  syncURL() {
+    const s = this.ts;
+    const d = this.DEFAULTS;
+    const p = new URLSearchParams();
+    if (this.tab !== d.tab) p.set('tab', this.tab);
+    if (this.sortMode !== d.sort) p.set('sort', this.sortMode);
+    if (s.query) p.set('q', s.query);
+    if (s.ownerFilter) p.set('owner', s.ownerFilter);
+    if (s.minStars > 0) p.set('stars', s.minStars);
+    // Include Forks filter is only surfaced when 0-star forks are included, otherwise it is ignored.
+    if (this.includeZeroStarForks && !s.includeForks) p.set('forks', '0');
+    const defaultReadme = this.tab === 'patches' ? d.readme_patches : d.readme_plugins;
+    if (s.readmeSearch !== defaultReadme) p.set('readme', s.readmeSearch ? '1' : '0');
+    if (this.includeZeroStarForks) p.set('zerostarforks', '1');
+    const qs = p.toString();
+    const newUrl = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
+    history.replaceState(null, '', newUrl);
+  },
+
+  openAiSearch() {
+    // Opens the finder already in AI mode and on the tab being browsed, so the
+    // click lands where it promised rather than on a generic front page.
+    const tab = this.tab === 'patches' ? 'patches' : 'plugins';
+    window.open(`https://omer-faruq.github.io/koreader-plugin-index/?ai=1&tab=${tab}`,
+                '_blank', 'noopener');
+  },
+
+  toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme');
+    this.applyTheme(current === 'light' ? 'dark' : 'light');
+  },
+
+  applyTheme(theme) {
+    if (theme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    document.getElementById('themeToggle').textContent = theme === 'light' ? '☀️' : '🌙';
+    Storage.set('theme', theme);
+  },
+
+  init() {
+    this.applyTheme(Storage.get('theme') || 'dark');
+    const savedSort = Storage.get('sort_mode');
+    if (savedSort) { this.sortMode = savedSort; document.getElementById('sortSelect').value = savedSort; }
+    this.loadFromURL();
+    if (!Storage.persistent) {
+      document.getElementById('statsBar').innerHTML = '⚠️ localStorage unavailable (file:// mode). Settings will not persist across sessions.';
+    }
+    this.syncControlsToTab();
+    this.loadCachedData();
+    if (!this.data.plugins && !this.data.patches) {
+      this.refreshData();
+    } else if (this.ts.readmeSearch && this.ts.query) {
+      this.applyFilter();
+    } else {
+      this.render();
+    }
+  },
+
+  syncControlsToTab() {
+    const s = this.ts;
+    document.getElementById('searchInput').value = s.query ? s.query : '';
+    document.getElementById('ownerInput').value = s.ownerFilter || '';
+    document.getElementById('minStarsInput').value = s.minStars || 0;
+    document.getElementById('includeForks').checked = s.includeForks;
+    document.getElementById('readmeSearch').checked = s.readmeSearch;
+    this.updateIncludeForksVisibility();
+    this.updateOwnerDatalist();
+    this.updateFilterBanner();
+  },
+
+  updateIncludeForksVisibility() {
+    const label = document.getElementById('includeForksLabel');
+    if (!label) return;
+    label.style.display = this.includeZeroStarForks ? 'flex' : 'none';
+  },
+
+  updateFilterBanner() {
+    const s = this.ts;
+    const banner = document.getElementById('filterBanner');
+    const text = document.getElementById('filterText');
+    const shareBtn = document.getElementById('shareBtn');
+    const parts = [];
+    if (s.query) parts.push(`"${s.query}"`);
+    if (s.ownerFilter) parts.push(`owner: ${s.ownerFilter}`);
+    if (s.minStars > 0) parts.push(`≥${s.minStars} ⭐`);
+    if (this.includeZeroStarForks && !s.includeForks) parts.push('no forks');
+    if (this.includeZeroStarForks) parts.push('incl. 0★ forks');
+    if (s.readmeSearch && s.query) parts.push('(+README)');
+    
+    const hasFilter = parts.length > 0;
+    if (hasFilter) {
+      text.textContent = 'Active filter: ' + parts.join(' · ');
+      banner.classList.add('visible');
+      if (shareBtn) shareBtn.classList.add('has-filter');
+    } else {
+      banner.classList.remove('visible');
+      if (shareBtn) shareBtn.classList.remove('has-filter');
+    }
+  },
+
+  loadCachedData() {
+    const p = Storage.getJSON('cache_plugins');
+    const pa = Storage.getJSON('cache_patches');
+    // Only accept caches whose 0-star-fork scope matches the current setting,
+    // so a URL that flips the flag triggers a fresh fetch instead of showing stale data.
+    if (p && p.repos && p.withZeroStarForks === this.includeZeroStarForks) this.data.plugins = p.repos;
+    if (pa && pa.repos && pa.withZeroStarForks === this.includeZeroStarForks) this.data.patches = pa.repos;
+  },
+
+  expandQueryForForkStarSplit(baseQuery) {
+    // When `includeZeroStarForks` is false we intentionally skip the `fork:only stars:0`
+    // query so that 0-star forks are never downloaded from the API. This is the main
+    // driver of noise in the results, so filtering server-side keeps the client list
+    // focused on meaningful repos.
+    const queries = [
+      `${baseQuery} fork:only stars:>=1`,
+      `${baseQuery} stars:0`,
+      `${baseQuery} stars:>=1`,
+    ];
+    if (this.includeZeroStarForks) {
+      queries.unshift(`${baseQuery} fork:only stars:0`);
+    }
+    return queries;
+  },
+
+  async fetchCategory(kind) {
+    const queries = this.QUERIES[kind];
+    const allBaseQueries = [...queries.topics, ...queries.names];
+    const seen = new Set();
+    const results = [];
+    // Collect per-query failures so the caller can surface them to the user.
+    // Without a token, GitHub's 10 req/min search cap is easily hit and some
+    // sub-queries fail silently otherwise, producing a partial repo list.
+    const errors = [];
+    let totalQueries = 0;
+
+    for (const baseQ of allBaseQueries) {
+      const splitQueries = this.expandQueryForForkStarSplit(baseQ);
+      for (const q of splitQueries) {
+        totalQueries++;
+        try {
+          const repos = await GitHub.exhaustiveSearch(q);
+          for (const repo of repos) {
+            const key = repo.full_name.toLowerCase();
+            if (!seen.has(key)) {
+              seen.add(key);
+              results.push(repo);
+            }
+          }
+        } catch (e) {
+          console.error(`Query failed [${q}]:`, e);
+          errors.push({ query: q, error: e });
+        }
+      }
+    }
+    return { repos: results, errors, totalQueries };
+  },
+
+  async refreshData() {
+    const active = this.tab;
+    this.loading[active] = true;
+    this.render();
+
+    Storage.remove(`cache_${active}`);
+    // If README search is about to run, defer list-fetch errors so both sets
+    // can be shown together in a single alert instead of two popups.
+    const willReadmeSearch = this.ts.readmeSearch && this.ts.query;
+    try {
+      const { repos, errors, totalQueries } = await this.fetchCategory(active);
+      this.data[active] = repos;
+      Storage.setJSON(`cache_${active}`, { repos, ts: Date.now(), withZeroStarForks: this.includeZeroStarForks });
+      if (errors && errors.length > 0) {
+        if (willReadmeSearch) {
+          this._pendingApiErrors = { errors, totalQueries };
+        } else {
+          this.showApiAlert(errors, totalQueries);
+        }
+      }
+    } catch (e) {
+      console.error('Fetch error:', e);
+      const msg = (e && e.message) ? e.message : String(e);
+      const banner = document.getElementById('error-banner');
+      if (banner) {
+        // Point at the static plugin index so a hard failure (rate limit, no
+        // network) still leaves the user somewhere to go.
+        banner.innerHTML = `${esc(msg)} <a href="${PLUGIN_INDEX_URL}" target="_blank" rel="noopener">Browse the static KOReader Plugin Finder instead →</a>`;
+        banner.classList.add('visible');
+        setTimeout(() => banner.classList.remove('visible'), 20000);
+      } else {
+        alert(msg);
+      }
+    }
+
+    this.loading[active] = false;
+    if (this.ts.readmeSearch && this.ts.query) {
+      this.applyFilter();
+    } else {
+      this.render();
+    }
+  },
+
+  switchTab(tab) {
+    this.tab = tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    this.syncControlsToTab();
+    this.syncURL();
+    if (!this.data[tab] && !this.loading[tab]) {
+      this.refreshData();
+    } else {
+      this.render();
+    }
+  },
+
+  onSearchKeydown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const value = e.target.value.trim();
+      this.ts.query = value.toLowerCase();
+      this.applyFilter();
+    }
+  },
+
+  onMinStarsKeydown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      this.ts.minStars = Math.max(0, parseInt(e.target.value) || 0);
+      this.applyFilter();
+    }
+  },
+
+  onMinStarsChange(value) {
+    this.ts.minStars = Math.max(0, parseInt(value) || 0);
+    this.updateFilterBanner();
+    this.syncURL();
+    this.render();
+  },
+
+  async applyFilter() {
+    const s = this.ts;
+    if (s.readmeSearch && s.query) {
+      this.showSearchOverlay('Searching READMEs...');
+      await this.fetchReadmesForSearch();
+      this.hideSearchOverlay();
+    }
+    // Fallback: surface any deferred list-fetch errors that the README path
+    // did not consume (e.g. when all READMEs were already cached).
+    if (this._pendingApiErrors) {
+      const { errors, totalQueries } = this._pendingApiErrors;
+      this._pendingApiErrors = null;
+      this.showApiAlert(errors, totalQueries);
+    }
+    this.updateFilterBanner();
+    this.syncURL();
+    this.render();
+  },
+
+  clearFilter() {
+    // Note: this intentionally does NOT reset `includeZeroStarForks` — that setting
+    // controls the server-side query scope and must be managed from the Settings modal.
+    const s = this.ts;
+    s.query = '';
+    s.ownerFilter = '';
+    s.minStars = 0;
+    s.includeForks = true;
+    this.syncControlsToTab();
+    this.syncURL();
+    this.render();
+  },
+
+  onOwnerInput(value) {
+    this.ts.ownerFilter = value.trim().toLowerCase();
+    this.updateFilterBanner();
+    this.syncURL();
+    this.render();
+  },
+
+  updateOwnerDatalist() {
+    const repos = this.data[this.tab];
+    const dl = document.getElementById('ownerDatalist');
+    if (!repos || !dl) return;
+    const owners = [...new Set(repos.map(r => r.owner?.login).filter(Boolean))].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+    dl.innerHTML = owners.map(o => `<option value="${esc(o)}">`).join('');
+  },
+
+  showSearchOverlay(msg) {
+    const el = document.getElementById('searchOverlay');
+    document.getElementById('searchOverlayText').textContent = msg || 'Searching...';
+    el.classList.add('visible');
+  },
+
+  hideSearchOverlay() {
+    document.getElementById('searchOverlay').classList.remove('visible');
+  },
+
+  onSortChange(value) {
+    this.sortMode = value;
+    Storage.set('sort_mode', value);
+    this.syncURL();
+    this.render();
+  },
+
+  onIncludeForksToggle(checked) {
+    this.ts.includeForks = checked;
+    this.updateFilterBanner();
+    this.syncURL();
+    this.render();
+  },
+
+  onIncludeZeroStarForksToggle(checked) {
+    this.includeZeroStarForks = checked;
+    this.updateIncludeForksVisibility();
+    this.updateFilterBanner();
+    this.syncURL();
+    // The server-side query set has changed, so existing caches are stale for both tabs.
+    // Drop them and re-fetch the active tab; the other tab will be fetched on next switch.
+    Storage.remove('cache_plugins');
+    Storage.remove('cache_patches');
+    this.data.plugins = null;
+    this.data.patches = null;
+    this.refreshData();
+  },
+
+  onReadmeSearchToggle(checked) {
+    this.ts.readmeSearch = checked;
+    if (checked && this.ts.query) {
+      this.applyFilter();
+    }
+    this.updateFilterBanner();
+    this.syncURL();
+    this.render();
+  },
+
+  toastTimer: null,
+  showToast(msg, duration = 5000) {
+    const el = document.getElementById('toast');
+    el.innerHTML = msg;
+    el.classList.add('visible');
+    if (this.toastTimer) clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => { el.classList.remove('visible'); this.toastTimer = null; }, duration);
+  },
+
+  async fetchReadmesForSearch() {
+    const repos = this.data[this.tab];
+    if (!repos) return;
+    const pending = repos.filter(r => this.readmeCache[r.full_name] === undefined);
+    if (pending.length === 0) return;
+    for (const r of pending) this.readmeLoading[r.full_name] = true;
+    this.render();
+    const BATCH = 6;
+    let done = 0;
+    // Collect non-404 errors so we can surface a single, clear alert at the
+    // end instead of silently producing a partial README search result set.
+    const errors = [];
+    const total = pending.length;
+    this.showSearchOverlay(`Searching READMEs... (0/${total})`);
+    for (let i = 0; i < pending.length; i += BATCH) {
+      const batch = pending.slice(i, i + BATCH);
+      await Promise.allSettled(batch.map(async repo => {
+        const key = repo.full_name;
+        try {
+          const [owner, name] = key.split('/');
+          const content = await GitHub.fetchReadme(owner, name);
+          this.readmeCache[key] = content.toLowerCase();
+        } catch (e) {
+          this.readmeCache[key] = '';
+          const is404 = e.message && e.message.includes('404');
+          if (!is404) {
+            errors.push({ query: `readme ${key}`, error: e });
+          }
+        }
+        this.readmeLoading[key] = false;
+        done++;
+        const errorCount = errors.length;
+        document.getElementById('searchOverlayText').textContent = `Searching READMEs... (${done}/${total}${errorCount ? ', ' + errorCount + ' failed' : ''})`;
+      }));
+      this.render();
+    }
+    // Merge any list-fetch errors that refreshData deferred so the user sees
+    // a single combined alert instead of two back-to-back popups.
+    let combinedErrors = errors;
+    let combinedTotal = total;
+    if (this._pendingApiErrors) {
+      combinedErrors = [...this._pendingApiErrors.errors, ...errors];
+      combinedTotal = this._pendingApiErrors.totalQueries + total;
+      this._pendingApiErrors = null;
+    }
+    if (combinedErrors.length > 0) {
+      this.showApiAlert(combinedErrors, combinedTotal);
+    }
+  },
+
+  getSortedRepos(repos) {
+    if (!repos) return [];
+    const list = [...repos];
+    const mode = this.sortMode;
+    list.sort((a, b) => {
+      if (mode === 'stars_desc') {
+        if (b.stargazers_count !== a.stargazers_count) return b.stargazers_count - a.stargazers_count;
+        if (a.pushed_at !== b.pushed_at) return new Date(b.pushed_at) - new Date(a.pushed_at);
+        return (a.name || '').localeCompare(b.name || '');
+      }
+      if (mode === 'updated_desc') {
+        if (a.pushed_at !== b.pushed_at) return new Date(b.pushed_at) - new Date(a.pushed_at);
+        if (b.stargazers_count !== a.stargazers_count) return b.stargazers_count - a.stargazers_count;
+        return (a.name || '').localeCompare(b.name || '');
+      }
+      if (mode === 'created_desc') {
+        if (a.created_at !== b.created_at) return new Date(b.created_at) - new Date(a.created_at);
+        if (b.stargazers_count !== a.stargazers_count) return b.stargazers_count - a.stargazers_count;
+        return (a.name || '').localeCompare(b.name || '');
+      }
+      if (mode === 'name_asc') {
+        const na = (a.name || '').toLowerCase(), nb = (b.name || '').toLowerCase();
+        if (na !== nb) return na.localeCompare(nb);
+        if (b.stargazers_count !== a.stargazers_count) return b.stargazers_count - a.stargazers_count;
+        return new Date(b.pushed_at) - new Date(a.pushed_at);
+      }
+      return 0;
+    });
+    return list;
+  },
+
+  getFilteredRepos(repos) {
+    const s = this.ts;
+    let list = repos;
+    // The Include Forks toggle is only surfaced (and therefore only applied) when
+    // `includeZeroStarForks` is on; otherwise all loaded forks are considered relevant.
+    if (this.includeZeroStarForks && !s.includeForks) {
+      list = list.filter(r => !r.fork);
+    }
+    if (s.ownerFilter) {
+      list = list.filter(r => (r.owner?.login || '').toLowerCase().includes(s.ownerFilter));
+    }
+    if (s.minStars > 0) {
+      list = list.filter(r => (r.stargazers_count || 0) >= s.minStars);
+    }
+    if (!s.query) return list;
+    const words = s.query.split(/\s+/).filter(Boolean);
+    if (words.length === 0) return list;
+    return list.filter(r => {
+      const name = ((r.full_name || '').split('/').pop() || '').toLowerCase();
+      const desc = (r.description || '').toLowerCase();
+      const topics = (r.topics || []).join(' ').toLowerCase();
+      const readmeTxt = s.readmeSearch ? (this.readmeCache[r.full_name] || '') : '';
+      const haystack = name + ' ' + desc + ' ' + topics + (readmeTxt ? ' ' + readmeTxt : '');
+      return words.every(w => haystack.includes(w));
+    });
+  },
+
+  render() {
+    const repos = this.data[this.tab];
+    const isLoading = this.loading[this.tab];
+    const listEl = document.getElementById('repoList');
+    const statsEl = document.getElementById('statsBar');
+
+    if (isLoading) {
+      listEl.innerHTML = `<div class="state-msg"><div class="spinner"></div><p style="margin-top:.75rem">Fetching ${this.tab}...</p></div>`;
+      statsEl.textContent = '';
+      return;
+    }
+
+    if (!repos) {
+      listEl.innerHTML = `<div class="state-msg"><div class="icon">📦</div><p>No data yet. Click 🔄 to fetch.</p></div>`;
+      statsEl.textContent = '';
+      return;
+    }
+
+    this.updateOwnerDatalist();
+    const sorted = this.getSortedRepos(repos);
+    const filtered = this.getFilteredRepos(sorted);
+
+
+    const readmeLoadingCount = Object.values(this.readmeLoading).filter(Boolean).length;
+    let statsText = `${filtered.length} of ${repos.length} repos`;
+    if (readmeLoadingCount > 0) statsText += ` · Fetching READMEs (${readmeLoadingCount} remaining)...`;
+    const cacheInfo = Storage.getJSON(`cache_${this.tab}`);
+    if (cacheInfo && cacheInfo.ts) statsText += ` · Last fetched: ${shortDate(new Date(cacheInfo.ts).toISOString())}`;
+    statsEl.textContent = statsText;
+
+    if (filtered.length === 0) {
+      listEl.innerHTML = `<div class="state-msg"><div class="icon">🔍</div><p>No repos match your search.</p></div>`;
+      return;
+    }
+
+    listEl.innerHTML = filtered.map(r => this.renderCard(r)).join('');
+  },
+
+  renderCard(repo) {
+    const owner = repo.owner?.login || '';
+    const name = repo.name || '';
+    const fullName = repo.full_name || `${owner}/${name}`;
+    const desc = repo.description ? esc(repo.description) : '<span style="color:var(--text3)">No description</span>';
+    const stars = repo.stargazers_count || 0;
+    const lang = repo.language || '';
+    const langColor = LANG_COLORS[lang] || '#888';
+    const topics = (repo.topics || []).slice(0, 15);
+    const updatedLabel = timeAgo(repo.pushed_at);
+    const createdLabel = shortDate(repo.created_at);
+
+    return `
+    <div class="repo-card">
+      <div class="repo-card-header">
+        <div class="repo-name"><a href="${repo.html_url}" target="_blank" rel="noopener">${esc(fullName)}</a>${repo.fork ? ` <span class="fork-badge" onclick="app.showForkSource(event,'${esc(owner)}','${esc(name)}')">🔀 Fork<span class="fork-popup" id="fork-pop-${esc(owner)}-${esc(name)}"></span></span>` : ''}</div>
+        <div class="repo-stars">⭐ ${stars}</div>
+      </div>
+      <div class="repo-desc">${desc}</div>
+      <div class="repo-meta">
+        ${lang ? `<span class="repo-meta-item"><span class="lang-dot" style="background:${langColor}"></span> ${esc(lang)}</span>` : ''}
+        <span class="repo-meta-item">📅 Created ${createdLabel}</span>
+        <span class="repo-meta-item">🕐 Updated ${updatedLabel}</span>
+        ${repo.license?.spdx_id ? `<span class="repo-meta-item">📄 ${esc(repo.license.spdx_id)}</span>` : ''}
+      </div>
+      ${topics.length ? `<div class="repo-topics">${topics.map(t => `<span class="topic-tag">${esc(t)}</span>`).join('')}</div>` : ''}
+      <div class="repo-actions">
+        <button class="btn-secondary btn-sm" onclick="app.showReadme('${esc(owner)}','${esc(name)}')">📖 README</button>
+        ${this.tab === 'patches' ? `<button class="btn-secondary btn-sm" onclick="app.showPatchFiles('${esc(owner)}','${esc(name)}')">📄 Patches</button>` : ''}
+        <a href="${repo.html_url}" target="_blank" rel="noopener"><button class="btn-secondary btn-sm">🔗 GitHub</button></a>
+      </div>
+    </div>`;
+  },
+
+  // ─── README ───
+  async showReadme(owner, repo) {
+    const modal = document.getElementById('readmeModal');
+    const titleEl = document.getElementById('readmeTitle');
+    const contentEl = document.getElementById('readmeContent');
+    titleEl.textContent = `${owner}/${repo} — README`;
+    contentEl.innerHTML = '<div class="state-msg"><div class="spinner"></div></div>';
+    modal.classList.add('open');
+
+    try {
+      const content = await GitHub.fetchReadme(owner, repo);
+      contentEl.innerHTML = md2html(content, owner, repo);
+    } catch (e) {
+      contentEl.innerHTML = `<div class="state-msg"><p>Failed to load README: ${esc(e.message)}</p></div>`;
+    }
+  },
+
+  closeReadme() {
+    document.getElementById('readmeModal').classList.remove('open');
+  },
+
+  // ─── Fork Source ───
+  forkSourceCache: {},
+  async showForkSource(e, owner, repo) {
+    e.stopPropagation();
+    const popId = `fork-pop-${owner}-${repo}`;
+    const pop = document.getElementById(popId);
+    if (!pop) return;
+    // Toggle off if already visible
+    if (pop.classList.contains('visible')) { pop.classList.remove('visible'); return; }
+    // Close any other open fork popups
+    document.querySelectorAll('.fork-popup.visible').forEach(p => p.classList.remove('visible'));
+    const key = `${owner}/${repo}`;
+    if (this.forkSourceCache[key]) {
+      pop.innerHTML = this.forkSourceCache[key];
+      pop.classList.add('visible');
+      return;
+    }
+    pop.innerHTML = '<span class="spinner" style="width:14px;height:14px;border-width:2px"></span>';
+    pop.classList.add('visible');
+    try {
+      const data = await GitHub.request(`/repos/${owner}/${repo}`);
+      const parent = data.parent;
+      if (parent) {
+        const html = `Forked from <a href="${parent.html_url}" target="_blank" rel="noopener">${esc(parent.full_name)}</a> ⭐ ${parent.stargazers_count || 0}`;
+        this.forkSourceCache[key] = html;
+        pop.innerHTML = html;
+      } else {
+        pop.innerHTML = 'Fork source unknown';
+        this.forkSourceCache[key] = 'Fork source unknown';
+      }
+    } catch (err) {
+      pop.innerHTML = 'Failed to load source';
+    }
+  },
+
+  // ─── Patch Files ───
+  async showPatchFiles(owner, repo) {
+    const modal = document.getElementById('patchesModal');
+    const titleEl = document.getElementById('patchesTitle');
+    const contentEl = document.getElementById('patchesContent');
+    titleEl.textContent = `${owner}/${repo} — Patch Files`;
+    contentEl.innerHTML = '<div class="state-msg"><div class="spinner"></div></div>';
+    modal.classList.add('open');
+
+    try {
+      const tree = await GitHub.fetchRepoTree(owner, repo);
+      const luaFiles = tree.filter(f => f.type === 'blob' && f.path.endsWith('.lua') && f.path.split('/').pop().startsWith('2-'));
+      if (luaFiles.length === 0) {
+        contentEl.innerHTML = '<div class="state-msg"><p>No .lua files found.</p></div>';
+        return;
+      }
+      const grouped = {};
+      for (const f of luaFiles) {
+        const parts = f.path.split('/');
+        const fileName = parts.pop();
+        const dir = parts.length > 0 ? parts.join('/') : '/';
+        if (!grouped[dir]) grouped[dir] = [];
+        grouped[dir].push({ name: fileName, path: f.path, url: `https://github.com/${owner}/${repo}/blob/HEAD/${f.path}` });
+      }
+      let html = `<p style="font-size:.8rem;color:var(--text3);margin-bottom:.75rem">${luaFiles.length} .lua file(s)</p>`;
+      const dirs = Object.keys(grouped).sort();
+      for (const dir of dirs) {
+        if (dirs.length > 1 || dir !== '/') {
+          html += `<div style="font-size:.8rem;color:var(--text3);margin-top:.75rem;margin-bottom:.3rem;font-weight:600">${esc(dir === '/' ? 'Root' : dir)}/</div>`;
+        }
+        for (const f of grouped[dir]) {
+          html += `<div style="padding:.3rem .5rem;border-bottom:1px solid var(--border);font-size:.88rem"><a href="${f.url}" target="_blank" rel="noopener" style="color:var(--accent2)">${esc(f.name)}</a></div>`;
+        }
+      }
+      contentEl.innerHTML = html;
+    } catch (e) {
+      contentEl.innerHTML = `<div class="state-msg"><p>Failed to load file tree: ${esc(e.message)}</p></div>`;
+    }
+  },
+
+  closePatchFiles() {
+    document.getElementById('patchesModal').classList.remove('open');
+  },
+
+  // ─── Settings ───
+  openSettings() {
+    const token = Storage.get('github_pat') || '';
+    document.getElementById('patInput').value = token;
+    document.getElementById('tokenStatus').innerHTML = '';
+    document.getElementById('includeZeroStarForksInput').checked = this.includeZeroStarForks;
+    document.getElementById('settingsModal').classList.add('open');
+  },
+
+  closeSettings() {
+    document.getElementById('settingsModal').classList.remove('open');
+  },
+
+  // ─── API Alert (rate-limit / failed queries) ───
+  _apiAlertTimer: null,
+  showApiAlert(errors, totalQueries) {
+    if (!errors || errors.length === 0) return;
+    const modal = document.getElementById('apiAlertModal');
+    const titleEl = document.getElementById('apiAlertTitle');
+    const bodyEl = document.getElementById('apiAlertBody');
+    if (!modal || !titleEl || !bodyEl) return;
+
+    const rateLimitErrors = errors.filter(e => {
+      const msg = (e && e.error && e.error.message) || '';
+      return /rate limit|\b429\b|\b403\b/i.test(msg);
+    });
+    const hasToken = !!(Storage.get('github_pat') || '').trim();
+    // Fall back to `errors.length` if the caller did not provide a total so the
+    // message still makes sense (e.g. "2 of 2" when nothing else was attempted).
+    const total = (typeof totalQueries === 'number' && totalQueries >= errors.length)
+      ? totalQueries : errors.length;
+
+    let html = '';
+    if (rateLimitErrors.length > 0) {
+      titleEl.textContent = '⚠️ Rate limit reached';
+      html += `<p>${rateLimitErrors.length} of ${total} GitHub API request(s) failed because the search rate limit was hit. The repository list below may be <strong>incomplete</strong>.</p>`;
+      if (!hasToken) {
+        html += `<p style="margin-top:.75rem">We hit the query limit. To fix this, get a <strong>free GitHub Personal Access Token</strong> and enter it in ⚙️ Settings. This raises the rate limit from 10 to 30 requests per minute.</p>`;
+        html += `<p style="margin-top:.5rem;font-size:.85rem;color:var(--text3)"><a href="https://github.com/settings/tokens" target="_blank" rel="noopener">Create a token on GitHub</a> — no scopes needed, public repo access is sufficient.</p>`;
+      } else {
+        html += `<p style="margin-top:.75rem">Your token's rate limit is exhausted. Please wait a minute and click 🔄 to retry, or use a different token in ⚙️ Settings.</p>`;
+      }
+      html += pluginIndexHint();
+    } else {
+      titleEl.textContent = '⚠️ Some requests failed';
+      const firstMsg = (errors[0] && errors[0].error && errors[0].error.message) || String(errors[0].error || 'Unknown error');
+      html += `<p>${errors.length} of ${total} GitHub API request(s) failed, so the repository list may be <strong>incomplete</strong>.</p>`;
+      html += `<p style="margin-top:.5rem;font-size:.85rem;color:var(--text3)">${esc(firstMsg)}</p>`;
+      html += pluginIndexHint();
+    }
+    bodyEl.innerHTML = html;
+    modal.classList.add('open');
+
+    // Auto-dismiss after a while so the user doesn't have to click if they
+    // walk away; they can also click OK or ✕ to close immediately.
+    if (this._apiAlertTimer) clearTimeout(this._apiAlertTimer);
+    this._apiAlertTimer = setTimeout(() => this.closeApiAlert(), 20000);
+  },
+
+  closeApiAlert() {
+    if (this._apiAlertTimer) { clearTimeout(this._apiAlertTimer); this._apiAlertTimer = null; }
+    const modal = document.getElementById('apiAlertModal');
+    if (modal) modal.classList.remove('open');
+  },
+
+  saveSettings() {
+    const token = document.getElementById('patInput').value.trim();
+    if (token) {
+      Storage.set('github_pat', token);
+    } else {
+      Storage.remove('github_pat');
+    }
+    this.closeSettings();
+  },
+
+  async testToken() {
+    const statusEl = document.getElementById('tokenStatus');
+    const token = document.getElementById('patInput').value.trim();
+    if (!token) { statusEl.innerHTML = '<span class="token-status token-fail">No token entered</span>'; return; }
+    statusEl.innerHTML = '<span class="spinner" style="width:16px;height:16px;border-width:2px"></span>';
+    const origToken = Storage.get('github_pat');
+    Storage.set('github_pat', token);
+    try {
+      const rate = await GitHub.testAuth();
+      statusEl.innerHTML = `<span class="token-status token-ok">✓ Valid — ${rate.remaining}/${rate.limit} requests remaining</span>`;
+    } catch (e) {
+      statusEl.innerHTML = `<span class="token-status token-fail">✕ Invalid token (${e.message})</span>`;
+      if (origToken) Storage.set('github_pat', origToken); else Storage.remove('github_pat');
+    }
+  },
+
+  // ─── Share/Export ───
+  shareContent: '',
+  
+  openShareModal() {
+    const repos = this.data[this.tab];
+    if (!repos) {
+      this.showToast('No data to share. Please fetch data first.', 3000);
+      return;
+    }
+    const sorted = this.getSortedRepos(repos);
+    const filtered = this.getFilteredRepos(sorted);
+    if (filtered.length === 0) {
+      this.showToast('No results to share. Try adjusting your filters.', 3000);
+      return;
+    }
+    
+    document.getElementById('shareCountInput').value = Math.min(10, filtered.length);
+    document.getElementById('sharePreview').textContent = '';
+    document.getElementById('shareCopyBtn').style.display = 'none';
+    document.getElementById('shareModal').classList.add('open');
+  },
+  
+  closeShareModal() {
+    document.getElementById('shareModal').classList.remove('open');
+  },
+  
+  generateSharePreview() {
+    const repos = this.data[this.tab];
+    const sorted = this.getSortedRepos(repos);
+    const filtered = this.getFilteredRepos(sorted);
+    
+    const count = Math.max(1, Math.min(100, parseInt(document.getElementById('shareCountInput').value) || 10));
+    const toShare = filtered.slice(0, count);
+    const hasMore = filtered.length > count;
+    
+    const fields = {
+      link: document.getElementById('shareFieldLink').checked,
+      stars: document.getElementById('shareFieldStars').checked,
+      desc: document.getElementById('shareFieldDesc').checked,
+      fork: document.getElementById('shareFieldFork').checked,
+      dates: document.getElementById('shareFieldDates').checked,
+    };
+    
+    const s = this.ts;
+    const filterDesc = [];
+    if (s.query) filterDesc.push(`search: "${s.query}"`);
+    if (s.ownerFilter) filterDesc.push(`owner: ${s.ownerFilter}`);
+    if (s.minStars > 0) filterDesc.push(`≥${s.minStars}⭐`);
+    if (this.includeZeroStarForks && !s.includeForks) filterDesc.push('no forks');
+    if (this.includeZeroStarForks) filterDesc.push('incl. 0★ forks');
+    if (s.readmeSearch && s.query) filterDesc.push('+README');
+    
+    const filterLine = filterDesc.length > 0 ? ` (${filterDesc.join(', ')})` : '';
+    const currentUrl = window.location.href;
+    const appStoreUrl = window.location.origin + window.location.pathname;
+    
+    let text = `KOReader AppStore - ${this.tab.charAt(0).toUpperCase() + this.tab.slice(1)}${filterLine}\n`;
+    text += `View in AppStore: ${currentUrl}\n\n`;
+    text += `${toShare.length} of ${filtered.length} results${hasMore ? ' (showing first ' + count + ')' : ''}\n`;
+    text += `${'='.repeat(12)}\n`;
+    
+    toShare.forEach((r, i) => {
+      const num = `${i + 1}.`;
+      text += num + ' ';
+      
+      const parts = [];
+      if (fields.link) parts.push(r.html_url);
+      if (fields.stars) parts.push(`⭐ ${r.stargazers_count || 0}`);
+      if (fields.desc && r.description) parts.push(r.description);
+      if (fields.fork && r.fork) parts.push('🔀 Fork');
+      if (fields.dates) {
+        parts.push(`Created: ${shortDate(r.created_at)}, Updated: ${timeAgo(r.pushed_at)}`);
+      }
+      
+      text += parts.join(' | ') + '\n';
+    });
+    
+    this.shareContent = text;
+    document.getElementById('sharePreview').textContent = text;
+    document.getElementById('shareCopyBtn').style.display = 'inline-block';
+  },
+  
+  async copyShareContent() {
+    if (!this.shareContent) {
+      this.showToast('⚠️ Please generate preview first', 2000);
+      return;
+    }
+    
+    try {
+      await navigator.clipboard.writeText(this.shareContent);
+      this.showToast('✅ Copied to clipboard!', 2000);
+      setTimeout(() => this.closeShareModal(), 1500);
+    } catch (e) {
+      const fallback = document.createElement('textarea');
+      fallback.value = this.shareContent;
+      document.body.appendChild(fallback);
+      fallback.select();
+      try {
+        document.execCommand('copy');
+        this.showToast('✅ Copied to clipboard!', 2000);
+        setTimeout(() => this.closeShareModal(), 1500);
+      } catch (e2) {
+        this.showToast('❌ Copy failed. Please select and copy manually.', 3000);
+      }
+      document.body.removeChild(fallback);
+    }
+  }
+};
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => {
+    if (e.target !== el) return;
+    if (el.id === 'apiAlertModal' && typeof app !== 'undefined' && app.closeApiAlert) {
+      app.closeApiAlert();
+    } else {
+      el.classList.remove('open');
+    }
+  });
+});
+
+// Close modals on Escape
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  document.querySelectorAll('.modal-overlay.open').forEach(m => {
+    if (m.id === 'apiAlertModal' && typeof app !== 'undefined' && app.closeApiAlert) {
+      app.closeApiAlert();
+    } else {
+      m.classList.remove('open');
+    }
+  });
+});
+
+// ─── Scroll hide/show header + controls ───
+(() => {
+  const header = document.querySelector('.header');
+  const controls = document.querySelector('.controls');
+  const filterBanner = document.getElementById('filterBanner');
+  let lastY = 0;
+  let ticking = false;
+  const updatePositions = (hide) => {
+    if (hide) {
+      header.classList.add('hidden');
+      controls.classList.add('hidden');
+      filterBanner.classList.add('hidden');
+      controls.style.top = '0px';
+      filterBanner.style.top = '0px';
+    } else {
+      header.classList.remove('hidden');
+      controls.classList.remove('hidden');
+      filterBanner.classList.remove('hidden');
+      const hH = header.offsetHeight;
+      controls.style.top = hH + 'px';
+      filterBanner.style.top = (hH + controls.offsetHeight) + 'px';
+    }
+  };
+  const SPEED_THRESHOLD = 30;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const y = window.scrollY;
+      const delta = lastY - y;
+      if (y <= 120) {
+        updatePositions(false);
+      } else if (y > lastY) {
+        updatePositions(true);
+      } else if (delta > SPEED_THRESHOLD) {
+        updatePositions(false);
+      }
+      lastY = y;
+      ticking = false;
+    });
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  // Set initial positions
+  requestAnimationFrame(() => updatePositions(false));
+})();
+
+// Close fork popups on outside click
+document.addEventListener('click', () => {
+  document.querySelectorAll('.fork-popup.visible').forEach(p => p.classList.remove('visible'));
+});
+
+// Boot
+app.init();
+</script>
+</body>
+</html>

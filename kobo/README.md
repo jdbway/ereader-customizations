@@ -1,5 +1,18 @@
 # Kobo setup
 
+See **[BASE_SETUP.md](BASE_SETUP.md)** for the full component list and
+install order — this is meant to be a repeatable base image for the whole
+Kobo fleet (`kobo-sabrina` plus the nephew Kobos), not just notes on one
+device.
+
+**Status (2026-08-29): `kobo-sabrina` was factory-reset** (see
+BASE_SETUP.md's incident writeup) and is being rebuilt from scratch using
+this folder as the reference. Everything below this point describes the
+*previous* install and is kept for reference/lessons-learned, not current
+device state.
+
+---
+
 First real device: `kobo-sabrina`, on the tailnet, dropbear (KOReader's
 SSH.koplugin) on port 2222 at `192.168.5.93`. Layout mirrors `kindle/`
 where it makes sense, adjusted for what's actually different on Kobo —
