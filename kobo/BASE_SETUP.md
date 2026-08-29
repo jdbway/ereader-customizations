@@ -114,6 +114,22 @@ source instead of vendored wholesale.
 - **appstore.koplugin** — the KOReader App Store
   (`omer-faruq/appstore.koplugin`), for browsing/installing/updating
   community plugins from KOReader itself.
+- **immichupload.koplugin** — this repo's own plugin. Uploads new
+  screenshots to Immich (`https://immich.truepob.com`). Deliberately not
+  the old standalone shell-script watcher (superseded, removed from this
+  repo) — that ran as a plain background process outside KOReader tied to
+  Tailscale's start/stop, either assuming Wi-Fi was already up or only
+  running while Tailscale happened to be on. This plugin is fully
+  decoupled from Tailscale: it checks the screenshots folder locally on a
+  timer (zero network cost — a directory listing, nothing else) and only
+  touches the network, via KOReader's own `NetworkMgr` Wi-Fi-on-demand
+  flow (the same "Connecting to Wi-Fi..." mechanism other plugins like
+  Crossbill use), when it actually finds a screenshot not yet uploaded.
+  Needs an Immich API key at `<koreader settings dir>/immich_api.key`
+  (one line, no vendored value — it's a real secret) — not yet placed on
+  kobo-sabrina as of this writing. Device attribution (Immich's
+  `deviceId`) is derived automatically from the `--hostname=` already set
+  in `tailscale/up.args`, so no separate per-device edit is needed.
 
 ### KOReader settings (`koreader-settings/`, copy into
 `/mnt/onboard/.adds/koreader/settings/`)
@@ -240,6 +256,22 @@ Back up the device's current `settings/bookshelf.lua` before overwriting
 it (`cp ... bookshelf.lua.bak-...`), and restart KOReader afterward so it
 picks up the change from disk rather than overwriting it back with
 whatever's still cached in memory from the running session.
+
+### Per-chip download folder
+
+OPDS downloads made through an OPDS-source chip (like Calibre) default to
+KOReader's own global "last used" download folder if the chip doesn't
+specify one — which on 2026-08-29 turned out to be the Wallabag folder
+(apparently left pointing there by Wallabag's own downloads), so every
+book downloaded from the Calibre chip landed in `Books/Wallabag/` instead
+of `Books/`. Fixed by setting `download_dir` directly on the chip; already
+included in the template above (`["download_dir"] = "/mnt/onboard/Books"`
+on the Calibre chip entry).
+
+**To change this manually on-device** instead of editing the file: long-press
+the chip → **Edit** (not the trash icon) → there's a download-folder
+option once the chip's source is OPDS (it isn't shown for the plain
+Home/Recent/etc. built-in sources) → pick the folder → Save.
 
 ## Wi-Fi caveat: things can look connected but not actually pass traffic
 

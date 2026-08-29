@@ -19,9 +19,11 @@ eips_log() {
 
 echo "[$(date)] Starting Tailscale..." > "$LOG"
 
-# Background watchers (screenshot uploader, then resolv.conf fixup).
-# Started unconditionally, before any exit path below, so it runs regardless
-# of whether reconnect succeeds or falls through to the auth-key branch.
+# Background watcher (resolv.conf fixup only -- the screenshot uploader is
+# now immichupload.koplugin, a real KOReader plugin, deliberately NOT tied
+# to Tailscale's lifecycle: it only touches the network via KOReader's own
+# Wi-Fi manager when it finds a genuinely new screenshot, regardless of
+# whether Tailscale itself is running).
 #
 # PID-file locking instead of `ps | grep`: the grep-based check raced when
 # this script ran multiple times in quick succession (manual toggles plus,
@@ -38,7 +40,6 @@ start_once() {
     echo $! > "$pidfile"
 }
 
-start_once "/mnt/us/extensions/tailscale/bin/immich_upload_watch.sh"
 start_once "/mnt/us/extensions/tailscale/bin/dns_watch.sh"
 eips_log "Reconnecting to Tailscale..."
 

@@ -17,6 +17,7 @@ return {
         [3] = { ["id"] = "opds_504150a3", ["label"] = "Calibre",
                 ["source"] = { ["kind"] = "opds", ["id"] = "504150a3" },
                 ["filter"] = {}, ["sort_priority"] = {},
+                ["download_dir"] = "/mnt/onboard/Books",
                 ["enabled"] = true },
         [4] = { ["id"] = "latest", ["label"] = "Latest", ["source"] = { ["kind"] = "latest" },
                 ["filter"] = {}, ["sort_priority"] = { [1] = { ["key"] = "date_added", ["reverse"] = true } },
