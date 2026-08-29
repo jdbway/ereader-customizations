@@ -23,12 +23,13 @@ secrets that the curated files deliberately strip out:
   `annotation_sync_plugin`, `cwasync`, and anything else a plugin stores
   there instead of its own file.
 
-**Never commit a raw snapshot's contents as-is.** `backup/kindle/` (where
-`backup_koreader.sh` writes by default) is gitignored for exactly this
-reason. If you want something from a snapshot reflected in the curated,
-public `kindle/` folder, copy it over by hand and scrub it the same way the
-existing files there were (see `kindle/koreader-settings/README.md` for
-what was kept vs. dropped and why).
+**Never commit a raw snapshot's contents as-is.** `backup/kindle/` and
+`backup/kobo/` (where `backup_koreader.sh` writes, split by `DEVICE`) are
+both gitignored for exactly this reason. If you want something from a
+snapshot reflected in the curated, public `kindle/` or `kobo/` folder,
+copy it over by hand and scrub it the same way the existing files there
+were (see `kindle/koreader-settings/README.md` for what was kept vs.
+dropped and why on Kindle — same reasoning applies to `kobo/`).
 
 ## What's excluded on purpose
 
@@ -48,21 +49,38 @@ what was kept vs. dropped and why).
 
 ## Usage
 
+One script pair for both devices — set `DEVICE=kindle` (the default) or
+`DEVICE=kobo`, which picks the right default host alias and remote
+KOReader path (`/mnt/base-us/koreader` vs. `/mnt/onboard/.adds/koreader` —
+Nickel's plugin/config layout differs from the Kindle jailbreak's). Not a
+forked `backup_kobo.sh`, since the only real difference is those two
+defaults.
+
 ```
-# Back up (from a machine with SSH reach to the device, e.g. over Tailscale):
+# Kindle (from a machine with SSH reach, e.g. over Tailscale):
 KINDLE_HOST=root@kindle ./backup_koreader.sh
 # -> writes to backup/kindle/<timestamp>/
 
+# Kobo:
+DEVICE=kobo ./backup_koreader.sh
+# -> writes to backup/kobo/<timestamp>/
+
 # Restore onto a fresh/replacement device:
 ./restore_koreader.sh backup/kindle/<timestamp> root@newkindle
+DEVICE=kobo ./restore_koreader.sh backup/kobo/<timestamp> root@newkobo
 ```
 
 Both scripts assume a plain `ssh <host>` (no extra flags) already works —
-put port (dropbear on 2222, or Tailscale SSH on 22 — see kindle/README.md's
-"SSH access" section) and key config in `~/.ssh/config` under whatever host
-alias you pass, rather than passing flags to these scripts.
-
-Kobo equivalents don't exist yet — no Kobo device to back up. When that
-starts, this'll need a `backup_kobo.sh`/`restore_kobo.sh` pair with
-Kobo-specific paths (Nickel's plugin/config layout differs from the Kindle
-jailbreak's `/mnt/base-us/koreader`).
+put port and key config in `~/.ssh/config` under whatever host alias you
+pass, rather than passing flags to these scripts. Kindle: dropbear on
+2222, or Tailscale SSH on 22 (see `kindle/README.md`'s "SSH access"
+section). Kobo: dropbear on 2222 over LAN only — Tailscale there is a
+manual toggle by design (battery reasons, see `kobo/BASE_SETUP.md`), so
+its MagicDNS name isn't reliably up; point the alias at the LAN IP
+directly instead, e.g.:
+```
+Host kobo-sabrina
+    HostName 192.168.5.93
+    Port 2222
+    User root
+```

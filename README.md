@@ -12,37 +12,50 @@ base image).
 the current working setup by copying files out of here, instead of
 re-deriving the whole configuration from memory. That's also *why* it needs
 to track what's actually on each device, not just what was true the day a
-plugin was first added — see each device folder's README (and
-`kobo/BASE_SETUP.md`) for the current snapshot.
+plugin was first added — see each device's `BASE_SETUP.md` for the
+current snapshot.
 
-See `kindle/README.md` and `kobo/README.md` / `kobo/BASE_SETUP.md` for
-per-device details.
+See `kindle/README.md` / `kindle/BASE_SETUP.md` and `kobo/README.md` /
+`kobo/BASE_SETUP.md` for per-device details — same structure in both,
+Components + Install order, so the two are directly comparable.
 
 ## Layout — where does a given file belong?
 
 ```
 shared/                    genuinely cross-device components — see below
-  koreader-plugins/networkextras.koplugin/   ours — Tailscale controls
-  koreader-plugins/immichupload.koplugin/    ours — uploads new screenshots to Immich
-  koreader-plugins/readinginsights.koplugin/ vendored — reading stats/goals popup,
-                                              powers the Reading streak micromodule's
-                                              "Reading insight" tap action
+  koreader-plugins/        every plugin confirmed to run correctly on both
+                            devices (12 as of 2026-08-29) — see "The
+                            shared/ rule" below for what "confirmed" means.
+                            Notably: networkextras.koplugin and
+                            immichupload.koplugin (ours), readinginsights.koplugin
+                            (vendored — powers the Reading streak
+                            micromodule's "Reading insight" tap action),
+                            bookshelf.koplugin/SETUP.md (device-agnostic
+                            home-screen setup instructions, referenced by
+                            both kindle/BASE_SETUP.md and kobo/BASE_SETUP.md
+                            instead of duplicated in each)
 kindle/
-  koreader-plugins/        Kindle-specific + not-yet-audited-for-portability plugins
+  BASE_SETUP.md            the reference build: full component list + install order
+  koreader-plugins/        genuinely Kindle-only plugins (2 as of 2026-08-29:
+                            suspendhack.koplugin, wifiwatchdogtune.koplugin —
+                            both touch Amazon-framework-specific mechanisms
+                            with no Kobo equivalent)
   koreader-settings/       settings-file backups (passwords blanked)
   tailscale/               Kindle's tailscale scripts + watchers (dns_watch.sh, etc.)
   boot-hooks/              upstart job configs
 kobo/
   BASE_SETUP.md            the reference build: full component list + install order
-  koreader-plugins/        Kobo-specific + not-yet-audited-for-portability plugins
+  koreader-plugins/        empty as of 2026-08-29 — every plugin Kobo
+                            currently uses turned out to be device-agnostic
   koreader-settings/       settings-file backups (passwords blanked)
   tailscale/                Kobo's tailscale scripts
   nickelmenu/               NickelMenu config
 backup/backup_koreader.sh  ours — Kodi-style raw snapshot: pulls the whole
                             plugins/ install + top-level settings/*.lua off a
-                            device (gitignored output, see backup/README.md)
+                            device (DEVICE=kindle|kobo, gitignored output,
+                            see backup/README.md)
 backup/restore_koreader.sh ours — pushes a backup_koreader.sh snapshot onto a
-                            fresh/replacement device
+                            fresh/replacement device (same DEVICE switch)
 scripts/                   git submodules — each a standalone public repo, linked
                             here so they're browsable alongside the device configs
                             that use them
@@ -58,26 +71,27 @@ empty directories.
 ### The `shared/` rule (read this before adding or editing a plugin)
 
 A plugin goes in **`shared/koreader-plugins/`** only if it's been
-*deliberately engineered* to run correctly on every device, not merely
-copied identically to both `kindle/` and `kobo/` folders. In practice that
-means: no hardcoded device-specific paths, explicit auto-detection where
-paths genuinely differ (see `networkextras.koplugin`'s `TS_CANDIDATES`
-table, or `immichupload.koplugin`'s use of `DataStorage:getFullDataDir()`
-instead of a hardcoded screenshots path), and no untested assumptions.
+*deliberately engineered or explicitly audited* to run correctly on every
+device — no hardcoded device-specific paths, explicit auto-detection
+where paths genuinely differ (see `networkextras.koplugin`'s
+`TS_CANDIDATES` table, or `immichupload.koplugin`'s use of
+`DataStorage:getFullDataDir()` instead of a hardcoded screenshots path),
+and no untested assumptions. It does **not** require the plugin to
+currently be installed on both devices — `AnnotationSync.koplugin` and
+`vocabdeck.koplugin`, for example, are only installed on Kindle today but
+live in `shared/` because their code has been checked and found clean;
+nothing stops a future Kobo from installing them too.
 
-Plugins that happen to be byte-identical between `kindle/` and `kobo/`
-right now (`bookshelf.koplugin`, `bookends.koplugin`, `crossbill.koplugin`,
-`cwasync.koplugin`, `appstore.koplugin`) are **not** in `shared/` — they
-were vendored as plain copies on the assumption they're cross-platform
-(reasonable, since they're pure KOReader-API plugins with no device
-mount-point assumptions of their own visible on inspection), but that
-assumption hasn't been explicitly verified the way the two `shared/`
-plugins were. `simpleui.koplugin` is a known counter-example: it still has
-a couple of `Device:isKindle()` / `/mnt/us` references never audited for
-Kobo correctness (see `kobo/BASE_SETUP.md`), so treat "currently identical
-files" as a weaker signal than "confirmed device-agnostic" — promote a
-plugin to `shared/` only once it's actually been checked, not just because
-`diff` says the two copies currently match.
+As of the 2026-08-29 full-repo audit, every plugin that's been checked
+this way lives in `shared/` — `kindle/koreader-plugins/` holds only the
+two that failed the check for a genuine reason (see the Layout tree
+above), and `kobo/koreader-plugins/` is empty. `simpleui.koplugin` was a
+real counter-example caught by this process: it had a hardcoded
+`/mnt/us/...` fallback path in `sui_updater.lua`, fixed before being
+moved to `shared/` (see `kobo/BASE_SETUP.md`). Treat "currently identical
+files between `kindle/` and `kobo/`" as a weaker signal than "confirmed
+device-agnostic" if you ever find a plugin duplicated instead of shared —
+that's a sign it hasn't been audited yet, not that it can't be.
 
 **When you fix or extend something in `shared/`, the fix applies to every
 device by construction — there's only one copy.** When you touch something
