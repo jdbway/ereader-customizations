@@ -77,13 +77,38 @@ source instead of vendored wholesale.
   [koreader/koreader releases](https://github.com/koreader/koreader/releases)
   page.
 
-### KOReader plugins (`koreader-plugins/`, copy each to
-`/mnt/onboard/.adds/koreader/plugins/`)
-- **networkextras.koplugin** — this repo's own plugin (also used on
-  Kindle). Manual Start/Stop/Update Tailscale + status from KOReader's
-  Tools menu. Auto-detects Kindle vs. Kobo paths and control socket; see
-  its `main.lua` comments. Tailscale is a **manual toggle by design** —
-  no boot-time auto-connect, for battery reasons.
+### KOReader plugins
+
+Every plugin Kobo currently uses lives in **`../shared/koreader-plugins/`**
+— as of 2026-08-29 nothing in `kobo/koreader-plugins/` itself (that
+folder's empty; it exists for whatever turns out to be genuinely
+Kobo-specific in the future). Copy each to
+`/mnt/onboard/.adds/koreader/plugins/`. See the root `README.md`'s "The
+`shared/` rule" for what qualifies a plugin to live there instead of
+staying duplicated per-device — briefly, these were all checked for
+actual device-specific assumptions (hardcoded `/mnt/us` paths,
+`Device:isKindle()` branches), not just found to be byte-identical copies:
+
+- **networkextras.koplugin** — Manual Start/Stop/Update Tailscale +
+  status from KOReader's Tools menu. Auto-detects Kindle vs. Kobo paths
+  and control socket; see its `main.lua` comments. Tailscale is a
+  **manual toggle by design** — no boot-time auto-connect, for battery
+  reasons.
+- **immichupload.koplugin** — Uploads new screenshots to Immich
+  (`https://immich.truepob.com`). Deliberately not a standalone
+  background shell script (the old design, since removed) — that either
+  had to assume Wi-Fi was already up or be tied to whenever Tailscale
+  happened to be running. This plugin checks the screenshots folder
+  locally on a 30s timer (zero network cost — a directory listing,
+  nothing else) and only touches the network, via KOReader's own
+  `NetworkMgr` Wi-Fi-on-demand flow (the same "Connecting to Wi-Fi..."
+  mechanism other plugins like Crossbill use), when it actually finds a
+  screenshot not yet uploaded. Needs an Immich API key at
+  `<koreader settings dir>/immich_api.key` (one line, no vendored value —
+  it's a real secret; kobo-sabrina has its own key, separate from
+  Kindle's). Device attribution (Immich's `deviceId`) is derived
+  automatically from the `--hostname=` already set in `tailscale/up.args`,
+  so no separate per-device edit is needed.
 - **crossbill.koplugin** — syncs highlights to the shared Crossbill
   server (`https://crossbill.truepob.com`). Config lives in KOReader's
   own `settings.reader.lua` under the `crossbill_sync` key, not a vendored
@@ -92,7 +117,11 @@ source instead of vendored wholesale.
   Settings menu after configuring the server — off by default, and
   without it the plugin only pushes on suspend/exit (see the NOTE file).
 - **cwasync.koplugin** — the "CWA / Calibre-Web-NextGen" progress-sync
-  plugin (upstream: `new-usemame/cwasync.koplugin`). **Shows up in
+  plugin. Not third-party in the usual sense: vendored directly from
+  KOReader's own mainline repo
+  (`koreader/koreader/tree/master/plugins/cwasync.koplugin`), not a
+  separate author's project (corrected 2026-08-29 — `../kindle/README.md`
+  had this right already, this file didn't). **Shows up in
   KOReader's Tools menu as "NextGen Progress Sync"**, not "cwasync" —
   don't go looking for the package name on-device. Sub-items: "Set
   NextGen Server", "Login", "Automatically keep documents in sync".
@@ -100,36 +129,28 @@ source instead of vendored wholesale.
   endpoint — **double-check the URL carefully**, `calibre` vs. `caliber`
   is an easy typo that silently fails rather than erroring obviously.
   See the Wi-Fi caveat below if Login hangs/times out even with a
-  correct URL.
+  correct URL. Also ships a Kobo-specific bridge module
+  (`kobo_sqlite_provider.lua`, bridges highlights into stock Nickel's own
+  database) — a legitimate device-specific provider used only on Kobo,
+  not something that blocks the plugin's own cross-device qualification.
 - **bookshelf.koplugin** — the home-screen replacement in use on the
   Kindle fleet; carries a Kobo-aware source module already
-  (`lib/bookshelf_kobo_source.lua`).
-- **bookends.koplugin** — cosmetic reading-progress/bookend styling.
+  (`lib/bookshelf_kobo_source.lua`), and correctly branches its font/data
+  paths per device (`Device:isKindle()` → `/mnt/us/fonts`, else
+  `DataStorage:getDataDir()`).
+- **bookends.koplugin** — cosmetic reading-progress/bookend styling. No
+  device-specific code at all.
 - **simpleui.koplugin** — alternate home screen (kept installed but
   inactive if `bookshelf` is the active `start_with`, matching the
-  Kindle setup — see `../kindle/README.md`). Has a couple of
-  `Device:isKindle()` / `/mnt/us` references (`sui_topbar.lua`,
-  `sui_updater.lua`) that weren't audited for Kobo correctness before
-  vendoring — check those if this is made the *active* home screen here.
+  Kindle setup — see `../kindle/README.md`). Previously had one real
+  Kindle-only assumption (a hardcoded `/mnt/us/...` fallback path in
+  `sui_updater.lua`, only reached if its primary — already
+  device-agnostic — path-resolution ever failed); **fixed 2026-08-29** to
+  fall back to `DataStorage:getFullDataDir()` instead, so it's correct on
+  every platform now, not just Kindle.
 - **appstore.koplugin** — the KOReader App Store
   (`omer-faruq/appstore.koplugin`), for browsing/installing/updating
-  community plugins from KOReader itself.
-- **immichupload.koplugin** — this repo's own plugin. Uploads new
-  screenshots to Immich (`https://immich.truepob.com`). Deliberately not
-  the old standalone shell-script watcher (superseded, removed from this
-  repo) — that ran as a plain background process outside KOReader tied to
-  Tailscale's start/stop, either assuming Wi-Fi was already up or only
-  running while Tailscale happened to be on. This plugin is fully
-  decoupled from Tailscale: it checks the screenshots folder locally on a
-  timer (zero network cost — a directory listing, nothing else) and only
-  touches the network, via KOReader's own `NetworkMgr` Wi-Fi-on-demand
-  flow (the same "Connecting to Wi-Fi..." mechanism other plugins like
-  Crossbill use), when it actually finds a screenshot not yet uploaded.
-  Needs an Immich API key at `<koreader settings dir>/immich_api.key`
-  (one line, no vendored value — it's a real secret) — not yet placed on
-  kobo-sabrina as of this writing. Device attribution (Immich's
-  `deviceId`) is derived automatically from the `--hostname=` already set
-  in `tailscale/up.args`, so no separate per-device edit is needed.
+  community plugins from KOReader itself. No device-specific code.
 
 ### KOReader settings (`koreader-settings/`, copy into
 `/mnt/onboard/.adds/koreader/settings/`)
@@ -183,8 +204,10 @@ let this list go stale.
    KOReader to a device that already has NickelMenu some other way.)
    Copy `nickelmenu/koreader` config in, restart Nickel/reboot so the menu
    entry appears, launch KOReader once via NickelMenu.
-5. Copy each `koreader-plugins/*.koplugin` folder into
-   `.adds/koreader/plugins/`, restart KOReader.
+5. Copy each `../shared/koreader-plugins/*.koplugin` folder (plus anything
+   that ends up in this folder's own `koreader-plugins/`, once something
+   genuinely Kobo-specific exists there) into `.adds/koreader/plugins/`,
+   restart KOReader.
 6. Create `/mnt/onboard/Books/` and `/mnt/onboard/Books/Wallabag/` (see
    "Home / library folder" above), point KOReader's file browser and
    `bookshelf.koplugin` at `Books/`.

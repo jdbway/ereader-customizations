@@ -37,8 +37,10 @@ in this repo as SpringBreak-specific until verified otherwise.
   beyond that and is now behind upstream, kept around or not as preferred,
   doesn't matter either way.
 
-- `koreader-plugins/networkextras.koplugin/` — **ours.** Adds a "Network
-  Extras" entry to KOReader's main menu with:
+- `../shared/koreader-plugins/networkextras.koplugin/` — **ours** (moved
+  to `shared/` 2026-08-29 — engineered to run unmodified on Kobo too; see
+  root `README.md`'s "The `shared/` rule"). Adds a "Network Extras" entry
+  to KOReader's main menu with:
   - **Framework Mode**: reboot with the Amazon framework enabled (needed to
     switch Wi-Fi networks — see below) or reboot back to low-power
     frameworkless mode.
@@ -76,24 +78,29 @@ in this repo as SpringBreak-specific until verified otherwise.
   chat/session won't be reflected here until re-synced from the device —
   this repo only has whatever was last copied over.
 
-- `koreader-plugins/bookshelf.koplugin/` — **third-party**
+- `../shared/koreader-plugins/bookshelf.koplugin/` — **third-party**
   ([AndyHazz/bookshelf.koplugin](https://github.com/AndyHazz/bookshelf.koplugin)),
-  vendored directly. Home-screen replacement — the active one on this device
+  vendored directly. Moved to `shared/` 2026-08-29 — audited device-agnostic,
+  see root `README.md`'s "The `shared/` rule". Home-screen replacement — the
+  active one on this device
   (**Start with → Bookshelf** in KOReader's file-manager menu). Installed via
   `git clone` on the device itself (for its in-app dev-branch update
   feature), so the nested `.git/` was stripped before committing here — a
   copy pulled from this repo is a plain file tree, not a git checkout of
   upstream.
 
-- `koreader-plugins/bookends.koplugin/` — **third-party**
+- `../shared/koreader-plugins/bookends.koplugin/` — **third-party**
   ([AndyHazz/bookends.koplugin](https://github.com/AndyHazz/bookends.koplugin)),
-  vendored directly. Overlay presets/styling; also supplies Bookshelf's
+  vendored directly. Moved to `shared/` 2026-08-29 — no device-specific
+  code found on audit. Overlay presets/styling; also supplies Bookshelf's
   richer font-preview and extra progress-bar styles when both are installed
   together.
 
-- `koreader-plugins/simpleui.koplugin/` — **third-party**
+- `../shared/koreader-plugins/simpleui.koplugin/` — **third-party**
   ([doctorhetfield-cmd/simpleui.koplugin](https://github.com/doctorhetfield-cmd/simpleui.koplugin)),
-  vendored directly. An earlier home-screen replacement, no longer the
+  vendored directly. Moved to `shared/` 2026-08-29 — had one real
+  Kindle-only hardcoded fallback path in `sui_updater.lua`, fixed to use
+  `DataStorage:getFullDataDir()` instead. An earlier home-screen replacement, no longer the
   default (Bookshelf is), but still installed: it contributes a standalone
   persistent toolbar widget (Wi-Fi/brightness/power toggles) independent of
   its home-screen role. Confirmed by direct testing that deleting it breaks
@@ -101,10 +108,12 @@ in this repo as SpringBreak-specific until verified otherwise.
   even though neither has a visible code-level dependency on it — keep it
   installed.
 
-- `koreader-plugins/cwasync.koplugin/` — **not third-party in the usual
+- `../shared/koreader-plugins/cwasync.koplugin/` — **not third-party in the usual
   sense**: vendored directly from KOReader's own mainline repo
   (https://github.com/koreader/koreader/tree/master/plugins/cwasync.koplugin),
-  not a separate author's project. Handles progress sync *and* two-way
+  not a separate author's project. Moved to `shared/` 2026-08-29 — its one
+  Kobo-specific file (`kobo_sqlite_provider.lua`) is a legitimate,
+  intentional device-specific provider, not a portability blocker. Handles progress sync *and* two-way
   highlights/annotations sync with Calibre-Web NextGen (`sync_logic.lua` has
   a real last-write-wins merge engine, not just percentage push). Note:
   annotation sync is opt-in and manual — check "Sync KOReader highlights" in
@@ -127,9 +136,10 @@ in this repo as SpringBreak-specific until verified otherwise.
   get pulled from the shared WebDAV store into whatever downstream tool
   needs them, instead of each tool needing its own per-device sync story.
 
-- `koreader-plugins/crossbill.koplugin/` — **third-party**
+- `../shared/koreader-plugins/crossbill.koplugin/` — **third-party**
   ([Crossbill-App/koreader-plugin](https://github.com/Crossbill-App/koreader-plugin)),
-  vendored directly, unmodified. Syncs highlights to a self-hosted
+  vendored directly, unmodified. Moved to `shared/` 2026-08-29 — no
+  device-specific code found on audit. Syncs highlights to a self-hosted
   [Crossbill](https://github.com/Crossbill-App/crossbill-web) instance for
   a real web UI — browsing highlights, AI chapter summaries, flashcards.
   Menu only appears in Tools while a document is open (`is_doc_only = true`
@@ -153,13 +163,19 @@ in this repo as SpringBreak-specific until verified otherwise.
   existing `/etc/upstart/tailscale.conf` job) — no read-only-filesystem edits
   needed. Verified to survive a real reboot and self-heal a forced overwrite.
 
-- `tailscale/immich_upload_watch.sh` — **ours.** Polls
-  `/mnt/us/koreader/screenshots` every 30s and uploads any new file to a
-  self-hosted [Immich](https://immich.app) instance via its REST API
-  (`POST /api/assets`), tracking what's already been uploaded in a local
-  state file so nothing re-uploads. Also launched from `start_tailscale.sh`
-  alongside `dns_watch.sh`. Reads the server URL from the top of the script
-  itself and the API key from `immich_api.key` (see Secrets below) —
+- `../shared/koreader-plugins/immichupload.koplugin/` — **ours** (moved to
+  `shared/` 2026-08-29; replaced the old `tailscale/immich_upload_watch.sh`
+  shell-script watcher entirely — deleted, no longer present here). As a
+  standalone background process outside KOReader, that script either had
+  to assume Wi-Fi was already up or be tied to whenever Tailscale happened
+  to be running; this plugin checks the screenshots folder locally on a
+  30s timer (zero network cost) and only calls KOReader's own `NetworkMgr`
+  Wi-Fi-on-demand flow once it actually finds something new to upload —
+  fully decoupled from Tailscale's lifecycle. Uploads to a self-hosted
+  [Immich](https://immich.app) instance via its REST API (`POST
+  /api/assets`), device id derived automatically from the tailnet hostname
+  in `tailscale/up.args`. Reads the API key from
+  `<koreader settings dir>/immich_api.key` (see Secrets below) —
   **generate that key with only the `asset.upload` permission**, nothing
   broader.
 
@@ -203,11 +219,15 @@ exact path, what it holds, and how to (re)populate it.
   node's Tailscale private key. Not something you write by hand; it's
   created automatically the first time `tailscale up --auth-key=...`
   succeeds. Deleting it forces the device to re-register as a "new" node.
-- **`/mnt/us/extensions/tailscale/bin/immich_api.key`** — Immich API key,
-  plain text, single line, no trailing newline required. Generate one from
-  the Immich **web UI** (not the Android app) under Account Settings → API
-  Keys → New API Key, with **only the `asset.upload` permission** checked —
-  nothing else. Read by `immich_upload_watch.sh`.
+- **`/mnt/us/koreader/settings/immich_api.key`** — Immich API key, plain
+  text, single line, no trailing newline required. Generate one from the
+  Immich **web UI** (not the Android app) under Account Settings → API
+  Keys → New API Key, with **only the `asset.upload` permission** checked
+  — nothing else. Read by `immichupload.koplugin`. **Path changed
+  2026-08-29** (was `/mnt/us/extensions/tailscale/bin/immich_api.key` for
+  the old shell-script watcher) — if this device is still running the old
+  script, the key needs copying to the new path once it's updated to the
+  plugin, not just left at the old one.
 - **`kindle/koreader-plugins/vocabdeck.koplugin/vocabdeck_apikeys.lua`** and
   **`vocabdeck_configuration.lua`** — AI-provider API keys for VocabDeck's
   optional enrichment feature. Copy the committed `.sample` files to these
