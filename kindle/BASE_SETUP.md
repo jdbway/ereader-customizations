@@ -253,16 +253,19 @@ remount to place back). Summary of what's live:
 
 - `kor.conf` — KOReader autolaunch on boot, via a third-party KUAL
   extension. Fires in both framework and frameworkless boots.
-- `tailscale.conf` — Tailscale + the DNS watcher, on boot.
-- `tailscale-watchdog.conf` and `phd.conf` — both **disabled 2026-08-27**
-  (renamed to `.disabled`, not deleted): the watchdog was silently
-  undoing manual Tailscale stops within 5 minutes, and `phd` (Amazon's
-  telemetry daemon) was found sending a UDP heartbeat every ~27s, enough
-  on its own to defeat KOReader's idle-Wi-Fi-off watchdog. See
-  `boot-hooks/README.md` for the packet-capture root-cause work behind
-  both.
-- `wifiwatch.conf` — added 2026-08-27, keeps the Wi-Fi-state monitoring
-  set up for that investigation running across reboots.
+- `tailscale.conf`, `tailscale-watchdog.conf`, and `phd.conf` — all
+  **disabled 2026-08-27** (renamed to `.disabled`, not deleted): manual
+  Tailscale control via `networkextras.koplugin`'s Start/Stop menu is
+  preferred over always-on/auto-reconnecting Tailscale (battery), the
+  watchdog was silently undoing manual Tailscale stops within 5 minutes,
+  and `phd` (Amazon's telemetry daemon) was found sending a UDP heartbeat
+  every ~27s, enough on its own to defeat KOReader's idle-Wi-Fi-off
+  watchdog. See `boot-hooks/README.md` for the packet-capture root-cause
+  work behind all three.
+- `wifiwatch.conf` — added 2026-08-27 for that investigation's packet
+  capture, **disabled 2026-08-30** once the investigation concluded (it
+  kept running for 3 extra days for no reason). Moved to
+  `archive/wifi-debug-2026-08/` — not part of the live boot-hooks set.
 
 ## Secrets — deliberately excluded, do not add these
 

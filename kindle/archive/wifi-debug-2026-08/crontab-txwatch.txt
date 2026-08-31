@@ -1,0 +1,20 @@
+# Removed crontab entry — 2026-08-30
+
+Third piece of the Aug 27 Wi-Fi debug investigation, missed by the
+`wifiwatch.conf`/`pktlog.lua` cleanup and the original boot-hooks
+documentation — found only because a stray background check turned it up
+after the fact. Was appended as the last line of `/etc/crontab/root`
+(root's crontab, on the read-only partition — edited via `mntroot rw`, same
+as the upstart jobs), running every minute:
+
+    * * * * * for i in 1 2 3 4 5 6 7 8 9 10 11; do echo "$(date +\%Y-\%m-\%d\ \%H:\%M:\%S) tx=$(cat /sys/class/net/wlan0/statistics/tx_packets)" >> /mnt/us/extensions/tailscale/bin/txwatch_cron.log; sleep 5; done
+
+Logged `wlan0`'s TX packet counter every 5s (11 samples per minute, covering
+~55 of every 60 seconds) to `txwatch_cron.log` — a cheap, complementary
+signal to `pktlog.lua`'s raw capture for confirming Wi-Fi activity/idle
+transitions during the `auto_disable_wifi` investigation.
+
+Removed 2026-08-30 along with the rest of this investigation's leftover
+tooling — `mntroot rw`, deleted the line from `/etc/crontab/root`,
+`mntroot ro`. `txwatch_cron.log` deleted. Not part of the live install set;
+kept here for reference only alongside `wifiwatch.sh`/`pktlog.lua`.

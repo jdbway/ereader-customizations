@@ -119,7 +119,7 @@ and stock `/etc/upstart/phd.conf` (`/usr/sbin/phd`, Amazon's own "phone
 home" device telemetry daemon - the upstart job's own top comment literally
 says `# phone home`, and the binary contains strings like `PHONE_HOME` /
 `PHONE_HOME_ACK`) were both renamed to `.disabled` at the user's explicit
-request. Root-cause work (raw-socket packet capture via `../tailscale/
+request. Root-cause work (raw-socket packet capture via `../archive/wifi-debug-2026-08/
 pktlog.lua`) found `phd` sending a UDP heartbeat to an Amazon IP roughly
 every 27s, on its own enough to defeat KOReader's `auto_disable_wifi` noise
 threshold - confirmed by stopping it and watching the watchdog actually fire
@@ -127,9 +127,19 @@ in KOReader's own debug log, cross-validated against `wifiwatch.sh`'s
 independent interface-state polling. Same re-enable procedure as
 `tailscale-watchdog.conf` above.
 
-## `wifiwatch.conf` - ours, added 2026-08-27
+## `wifiwatch.conf` - ours, added 2026-08-27, disabled 2026-08-30
 
-`respawn`-supervised, execs `../tailscale/wifiwatch.sh`. Added so the
+`respawn`-supervised, execs `wifiwatch.sh` (originally at
+`../tailscale/wifiwatch.sh`, now `../archive/wifi-debug-2026-08/wifiwatch.sh`
+— see below). Added so the
 Wi-Fi-state/packet-capture monitoring set up for the `auto_disable_wifi`
 investigation survives a reboot during multi-day passive monitoring, instead
 of silently going dark until someone notices and manually relaunches it.
+
+**Disabled 2026-08-30** (renamed to `wifiwatch.conf.disabled` on-device,
+`wifiwatch.sh`/`pktlog.lua` killed, logs cleared). The investigation this
+supported concluded when `phd.conf` was identified and disabled (above) —
+this just never got turned off afterward, and sat running the packet
+sniffer on every boot for three days with nothing left to investigate.
+Moved to `../archive/wifi-debug-2026-08/` — no longer part of the live
+boot-hooks set; see that directory's README before reviving it.
