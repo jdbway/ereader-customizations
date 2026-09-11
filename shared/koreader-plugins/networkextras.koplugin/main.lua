@@ -46,7 +46,7 @@ local NetworkExtras = WidgetContainer:extend{
 }
 
 local function isTailscaledRunning()
-    return os.execute("pgrep -f tailscaled >/dev/null 2>&1") == 0
+    return os.execute("pgrep -f 'tailscaled --tun' >/dev/null 2>&1") == 0
 end
 
 function NetworkExtras:init()
@@ -98,10 +98,14 @@ function NetworkExtras:stopTailscale()
         UIManager:show(InfoMessage:new{ text = _("Tailscale not found on this device."), timeout = 3 })
         return
     end
+    local stopping = InfoMessage:new{ text = _("Stopping Tailscale…"), timeout = 30 }
+    UIManager:show(stopping)
+    UIManager:forceRePaint()
     local stop_ok = os.execute(TS_DIR .. "/stop_tailscale.sh >/dev/null 2>&1") == 0
     local daemon_ok = os.execute(TS_DIR .. "/stop_tailscaled.sh >/dev/null 2>&1") == 0
+    UIManager:close(stopping)
     if stop_ok and daemon_ok and not isTailscaledRunning() then
-        UIManager:show(InfoMessage:new{ text = _("Tailscale stopped."), timeout = 2 })
+        UIManager:show(InfoMessage:new{ text = _("Tailscale stopped."), timeout = 5 })
     else
         UIManager:show(InfoMessage:new{
             text = _("Tailscale stop reported a problem — check tailscaled_stop_log.txt."),
@@ -112,19 +116,48 @@ end
 
 -- update_tailscale.sh only replaces the binaries on disk (backing up the old
 -- ones as *.bak first) — it doesn't touch the running process, so it's safe
--- to run while Tailscale is up. Progress prints directly to the screen via
--- eips. Start/Stop Tailscale afterward to actually pick up the new binary.
+-- to run while Tailscale is up. Progress also prints on-screen via eips on
+-- Kindle. Start/Stop Tailscale afterward to actually pick up the new binary.
+function NetworkExtras:checkTailscaleUpdateResult(attempt)
+    local done_marker = TS_DIR .. "/update_tailscale.done"
+    local marker_file = io.open(done_marker, "r")
+    if marker_file then
+        marker_file:close()
+        os.remove(done_marker)
+        local result_text = _("Update finished — check update_log.txt for details.")
+        local result_file = io.open(TS_DIR .. "/update_result.txt", "r")
+        if result_file then
+            local line = result_file:read("*l")
+            result_file:close()
+            if line and line ~= "" then
+                result_text = line
+            end
+        end
+        UIManager:show(InfoMessage:new{ text = result_text, timeout = 6 })
+    elseif attempt < 20 then
+        -- ~100s total, generous enough for a ~31MB download over a slow
+        -- e-reader Wi-Fi radio.
+        UIManager:scheduleIn(5, function() self:checkTailscaleUpdateResult(attempt + 1) end)
+    else
+        UIManager:show(InfoMessage:new{
+            text = _("Tailscale update timed out — check update_log.txt."),
+            timeout = 6,
+        })
+    end
+end
+
 function NetworkExtras:updateTailscale()
     if not TS_DIR then
         UIManager:show(InfoMessage:new{ text = _("Tailscale not found on this device."), timeout = 3 })
         return
     end
     UIManager:show(ConfirmBox:new{
-        text = _("Check for and install the latest Tailscale binaries (~31MB download)? Progress shows on-screen. You'll need to Stop then Start Tailscale afterward for the update to take effect."),
+        text = _("Check for and install the latest Tailscale binaries (~31MB download)? You'll need to Stop then Start Tailscale afterward for the update to take effect."),
         ok_text = _("Update"),
         ok_callback = function()
             os.execute(TS_DIR .. "/update_tailscale.sh >/dev/null 2>&1 &")
             UIManager:show(InfoMessage:new{ text = _("Checking for updates…"), timeout = 2 })
+            UIManager:scheduleIn(5, function() self:checkTailscaleUpdateResult(1) end)
         end,
     })
 end
