@@ -390,3 +390,28 @@ If this is attempted again:
   recovery partway through — so "worst case" for any boot-file change on
   this hardware is effectively "full wipe," not "stuck, but fixable via
   SSH."
+
+## Nickel exit behavior & diagnostics (2026-09-13)
+
+Two device-config items from a live troubleshooting session on
+`kobo-sabrina` (the MediaTek / `kobov5` Clara BW; tracked upstream in
+koreader/koreader#16046):
+
+- **`kfmon/set-reboot-on-exit.sh`** — uncomments `reboot_on_exit=false` in
+  `/mnt/onboard/.adds/kfmon/config/koreader.ini`. Without it, every KOReader
+  exit runs `/sbin/reboot` (the older OCP/KFMon default in this bundle),
+  which looks like a crash, and kills any diagnostic logger. With it, exit
+  runs `./nickel.sh` (restart Nickel, the KFMon ≥ 0.9.5 default).
+- **`diag/monitor.sh`** — lightweight 5s on-device health logger writing to
+  `/mnt/onboard/diag/monitor.log`. It records: `btservice` CPU ticks,
+  `wmt_launcher` count, cumulative `WMT_open -EIO` count, load average,
+  `wpa_state`, `wlan0` IPv4, and D-state tasks with their `wchan`. It does
+  not auto-start after a reboot — relaunch manually.
+
+**Fault it was built to catch (seen live on Sabrina):** `btservice` pinned
+at ~90% CPU plus two extra `wmt_launcher` processes wedged on `WMT_open`
+(`-EIO` every ~2.4s) on the shared MediaTek combo die, alongside Wi-Fi
+dropping for ~40s while `wpa_cli` still reported `wpa_state=COMPLETED`. Both
+were absent on a clean boot and did not recur in a normal session, so the
+trigger is still unknown. Killing the duplicate `wmt_launcher` PIDs stops
+the WMT storm; killing `btservice` + `mtkbtd` restores ~91% idle.
