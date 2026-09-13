@@ -77,6 +77,46 @@ source instead of vendored wholesale.
   [koreader/koreader releases](https://github.com/koreader/koreader/releases)
   page.
 
+### SSH access — KOReader (port 2222) and Nickel (port 22)
+
+There are **two independent SSH servers** on this device, and it matters
+which one you're hitting:
+
+- **Port 2222 — KOReader's bundled `dropbear`** (KOReader's SSH.koplugin).
+  Started/stopped with KOReader, so it only exists *while KOReader is
+  running*. Per its README, **only 2222 is reachable over LAN**; keys live
+  in `/mnt/onboard/.adds/koreader/settings/SSH/authorized_keys` (its own
+  dropbear resolves `authorized_keys` relative to its cwd, not `~/.ssh`).
+- **Port 22 — Kobo's stock OpenSSH (`/usr/sbin/sshd`)**. This is the one
+  that is available **in Nickel**, i.e. when KOReader is closed. Stock
+  firmware ships it but gates it behind a file and forces a password-setup
+  prompt on root login. `ssh/enable-nickel-ssh.sh` un-gates it, switches
+  it to **key-only** (reusing KOReader's `authorized_keys` so there's one
+  key list), starts it, and flips the boot gate to
+  `/mnt/onboard/.kobo/ssh-enabled` so it starts on every boot.
+
+Run it once over KOReader's SSH (or USB shell):
+
+```sh
+sh enable-nickel-ssh.sh          # from a copy on the device
+ssh -l root <device-ip>          # now works in Nickel, port 22
+```
+
+Notes / gotchas:
+- The `ssh-enabled` file is the stock mechanism — don't hand-edit
+  `rcS`. Renaming `ssh-disabled` → `ssh-enabled` and rebooting is exactly
+  what Kobo's own `/etc/init.d/ssh` checks for.
+- `/` is ext4 and writable, so the `sshd_config` edits persist, **but a
+  firmware update will overwrite `sshd_config`** — re-run the script after
+  one. It is idempotent.
+- With the patch applied, root login is **public-key only**
+  (`PasswordAuthentication no`, `PermitEmptyPasswords no`, forced
+  password-setup removed). Don't leave the stock empty-root-password
+  config in place on a LAN device.
+- Enable this before any future Nickel troubleshooting — when Nickel is
+  wedged, port 2222 is gone (KOReader not running), so port 22 is the only
+  way in.
+
 ### KOReader plugins
 
 Every plugin Kobo currently uses lives in **`../shared/koreader-plugins/`**
